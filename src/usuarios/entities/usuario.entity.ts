@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Foto } from 'src/fotos/entities/foto.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -21,31 +25,31 @@ export class Usuario {
   @Column({ nullable: false })
   senha: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: false, type: 'enum', enum: TipoUsuario })
   tipoUsuario: TipoUsuario;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true, unique: true, length: 11 })
   cpf: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   nascimento: Date;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true, length: 11 })
   telefone: string;
 
-  @Column()
+  @Column({ nullable: true })
   reputacao: number;
 
-  @Column()
+  @Column({ name: 'chave_pix', nullable: true })
   chavePix: string;
 
-  /*@Column()
-  fotoUsuario: Foto;
+  @OneToOne((type) => Foto, { nullable: true })
+  @JoinColumn({ name: 'foto_usuario' })
+  fotoUsuario: Promise<Foto[]>;
 
-  @Column()
-  fotoDocumento: Foto;
-
-  cidadesAtendidas: CidadeAtendida[]; */
+  @OneToOne((type) => Foto, { nullable: true })
+  @JoinColumn({ name: 'foto_documento' })
+  fotoDocumento: Promise<Foto[]>;
 
   @CreateDateColumn({
     type: 'timestamp',
