@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { CidadesAtendidas } from 'src/cidades-atendidas/entities/cidades-atendidas.entity';
 import { Foto } from 'src/fotos/entities/foto.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -45,11 +48,18 @@ export class Usuario {
 
   @OneToOne((type) => Foto, { nullable: true })
   @JoinColumn({ name: 'foto_usuario' })
-  fotoUsuario: Promise<Foto[]>;
+  fotoUsuario: Promise<Foto>;
 
   @OneToOne((type) => Foto, { nullable: true })
   @JoinColumn({ name: 'foto_documento' })
-  fotoDocumento: Promise<Foto[]>;
+  fotoDocumento: Promise<Foto>;
+
+  @ManyToMany(
+    (type) => CidadesAtendidas,
+    (cidadesAtendidas) => cidadesAtendidas.usuarios,
+  )
+  @JoinTable({ name: 'cidades_atendidas_usuarios' })
+  cidadesAtendidas: CidadesAtendidas[];
 
   @CreateDateColumn({
     type: 'timestamp',
