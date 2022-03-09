@@ -15,10 +15,6 @@ import { classes } from '@automapper/classes';
     FotoModule,
     CidadesAtendidasModule,
     DiaristaModule,
-    AutomapperModule.forRoot({
-      options: [{ name: 'classMapper', pluginInitializer: classes }],
-      singular: true,
-    }),
   ],
 })
 export class AppModule {}

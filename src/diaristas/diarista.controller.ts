@@ -17,21 +17,12 @@ import { Mapper } from '@automapper/core';
 
 @Controller('api/diaristas')
 export class DiaristaController {
-  constructor(
-    private readonly diaristaService: DiaristaService,
-    @InjectMapper() private readonly mapper: Mapper,
-  ) {}
+  constructor(private readonly diaristaService: DiaristaService) {}
 
   @Get('/localidades')
   @UseInterceptors(MapInterceptor(DiaristaLocalidadeResponseDto, Usuario))
   async findAll() {
     return this.diaristaService.buscarDiaristasPorCep();
-  }
-
-  @Get(':id')
-  @UseInterceptors(MapInterceptor(DiaristaLocalidadeResponseDto, Usuario))
-  async findOne(@Param('id') id: number) {
-    return await this.diaristaService.findOne(id);
   }
 
   /*  @Post()

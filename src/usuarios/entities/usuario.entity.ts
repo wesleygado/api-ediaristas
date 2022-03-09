@@ -2,6 +2,7 @@
 import { CidadesAtendidas } from 'src/cidades-atendidas/entities/cidades-atendidas.entity';
 import { Foto } from 'src/fotos/entities/foto.entity';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -13,6 +14,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import TipoUsuario from '../enum/tipoUsuario-enum';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class Usuario {
@@ -43,16 +45,16 @@ export class Usuario {
   @Column({ nullable: true })
   reputacao: number;
 
-  @Column({ name: 'chave_pix', nullable: true })
+  @Column({ name: 'chave_pix', nullable: true, unique: true })
   chavePix: string;
 
-  @OneToOne((type) => Foto, { nullable: true })
+  @OneToOne((type) => Foto, { nullable: true, eager: true })
   @JoinColumn({ name: 'foto_usuario' })
-  fotoUsuario: Promise<Foto>;
+  fotoUsuario: Foto;
 
-  @OneToOne((type) => Foto, { nullable: true })
+  @OneToOne((type) => Foto, { nullable: true, eager: true })
   @JoinColumn({ name: 'foto_documento' })
-  fotoDocumento: Promise<Foto>;
+  fotoDocumento: Foto;
 
   @ManyToMany(
     (type) => CidadesAtendidas,
@@ -73,4 +75,10 @@ export class Usuario {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updated_at: Date;
+
+  @BeforeInsert()
+  async setPassword(senha: string) {
+    const salt = await bcrypt.genSalt();
+    this.senha = await bcrypt.hash(senha || this.senha, salt);
+  }
 }
