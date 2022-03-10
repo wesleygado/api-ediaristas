@@ -10,4 +10,15 @@ export class DiaristaRepository extends Repository<Usuario> {
     const usuarios = await query.getMany();
     return usuarios;
   }
+
+  async findByCidadesAtendidasCodigoIbge(
+    codigoIbge: string,
+  ): Promise<Usuario[]> {
+    const query = this.createQueryBuilder('usuario')
+      .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
+      .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas')
+      .where('cidadesAtendidas.codigoIbge = :ibge', { ibge: codigoIbge });
+    const usuarios = await query.getMany();
+    return usuarios;
+  }
 }

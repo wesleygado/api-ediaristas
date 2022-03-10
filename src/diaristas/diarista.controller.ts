@@ -1,28 +1,23 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseInterceptors,
-  Query,
-} from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { Controller, Get, Param } from '@nestjs/common';
+import { response } from 'express';
+import { map } from 'rxjs';
+import { ViaCepService } from 'src/consulta-endereco/providers/viaCep.service';
+import { arrayBuffer } from 'stream/consumers';
+import { RepositoryNotFoundError } from 'typeorm';
 import { DiaristaService } from './diarista.service';
-import { InjectMapper, MapInterceptor, MapPipe } from '@automapper/nestjs';
-import { DiaristaLocalidadeResponseDto } from './dto/diaristaLocalidadeResponse.dto';
-import { Usuario } from 'src/usuarios/entities/usuario.entity';
-import { Mapper } from '@automapper/core';
 
 @Controller('api/diaristas')
 export class DiaristaController {
-  constructor(private readonly diaristaService: DiaristaService) {}
+  constructor(
+    private readonly diaristaService: DiaristaService,
+    private httpService: HttpService,
+    private viaCepService: ViaCepService,
+  ) {}
 
-  @Get('/localidades')
-  @UseInterceptors(MapInterceptor(DiaristaLocalidadeResponseDto, Usuario))
-  async findAll() {
-    return this.diaristaService.buscarDiaristasPorCep();
+  @Get('/localidades/:cep')
+  async findByCep(@Param('cep') cep: string) {
+    return this.diaristaService.buscarDiaristasPorCep(cep);
   }
 
   /*  @Post()
