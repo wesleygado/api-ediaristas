@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ViaCepService } from 'src/consulta-endereco/providers/viaCep.service';
 import { DiaristaMapper } from './diarista.mapper';
 import { DiaristaRepository } from './diarista.repository';
+import { diaristaLocalidadesPagedResponse } from './dtos/diaristaLocalidadesPagedResponse.dto';
 
 @Injectable()
 export class DiaristaService {
@@ -23,6 +24,13 @@ export class DiaristaService {
         codigoIbge,
       );
 
-    return this.diaristaMapper.toDiaristaLocalidadeResponseDto(usuarios);
+    const diaristas =
+      this.diaristaMapper.toDiaristaLocalidadeResponseDto(usuarios);
+
+    return new diaristaLocalidadesPagedResponse(
+      diaristas.slice(0, 6),
+      6,
+      usuarios.length,
+    );
   }
 }

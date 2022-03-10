@@ -17,7 +17,8 @@ export class DiaristaRepository extends Repository<Usuario> {
     const query = this.createQueryBuilder('usuario')
       .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
       .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas')
-      .where('cidadesAtendidas.codigoIbge = :ibge', { ibge: codigoIbge });
+      .where('cidadesAtendidas.codigoIbge = :ibge', { ibge: codigoIbge })
+      .orderBy('usuario.reputacao', 'DESC');
     const usuarios = await query.getMany();
     return usuarios;
   }
