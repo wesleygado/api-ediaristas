@@ -4,16 +4,14 @@ import { DiaristaLocalidadeResponseDto } from './dtos/diaristaLocalidadeResponse
 
 @Injectable()
 export class DiaristaMapper {
-  toDiaristaLocalidadeResponseDto(usuarios: Usuario[]) {
-    const diaristas = [];
-    for (let i = 0; i < usuarios.length; i++) {
-      const diaristaDTO = new DiaristaLocalidadeResponseDto();
-      diaristaDTO['nomeCompleto'] = usuarios[i].nomeCompleto;
-      diaristaDTO['reputacao'] = usuarios[i].reputacao;
-      diaristaDTO['fotoUsuario'] = usuarios[i].fotoUsuario.url;
-      diaristaDTO['cidade'] = null;
-      diaristas.push(diaristaDTO);
-    }
-    return diaristas;
+  toDiaristaLocalidadeResponseDto(
+    usuario: Usuario,
+  ): DiaristaLocalidadeResponseDto {
+    const diaristaDTO = new DiaristaLocalidadeResponseDto();
+    diaristaDTO['nomeCompleto'] = usuario.nomeCompleto;
+    diaristaDTO['reputacao'] = usuario.reputacao;
+    diaristaDTO['fotoUsuario'] = usuario.fotoUsuario.url;
+    diaristaDTO['cidade'] = null;
+    return diaristaDTO;
   }
 }

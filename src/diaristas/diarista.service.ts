@@ -15,22 +15,24 @@ export class DiaristaService {
   ) {}
 
   async buscarDiaristasPorCep(cep: string) {
-    const codigoIbge = JSON.parse(
-      (await this.viaCepService.buscarEnderecoPorCep(cep)).ibge,
-    );
+    const codigoIbge = (await this.viaCepService.buscarEnderecoPorCep(cep))
+      .ibge;
 
+    const pageSize = 6;
     const usuarios =
       await this.diaristaRepository.findByCidadesAtendidasCodigoIbge(
         codigoIbge,
+        pageSize,
       );
 
-    const diaristas =
-      this.diaristaMapper.toDiaristaLocalidadeResponseDto(usuarios);
+    const diaristas = usuarios.content.map((usuario) =>
+      this.diaristaMapper.toDiaristaLocalidadeResponseDto(usuario),
+    );
 
     return new diaristaLocalidadesPagedResponse(
-      diaristas.slice(0, 6),
-      6,
-      usuarios.length,
+      diaristas,
+      pageSize,
+      usuarios.totalElement,
     );
   }
 }
