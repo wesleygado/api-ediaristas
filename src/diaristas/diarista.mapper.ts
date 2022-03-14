@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Usuario } from 'src/usuarios/entities/usuario.entity';
+import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
 import { DiaristaLocalidadeResponseDto } from './dtos/diaristaLocalidadeResponse.dto';
 
 @Injectable()
 export class DiaristaMapper {
   toDiaristaLocalidadeResponseDto(
-    usuario: Usuario,
+    usuario: UsuarioApi,
   ): DiaristaLocalidadeResponseDto {
     const diaristaDTO = new DiaristaLocalidadeResponseDto();
     diaristaDTO['nomeCompleto'] = usuario.nomeCompleto;

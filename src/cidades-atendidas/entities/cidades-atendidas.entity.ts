@@ -1,5 +1,5 @@
 import { type } from 'os';
-import { Usuario } from 'src/usuarios/entities/usuario.entity';
+import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -16,6 +16,6 @@ export class CidadesAtendidas {
   @Column({ nullable: false })
   estado: string;
 
-  @ManyToMany((type) => Usuario)
-  usuarios: Usuario[];
+  @ManyToMany((type) => UsuarioApi)
+  usuarios: UsuarioApi[];
 }

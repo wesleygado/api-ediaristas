@@ -6,7 +6,7 @@ const config: ConnectionOptions = {
   port: 3306,
   username: 'root',
   password: 'treinaweb',
-  database: 'teste-api',
+  database: 'ediaristas',
   synchronize: false,
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],

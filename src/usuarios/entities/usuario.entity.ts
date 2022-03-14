@@ -17,7 +17,7 @@ import TipoUsuario from '../enum/tipoUsuario-enum';
 import * as bcrypt from 'bcrypt';
 
 @Entity()
-export class Usuario {
+export class UsuarioApi {
   @PrimaryGeneratedColumn('increment')
   id: number;
 

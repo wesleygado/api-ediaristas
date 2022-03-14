@@ -1,10 +1,10 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Usuario } from './entities/usuario.entity';
+import { UsuarioApi } from './entities/usuario.entity';
 
-@EntityRepository(Usuario)
-export class UsuarioRepository extends Repository<Usuario> {
-  async getUsers(): Promise<Usuario[]> {
-    const query = this.createQueryBuilder('usuario');
+@EntityRepository(UsuarioApi)
+export class UsuarioRepository extends Repository<UsuarioApi> {
+  async getUsers(): Promise<UsuarioApi[]> {
+    const query = this.createQueryBuilder('usuarioApi');
     const usuarios = await query.getMany();
     return usuarios;
   }

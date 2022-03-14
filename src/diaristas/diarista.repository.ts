@@ -1,9 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Usuario } from '../usuarios/entities/usuario.entity';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 
-@EntityRepository(Usuario)
-export class DiaristaRepository extends Repository<Usuario> {
-  async buscarDiaristasPorCep(): Promise<Usuario[]> {
+@EntityRepository(UsuarioApi)
+export class DiaristaRepository extends Repository<UsuarioApi> {
+  async buscarDiaristasPorCep(): Promise<UsuarioApi[]> {
     const query = this.createQueryBuilder('usuario')
       .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
       .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas');
@@ -14,7 +14,7 @@ export class DiaristaRepository extends Repository<Usuario> {
   async findByCidadesAtendidasCodigoIbge(
     codigoIbge: string,
     pageSize: number,
-  ): Promise<PagedQuery<Usuario>> {
+  ): Promise<PagedQuery<UsuarioApi>> {
     const query = this.createQueryBuilder('usuario')
       .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
       .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas')
