@@ -7,6 +7,7 @@ import { CidadesAtendidasModule } from './cidades-atendidas/cidades-atendidas.mo
 import { DiaristaModule } from './diaristas/diarista.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
+import { EnderecoModule } from './consulta-endereco/endereco.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { classes } from '@automapper/classes';
     FotoModule,
     CidadesAtendidasModule,
     DiaristaModule,
+    EnderecoModule,
   ],
 })
 export class AppModule {}

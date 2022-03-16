@@ -1,6 +1,6 @@
 import { DiaristaLocalidadeResponseDto } from './diaristaLocalidadeResponse.dto';
 
-export class diaristaLocalidadesPagedResponse {
+export class DiaristaLocalidadesPagedResponse {
   diaristas: DiaristaLocalidadeResponseDto[];
   tamanhoPagina: number;
   totalElementos: number;

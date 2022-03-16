@@ -25,6 +25,19 @@ export class DiaristaRepository extends Repository<UsuarioApi> {
 
     return { content: usuarios, totalElement: count };
   }
+
+  async existsByCidadesAtendidasCodigoIbge(
+    codigoIbge: string,
+  ): Promise<boolean> {
+    const exists = await this.createQueryBuilder('usuario')
+      .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
+      .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas')
+      .where('cidadesAtendidas.codigoIbge = :ibge', { ibge: codigoIbge })
+      .orderBy('usuario.reputacao', 'DESC')
+      .getCount();
+
+    return exists >= 1 ? true : false;
+  }
 }
 
 export interface PagedQuery<T> {

@@ -8,10 +8,10 @@ export class DiaristaMapper {
     usuario: UsuarioApi,
   ): DiaristaLocalidadeResponseDto {
     const diaristaDTO = new DiaristaLocalidadeResponseDto();
-    diaristaDTO['nomeCompleto'] = usuario.nomeCompleto;
-    diaristaDTO['reputacao'] = usuario.reputacao;
-    diaristaDTO['fotoUsuario'] = usuario.fotoUsuario.url;
-    diaristaDTO['cidade'] = null;
+    diaristaDTO.nomeCompleto = usuario.nomeCompleto;
+    diaristaDTO.reputacao = usuario.reputacao;
+    diaristaDTO.fotoUsuario = usuario.fotoUsuario.url;
+    diaristaDTO.cidade = null;
     return diaristaDTO;
   }
 }

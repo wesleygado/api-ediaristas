@@ -27,7 +27,7 @@ export class ViaCepService {
     }
 
     if (this.DIARISTAS['erro'] === true) {
-      throw new NotFoundException('CEP NÃO ENCOTRADO');
+      throw new NotFoundException('CEP NÃO ENCONTRADO');
     }
 
     return this.DIARISTAS;

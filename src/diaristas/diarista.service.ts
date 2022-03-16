@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ViaCepService } from 'src/consulta-endereco/providers/viaCep.service';
 import { DiaristaMapper } from './diarista.mapper';
 import { DiaristaRepository } from './diarista.repository';
-import { diaristaLocalidadesPagedResponse } from './dtos/diaristaLocalidadesPagedResponse.dto';
+import { DiaristaLocalidadesPagedResponse } from './dtos/diaristaLocalidadesPagedResponse.dto';
+import { DisponibilidadeResponse } from './dtos/disponibilidadeResponse.dto';
 
 @Injectable()
 export class DiaristaService {
@@ -15,8 +16,7 @@ export class DiaristaService {
   ) {}
 
   async buscarDiaristasPorCep(cep: string) {
-    const codigoIbge = (await this.viaCepService.buscarEnderecoPorCep(cep))
-      .ibge;
+    const codigoIbge = await this.buscarCodigoIbgePorCep(cep);
 
     const pageSize = 6;
     const usuarios =
@@ -29,10 +29,24 @@ export class DiaristaService {
       this.diaristaMapper.toDiaristaLocalidadeResponseDto(usuario),
     );
 
-    return new diaristaLocalidadesPagedResponse(
+    return new DiaristaLocalidadesPagedResponse(
       diaristas,
       pageSize,
       usuarios.totalElement,
     );
+  }
+
+  async verificarDisponibilidadePorCep(cep: string) {
+    const codigoIbge = await this.buscarCodigoIbgePorCep(cep);
+    const disponibilidade =
+      await this.diaristaRepository.existsByCidadesAtendidasCodigoIbge(
+        codigoIbge,
+      );
+    console.log(disponibilidade);
+    return new DisponibilidadeResponse(disponibilidade);
+  }
+
+  private async buscarCodigoIbgePorCep(cep: string) {
+    return (await this.viaCepService.buscarEnderecoPorCep(cep)).ibge;
   }
 }
