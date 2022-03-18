@@ -1,12 +1,12 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { EnderecoResponse } from './dtos/enderecoResponse.dto';
 import { EnderecoMapper } from './endereco.mapper';
-import { ViaCepService } from './providers/viaCep.service';
+import { EnderecoService } from './adapters/endereco.service.interface';
 
 @Controller('api/enderecos')
 export class EnderecoController {
   constructor(
-    private readonly viaCep: ViaCepService,
+    private readonly enderecoService: EnderecoService,
     private readonly enderecoMapper: EnderecoMapper,
   ) {}
 
@@ -14,7 +14,7 @@ export class EnderecoController {
   async buscarEnderecoPorCep(
     @Query('cep') cep: string,
   ): Promise<EnderecoResponse> {
-    const endereco = await this.viaCep.buscarEnderecoPorCep(cep);
+    const endereco = await this.enderecoService.buscarEnderecoPorCep(cep);
     return this.enderecoMapper.toEnderecoResponseDto(endereco);
   }
 }

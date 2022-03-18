@@ -8,6 +8,7 @@ import { DiaristaModule } from './diaristas/diarista.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { EnderecoModule } from './consulta-endereco/endereco.module';
+import { ServicoModule } from './servicos/servico.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { EnderecoModule } from './consulta-endereco/endereco.module';
     CidadesAtendidasModule,
     DiaristaModule,
     EnderecoModule,
+    ServicoModule,
   ],
 })
 export class AppModule {}

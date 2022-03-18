@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { EnderecoController } from './endereco.controller';
-import { ViaCepService } from './providers/viaCep.service';
 import { EnderecoMapper } from './endereco.mapper';
+import { EnderecoService } from './adapters/endereco.service.interface';
+import { ViaCepService } from './providers/viaCep.service';
 
 @Module({
   controllers: [EnderecoController],
-  providers: [ViaCepService, EnderecoMapper],
+  providers: [ViaCepService, EnderecoService, EnderecoMapper],
 })
 export class EnderecoModule {}
