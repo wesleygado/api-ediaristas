@@ -1,35 +1,36 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { EnderecoResponse } from '../dtos/enderecoResponse.dto';
+import { EnderecoResponse } from '../dtos/endereco-response.dto';
 import axios from 'axios';
 
 @Injectable()
 export class ViaCepService {
-  DIARISTAS = new EnderecoResponse();
   async buscarEnderecoPorCep(cep: string): Promise<EnderecoResponse> {
     const URL_CEP = `http://viacep.com.br/ws/${cep}/json/`;
+    let endereco = new EnderecoResponse();
 
     try {
       const enderecoBody = await axios.get(URL_CEP);
-      this.DIARISTAS = enderecoBody.data;
+      endereco = enderecoBody.data;
     } catch (error) {
       if (error.response['status'] === 400) {
         throw new BadRequestException('CEP INVÁLIDO');
       }
 
       if (error.response['status'] === 500) {
-        throw new InternalServerErrorException('ERRO INTERNO');
+        throw new BadRequestException(
+          'SERVIÇO DE CEP FORA DO AR - TENTE NOVAMENTE',
+        );
       }
     }
 
-    if (this.DIARISTAS['erro'] === true) {
+    if (endereco['erro'] === true) {
       throw new NotFoundException('CEP NÃO ENCONTRADO');
     }
 
-    return this.DIARISTAS;
+    return endereco;
   }
 }

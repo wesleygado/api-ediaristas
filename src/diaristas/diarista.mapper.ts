@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
-import { DiaristaLocalidadeResponseDto } from './dtos/diaristaLocalidadeResponse.dto';
+import { DiaristaLocalidadeResponseDto } from './dtos/diarista-localidade-response.dto';
 
 @Injectable()
 export class DiaristaMapper {

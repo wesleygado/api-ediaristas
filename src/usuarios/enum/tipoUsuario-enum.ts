@@ -1,6 +1,6 @@
 enum TipoUsuario {
-  CLIENTE = 'Cliente',
-  DIARISTA = 'Diarista',
+  CLIENTE = 1,
+  DIARISTA = 2,
 }
 
 export default TipoUsuario;

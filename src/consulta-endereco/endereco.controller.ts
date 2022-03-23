@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { EnderecoResponse } from './dtos/enderecoResponse.dto';
+import { EnderecoResponse } from './dtos/endereco-response.dto';
 import { EnderecoMapper } from './endereco.mapper';
 import { EnderecoService } from './adapters/endereco.service.interface';
 
@@ -10,7 +10,7 @@ export class EnderecoController {
     private readonly enderecoMapper: EnderecoMapper,
   ) {}
 
-  @Get('?')
+  @Get()
   async buscarEnderecoPorCep(
     @Query('cep') cep: string,
   ): Promise<EnderecoResponse> {

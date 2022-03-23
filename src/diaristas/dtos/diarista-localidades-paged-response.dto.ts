@@ -1,4 +1,4 @@
-import { DiaristaLocalidadeResponseDto } from './diaristaLocalidadeResponse.dto';
+import { DiaristaLocalidadeResponseDto } from './diarista-localidade-response.dto';
 
 export class DiaristaLocalidadesPagedResponse {
   diaristas: DiaristaLocalidadeResponseDto[];

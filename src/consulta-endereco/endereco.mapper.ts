@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EnderecoResponse } from './dtos/enderecoResponse.dto';
+import { EnderecoResponse } from './dtos/endereco-response.dto';
 
 @Injectable()
 export class EnderecoMapper {

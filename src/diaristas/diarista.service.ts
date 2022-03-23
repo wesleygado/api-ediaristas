@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ViaCepService } from 'src/consulta-endereco/providers/viaCep.service';
+import { ViaCepService } from 'src/consulta-endereco/providers/via-cep.service';
 import { DiaristaMapper } from './diarista.mapper';
 import { DiaristaRepository } from './diarista.repository';
-import { DiaristaLocalidadesPagedResponse } from './dtos/diaristaLocalidadesPagedResponse.dto';
-import { DisponibilidadeResponse } from './dtos/disponibilidadeResponse.dto';
+import { DiaristaLocalidadesPagedResponse } from './dtos/diarista-localidades-paged-response.dto';
+import { DisponibilidadeResponse } from './dtos/disponibilidade-response.dto';
 
 @Injectable()
 export class DiaristaService {

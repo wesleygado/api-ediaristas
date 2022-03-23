@@ -7,8 +7,7 @@ export class DiaristaRepository extends Repository<UsuarioApi> {
     const query = this.createQueryBuilder('usuario')
       .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
       .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas');
-    const usuarios = await query.getMany();
-    return usuarios;
+    return await query.getMany();
   }
 
   async findByCidadesAtendidasCodigoIbge(
@@ -31,12 +30,11 @@ export class DiaristaRepository extends Repository<UsuarioApi> {
   ): Promise<boolean> {
     const exists = await this.createQueryBuilder('usuario')
       .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
-      .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas')
       .where('cidadesAtendidas.codigoIbge = :ibge', { ibge: codigoIbge })
-      .orderBy('usuario.reputacao', 'DESC')
+      .limit(1)
       .getCount();
 
-    return exists >= 1 ? true : false;
+    return exists === 1 ? true : false;
   }
 }
 

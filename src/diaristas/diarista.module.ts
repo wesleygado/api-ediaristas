@@ -4,7 +4,7 @@ import { DiaristaController } from './diarista.controller';
 import { DiaristaRepository } from './diarista.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { ViaCepService } from 'src/consulta-endereco/providers/viaCep.service';
+import { ViaCepService } from 'src/consulta-endereco/providers/via-cep.service';
 import { DiaristaMapper } from './diarista.mapper';
 
 @Module({
