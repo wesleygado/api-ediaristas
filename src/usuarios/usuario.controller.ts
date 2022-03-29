@@ -8,10 +8,8 @@ import {
 } from '@nestjs/common';
 import { UsuarioRequestDto } from './dtos/usuario-request.dto';
 import { UsuarioService } from './usuario.service';
-import { UsuarioValidator } from 'src/core/validators/usuario-validators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
-import { FotoDto } from 'src/fotos/dto/foto.dto';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -26,13 +24,8 @@ export class UsuarioController {
   }
 
   @Post()
-  async create(@Body() usuarioRequestDto: UsuarioRequestDto) {
-    return await this.usuariosService.cadastrar(usuarioRequestDto);
-  }
-
-  @Post('foto/upload')
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileInterceptor('foto_usuario', {
       storage: diskStorage({
         destination: './src/fotos/uploads',
         filename: (req, file, cb) => {
@@ -45,13 +38,10 @@ export class UsuarioController {
       }),
     }),
   )
-  async uploadFoto(
-    @Body() body: FotoDto,
+  async create(
+    @Body() usuarioRequestDto: UsuarioRequestDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return {
-      body,
-      file: file.path,
-    };
+    return await this.usuariosService.cadastrar(usuarioRequestDto, file);
   }
 }

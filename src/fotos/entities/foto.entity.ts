@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Expose } from 'class-transformer';
 
 @Entity()
 export class Foto {
@@ -6,12 +7,15 @@ export class Foto {
   id: number;
 
   @Column({ nullable: false, unique: true })
-  filename: string;
+  @Expose({ name: 'file_name' })
+  fileName: string;
 
   @Column({ name: 'content_length', nullable: false })
+  @Expose({ name: 'content_lenght' })
   contentLength: number;
 
   @Column({ name: 'content_type', nullable: false })
+  @Expose({ name: 'content_type' })
   contentType: string;
 
   @Column({ nullable: false })

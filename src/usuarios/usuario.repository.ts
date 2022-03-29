@@ -20,6 +20,7 @@ export class UsuarioRepository extends Repository<UsuarioApi> {
       nascimento,
       telefone,
       chavePix,
+      fotoUsuario,
     } = usuarioRequestDto;
     const usuario = this.create({
       nomeCompleto,
@@ -30,6 +31,7 @@ export class UsuarioRepository extends Repository<UsuarioApi> {
       nascimento,
       telefone,
       chavePix,
+      fotoUsuario,
     });
     await this.save(usuario);
     return usuario;

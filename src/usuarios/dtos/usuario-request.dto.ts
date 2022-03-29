@@ -10,6 +10,7 @@ import {
   Validate,
 } from 'class-validator';
 import { IdadeValida } from 'src/core/validators/idade';
+import { Foto } from 'src/fotos/entities/foto.entity';
 import TipoUsuario from '../enum/tipoUsuario-enum';
 
 export class UsuarioRequestDto {
@@ -53,6 +54,8 @@ export class UsuarioRequestDto {
   @Length(11, 11, { message: 'Chave Pix deve ter 11 caracteres' })
   @Expose({ name: 'chave_pix' })
   chavePix: string;
-  /* fotoUsuario: Foto; */
+
+  @Expose({ name: 'foto_usuario' })
+  fotoUsuario: Foto;
   /* fotoDocumento: Foto; */
 }

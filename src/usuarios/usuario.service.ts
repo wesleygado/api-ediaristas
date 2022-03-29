@@ -6,6 +6,7 @@ import { UsuarioMapper } from './usuario.mapper';
 import { UsuarioRepository } from './usuario.repository';
 import 'reflect-metadata';
 import { UsuarioValidator } from 'src/core/validators/usuario-validators';
+import { FotoService } from 'src/fotos/foto.service';
 
 @Injectable()
 export class UsuarioService {
@@ -14,13 +15,17 @@ export class UsuarioService {
     private usuarioRepository: UsuarioRepository,
     private mapper: UsuarioMapper,
     private readonly usuarioValidator: UsuarioValidator,
+    private foto: FotoService,
   ) {}
 
   buscarDiaristasPorCep() {
     return this.usuarioRepository.getUsers();
   }
 
-  async cadastrar(request: UsuarioRequestDto): Promise<UsuarioResponseDto> {
+  async cadastrar(
+    request: UsuarioRequestDto,
+    file: Express.Multer.File,
+  ): Promise<UsuarioResponseDto> {
     const existeUsuarioEmail = await this.usuarioRepository.findOne({
       email: request.email,
     });
@@ -49,8 +54,8 @@ export class UsuarioService {
       throw new BadRequestException(`Chave Pix já cadastrada`);
     }
 
-    console.log(existeUsuarioCPF);
-    const usuarioParaCadastrar = this.mapper.toUsuarioRequestDto(request);
+    const foto = await this.foto.salvar(file);
+    const usuarioParaCadastrar = this.mapper.toUsuarioRequestDto(request, foto);
     const usuarioCadastrado = await this.usuarioRepository.createUser(
       usuarioParaCadastrar,
     );
