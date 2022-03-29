@@ -8,7 +8,8 @@ export class UsuarioMapper {
 
     usuarioDTO.nomeCompleto = usuario.nomeCompleto;
     usuarioDTO.email = usuario.email;
-    usuarioDTO.senha = usuario.senha;
+    usuarioDTO.password = usuario.password;
+    usuarioDTO.passwordConfirmation = usuario.passwordConfirmation;
     usuarioDTO.tipoUsuario = usuario.tipoUsuario;
     usuarioDTO.cpf = usuario.cpf;
     usuarioDTO.nascimento = usuario.nascimento;
@@ -20,7 +21,7 @@ export class UsuarioMapper {
 
   toUsuarioResponseDto(usuario: UsuarioApi): UsuarioResponseDto {
     const usuarioDTO = new UsuarioResponseDto();
-
+    usuarioDTO.id = usuario.id;
     usuarioDTO.nomeCompleto = usuario.nomeCompleto;
     usuarioDTO.email = usuario.email;
     usuarioDTO.tipoUsuario = usuario.tipoUsuario;

@@ -1,6 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-
-import { UsuarioResponseDto } from './dtos/usuario-response.dto';
+import { UsuarioRequestDto } from './dtos/usuario-request.dto';
 import { UsuarioApi } from './entities/usuario.entity';
 
 @EntityRepository(UsuarioApi)
@@ -11,23 +10,21 @@ export class UsuarioRepository extends Repository<UsuarioApi> {
     return usuarios;
   }
 
-  async createUser(
-    usuarioResponseDto: UsuarioResponseDto,
-  ): Promise<UsuarioApi> {
+  async createUser(usuarioRequestDto: UsuarioRequestDto): Promise<UsuarioApi> {
     const {
       nomeCompleto,
       email,
-      senha,
+      password,
       tipoUsuario,
       cpf,
       nascimento,
       telefone,
       chavePix,
-    } = usuarioResponseDto;
+    } = usuarioRequestDto;
     const usuario = this.create({
       nomeCompleto,
       email,
-      senha,
+      senha: password,
       tipoUsuario,
       cpf,
       nascimento,

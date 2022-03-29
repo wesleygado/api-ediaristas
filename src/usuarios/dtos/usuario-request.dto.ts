@@ -1,41 +1,57 @@
-import { IsDate, IsEmail, IsNotEmpty, Max, Min } from 'class-validator';
-
+import { Expose } from 'class-transformer';
+import {
+  IsDateString,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  Length,
+  MaxLength,
+  MinLength,
+  Validate,
+} from 'class-validator';
+import { IdadeValida } from 'src/core/validators/idade';
 import TipoUsuario from '../enum/tipoUsuario-enum';
 
 export class UsuarioRequestDto {
   id: number;
 
-  @Min(3)
-  @Max(255)
+  @MinLength(3, { message: 'Nome deve possuir mais de 3 caracteres' })
+  @MaxLength(255, { message: 'Nome deve possuir menos de 255 caracteres' })
+  @Expose({ name: 'nome_completo' })
   nomeCompleto: string;
 
   @IsNotEmpty()
-  @Max(255)
-  @IsEmail()
+  @MinLength(3, { message: 'Email deve possuir mais de 3 caracteres' })
+  @MaxLength(255, { message: 'Email deve possuir menos de 255 caracteres' })
+  @IsEmail({}, { message: 'Digite um email válido' })
   email: string;
 
   @IsNotEmpty()
-  senha: string;
+  password: string;
 
   @IsNotEmpty()
+  @Expose({ name: 'password_confirmation' })
   passwordConfirmation: string;
 
   @IsNotEmpty()
+  @Expose({ name: 'tipo_usuario' })
   tipoUsuario: TipoUsuario;
 
-  @Min(11)
-  @Max(11)
+  @MinLength(11, { message: 'CPF deve possuir 11 caracteres' })
+  @MaxLength(11, { message: 'CPF deve possuir 11 caracteres' })
   cpf: string;
 
-  @IsDate()
+  @IsDateString('', { message: 'Nascimento deve ser uma data valida' })
+  @Validate(IdadeValida)
   nascimento: Date;
 
   @IsNotEmpty()
-  @Max(11)
+  @Length(11, 11, { message: 'Telefone deve ter 11 caracteres' })
   telefone: string;
 
-  @Min(11)
-  @Max(254)
+  @IsOptional()
+  @Length(11, 11, { message: 'Chave Pix deve ter 11 caracteres' })
+  @Expose({ name: 'chave_pix' })
   chavePix: string;
   /* fotoUsuario: Foto; */
   /* fotoDocumento: Foto; */

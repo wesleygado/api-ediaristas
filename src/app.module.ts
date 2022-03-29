@@ -5,8 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FotoModule } from './fotos/foto.module';
 import { CidadesAtendidasModule } from './cidades-atendidas/cidades-atendidas.module';
 import { DiaristaModule } from './diaristas/diarista.module';
-import { AutomapperModule } from '@automapper/nestjs';
-import { classes } from '@automapper/classes';
 import { EnderecoModule } from './consulta-endereco/endereco.module';
 import { ServicoModule } from './servicos/servico.module';
 

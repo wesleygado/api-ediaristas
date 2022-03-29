@@ -42,7 +42,6 @@ export class DiaristaService {
       await this.diaristaRepository.existsByCidadesAtendidasCodigoIbge(
         codigoIbge,
       );
-    console.log(disponibilidade);
     return new DisponibilidadeResponse(disponibilidade);
   }
 

@@ -15,13 +15,15 @@ import {
 } from 'typeorm';
 import TipoUsuario from '../enum/tipoUsuario-enum';
 import * as bcrypt from 'bcrypt';
+import { Expose } from 'class-transformer';
 
 @Entity()
 export class UsuarioApi {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ name: 'nome_completo', nullable: false })
+  @Column({ name: 'nome_completo' })
+  @Expose({ name: 'nome_completo' })
   nomeCompleto: string;
 
   @Column({ nullable: false, unique: true })
@@ -30,7 +32,13 @@ export class UsuarioApi {
   @Column({ nullable: false })
   senha: string;
 
-  @Column({ nullable: false, type: 'enum', enum: TipoUsuario })
+  @Column({
+    name: 'tipo_usuario',
+    nullable: false,
+    type: 'enum',
+    enum: TipoUsuario,
+  })
+  @Expose({ name: 'tipo_usuario' })
   tipoUsuario: TipoUsuario;
 
   @Column({ nullable: true, unique: true, length: 11 })
