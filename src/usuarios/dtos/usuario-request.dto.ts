@@ -9,7 +9,10 @@ import {
   MinLength,
   Validate,
 } from 'class-validator';
-import { IdadeValida } from 'src/core/validators/idade';
+import { ChavePixJaExiste } from 'src/core/validators/usuario/validator-chave-pix';
+import { CpfJaExiste } from 'src/core/validators/usuario/validator-cpf';
+import { EmailJaExiste } from 'src/core/validators/usuario/validator-email';
+import { IdadeValida } from 'src/core/validators/usuario/validator-idade';
 import { Foto } from 'src/fotos/entities/foto.entity';
 import TipoUsuario from '../enum/tipoUsuario-enum';
 
@@ -25,6 +28,7 @@ export class UsuarioRequestDto {
   @MinLength(3, { message: 'Email deve possuir mais de 3 caracteres' })
   @MaxLength(255, { message: 'Email deve possuir menos de 255 caracteres' })
   @IsEmail({}, { message: 'Digite um email válido' })
+  @Validate(EmailJaExiste)
   email: string;
 
   @IsNotEmpty()
@@ -40,6 +44,7 @@ export class UsuarioRequestDto {
 
   @MinLength(11, { message: 'CPF deve possuir 11 caracteres' })
   @MaxLength(11, { message: 'CPF deve possuir 11 caracteres' })
+  @Validate(CpfJaExiste)
   cpf: string;
 
   @IsDateString('', { message: 'Nascimento deve ser uma data valida' })
@@ -53,6 +58,7 @@ export class UsuarioRequestDto {
   @IsOptional()
   @Length(11, 11, { message: 'Chave Pix deve ter 11 caracteres' })
   @Expose({ name: 'chave_pix' })
+  @Validate(ChavePixJaExiste)
   chavePix: string;
 
   @Expose({ name: 'foto_usuario' })

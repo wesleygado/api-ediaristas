@@ -1,25 +1,23 @@
 import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
-  ValidationArguments,
 } from 'class-validator';
 
 @ValidatorConstraint({ name: 'customAge', async: false })
 export class IdadeValida implements ValidatorConstraintInterface {
-  validate(nascimento: Date, args: ValidationArguments): boolean {
+  validate(nascimento: Date) {
     nascimento = new Date(nascimento);
-    return this.calculateAge(nascimento) > 17 &&
-      this.calculateAge(nascimento) <= 100
+    return this.calcularIdade(nascimento) > 17 &&
+      this.calcularIdade(nascimento) <= 100
       ? true
       : false;
   }
 
-  defaultMessage(args: ValidationArguments) {
-    // here you can provide default error message if validation failed
+  defaultMessage() {
     return 'A idade precisa ser entre 18 e 100 anos';
   }
 
-  calculateAge(nascimento: Date): number {
+  calcularIdade(nascimento: Date): number {
     const dataAtual = new Date(Date.now());
     const diferencaEntreDatas = Math.abs(
       dataAtual.getTime() - nascimento.getTime(),

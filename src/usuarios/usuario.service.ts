@@ -5,8 +5,8 @@ import { UsuarioResponseDto } from './dtos/usuario-response.dto';
 import { UsuarioMapper } from './usuario.mapper';
 import { UsuarioRepository } from './usuario.repository';
 import 'reflect-metadata';
-import { UsuarioValidator } from 'src/core/validators/usuario-validators';
 import { FotoService } from 'src/fotos/foto.service';
+import { ValidatorPasswordConfirmation } from 'src/core/validators/usuario/validator-password-confirmation';
 
 @Injectable()
 export class UsuarioService {
@@ -14,45 +14,30 @@ export class UsuarioService {
     @InjectRepository(UsuarioRepository)
     private usuarioRepository: UsuarioRepository,
     private mapper: UsuarioMapper,
-    private readonly usuarioValidator: UsuarioValidator,
     private foto: FotoService,
+    private validator: ValidatorPasswordConfirmation,
   ) {}
 
   buscarDiaristasPorCep() {
     return this.usuarioRepository.getUsers();
   }
 
+  async buscarPorEmail(email: string) {
+    const existeUsuario = await this.usuarioRepository.findOne({
+      email: email,
+    });
+
+    return existeUsuario;
+  }
+
   async cadastrar(
     request: UsuarioRequestDto,
     file: Express.Multer.File,
   ): Promise<UsuarioResponseDto> {
-    const existeUsuarioEmail = await this.usuarioRepository.findOne({
-      email: request.email,
-    });
-
-    const existeUsuarioCPF = await this.usuarioRepository.findOne({
-      cpf: request.cpf,
-    });
-
-    const existeUsuarioPix = await this.usuarioRepository.findOne({
-      chavePix: request.chavePix,
-    });
-
-    if (request.password !== request.passwordConfirmation) {
-      throw new BadRequestException(`Senha não confere`);
-    }
-
-    if (existeUsuarioEmail !== undefined) {
-      throw new BadRequestException(`Email já cadastrado`);
-    }
-
-    if (existeUsuarioCPF !== undefined) {
-      throw new BadRequestException(`CPF já cadastrado`);
-    }
-
-    if (existeUsuarioPix !== undefined) {
-      throw new BadRequestException(`Chave Pix já cadastrada`);
-    }
+    this.validator.validarConfirmacaoDeSenha(
+      request.password,
+      request.passwordConfirmation,
+    );
 
     const foto = await this.foto.salvar(file);
     const usuarioParaCadastrar = this.mapper.toUsuarioRequestDto(request, foto);

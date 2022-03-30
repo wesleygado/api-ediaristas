@@ -29,12 +29,11 @@ export class DiaristaRepository extends Repository<UsuarioApi> {
     codigoIbge: string,
   ): Promise<boolean> {
     const exists = await this.createQueryBuilder('usuario')
-      .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
+      .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas')
       .where('cidadesAtendidas.codigoIbge = :ibge', { ibge: codigoIbge })
       .limit(1)
       .getCount();
-
-    return exists === 1 ? true : false;
+    return exists > 0 ? true : false;
   }
 }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ViaCepService } from 'src/consulta-endereco/providers/via-cep.service';
+import { ViaCepService } from 'src/core/providers/via-cep.service';
 import { DiaristaMapper } from './diarista.mapper';
 import { DiaristaRepository } from './diarista.repository';
 import { DiaristaLocalidadesPagedResponse } from './dtos/diarista-localidades-paged-response.dto';
