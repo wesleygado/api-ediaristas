@@ -10,11 +10,13 @@ import { EmailJaExiste } from '../core/validators/usuario/validator-email';
 import { CpfJaExiste } from 'src/core/validators/usuario/validator-cpf';
 import { ChavePixJaExiste } from 'src/core/validators/usuario/validator-chave-pix';
 import { ValidatorPasswordConfirmation } from 'src/core/validators/usuario/validator-password-confirmation';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UsuarioRepository]),
     TypeOrmModule.forFeature([FotoRepository]),
+    MailModule,
   ],
   controllers: [UsuarioController],
   providers: [

@@ -7,6 +7,7 @@ import { CidadesAtendidasModule } from './cidades-atendidas/cidades-atendidas.mo
 import { DiaristaModule } from './diaristas/diarista.module';
 import { EnderecoModule } from './consulta-endereco/endereco.module';
 import { ServicoModule } from './servicos/servico.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -17,6 +18,8 @@ import { ServicoModule } from './servicos/servico.module';
     DiaristaModule,
     EnderecoModule,
     ServicoModule,
+    FotoModule,
+    MailModule,
   ],
 })
 export class AppModule {}

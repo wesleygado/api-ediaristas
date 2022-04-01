@@ -3,6 +3,7 @@ import {
   IsDateString,
   IsEmail,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   Length,
   MaxLength,
@@ -46,6 +47,10 @@ export class UsuarioRequestDto {
   @MaxLength(11, { message: 'CPF deve possuir 11 caracteres' })
   @Validate(CpfJaExiste)
   cpf: string;
+
+  @IsNumber()
+  @IsOptional()
+  reputacao: number;
 
   @IsDateString('', { message: 'Nascimento deve ser uma data valida' })
   @Validate(IdadeValida)

@@ -3,13 +3,14 @@ import {
   Controller,
   Get,
   Post,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { UsuarioRequestDto } from './dtos/usuario-request.dto';
 import { UsuarioService } from './usuario.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
+import { Express, Request } from 'express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,7 +28,7 @@ export class UsuarioController {
   @UseInterceptors(
     FileInterceptor('foto_usuario', {
       storage: diskStorage({
-        destination: './src/fotos/uploads',
+        destination: './public/images',
         filename: (req, file, cb) => {
           const fileName: string =
             path.parse(file.originalname).name.replace(/\s/g, '') + uuidv4();
@@ -41,7 +42,8 @@ export class UsuarioController {
   async create(
     @Body() usuarioRequestDto: UsuarioRequestDto,
     @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
   ) {
-    return await this.usuariosService.cadastrar(usuarioRequestDto, file);
+    return await this.usuariosService.cadastrar(usuarioRequestDto, file, req);
   }
 }
