@@ -12,8 +12,8 @@ import { join } from 'path';
         secure: false,
         port: 587,
         auth: {
-          user: 'postmaster@sandboxccaa5275c5d4420fb6d924a062e1d093.mailgun.org',
-          pass: 'f02b288116f824f2bd344799457d5422-62916a6c-949dfb2b',
+          user: 'user',
+          pass: 'pass',
         },
         ignoreTLS: true,
       },
