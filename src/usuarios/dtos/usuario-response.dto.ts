@@ -23,7 +23,4 @@ export class UsuarioResponseDto {
 
   @Expose({ name: 'chave_pix' })
   chavePix: string;
-
-  @Expose({ name: 'foto_usuario' })
-  fotoUsuario: Foto;
 }

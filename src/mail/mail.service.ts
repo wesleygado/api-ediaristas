@@ -7,7 +7,15 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async enviarEmailDeConfirmacao(usuario: UsuarioApi) {
-    const url = `teste-email.com.br`;
+    let tipoUsuario: boolean;
+
+    if (usuario.tipoUsuario == 1) {
+      tipoUsuario = true;
+    }
+
+    if (usuario.tipoUsuario == 2) {
+      tipoUsuario = false;
+    }
 
     await this.mailerService.sendMail({
       to: 'wesley.gado@treinaweb.com.br',
@@ -15,8 +23,8 @@ export class MailService {
       subject: 'Bem vindo ao Ediaristas',
       template: 'confirmation', // `.hbs` extension is appended automatically
       context: {
-        name: usuario.nomeCompleto,
-        url,
+        nome: usuario.nomeCompleto,
+        tipoUsuario: tipoUsuario,
       },
     });
   }

@@ -8,6 +8,8 @@ import { DiaristaModule } from './diaristas/diarista.module';
 import { EnderecoModule } from './consulta-endereco/endereco.module';
 import { ServicoModule } from './servicos/servico.module';
 import { MailModule } from './mail/mail.module';
+import { AuthModule } from './auth/auth.module';
+import { MeModule } from './me/me.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { MailModule } from './mail/mail.module';
     ServicoModule,
     FotoModule,
     MailModule,
+    AuthModule,
+    MeModule,
   ],
 })
 export class AppModule {}

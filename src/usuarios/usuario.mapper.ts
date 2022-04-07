@@ -1,4 +1,5 @@
 import { Foto } from 'src/fotos/entities/foto.entity';
+import { Index } from 'typeorm';
 import { UsuarioRequestDto } from './dtos/usuario-request.dto';
 import { UsuarioResponseDto } from './dtos/usuario-response.dto';
 import { UsuarioApi } from './entities/usuario.entity';
@@ -20,8 +21,6 @@ export class UsuarioMapper {
     usuarioDTO.telefone = usuario.telefone;
     usuarioDTO.chavePix = usuario.chavePix;
     usuarioDTO.reputacao = usuario.reputacao;
-    usuarioDTO.fotoUsuario = foto;
-
     return usuarioDTO;
   }
 
@@ -35,8 +34,6 @@ export class UsuarioMapper {
     usuarioDTO.nascimento = usuario.nascimento;
     usuarioDTO.telefone = usuario.telefone;
     usuarioDTO.chavePix = usuario.chavePix;
-    usuarioDTO.fotoUsuario = usuario.fotoUsuario;
-
     return usuarioDTO;
   }
 }

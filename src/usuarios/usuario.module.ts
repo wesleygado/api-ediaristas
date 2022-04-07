@@ -11,9 +11,19 @@ import { CpfJaExiste } from 'src/core/validators/usuario/validator-cpf';
 import { ChavePixJaExiste } from 'src/core/validators/usuario/validator-chave-pix';
 import { ValidatorPasswordConfirmation } from 'src/core/validators/usuario/validator-password-confirmation';
 import { MailModule } from 'src/mail/mail.module';
+import { AuthService } from 'src/auth/auth.service';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: 'topSecret51',
+      signOptions: {
+        expiresIn: 3600,
+      },
+    }),
     TypeOrmModule.forFeature([UsuarioRepository]),
     TypeOrmModule.forFeature([FotoRepository]),
     MailModule,
@@ -27,6 +37,7 @@ import { MailModule } from 'src/mail/mail.module';
     UsuarioMapper,
     FotoService,
     ValidatorPasswordConfirmation,
+    AuthService,
   ],
 })
 export class UsuariosModule {}
