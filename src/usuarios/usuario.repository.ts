@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
+
 import { UsuarioRequestDto } from './dtos/usuario-request.dto';
 import { UsuarioApi } from './entities/usuario.entity';
-import TipoUsuario from './enum/tipoUsuario-enum';
 
 @EntityRepository(UsuarioApi)
 export class UsuarioRepository extends Repository<UsuarioApi> {

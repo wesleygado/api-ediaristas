@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
+
 import { UsuarioService } from './usuario.service';
 import { UsuarioController } from './usuario.controller';
 import { UsuarioRepository } from './usuario.repository';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioMapper } from './usuario.mapper';
 import { FotoService } from 'src/fotos/foto.service';
 import { FotoRepository } from 'src/fotos/foto.repository';
@@ -12,21 +14,14 @@ import { ChavePixJaExiste } from 'src/core/validators/usuario/validator-chave-pi
 import { ValidatorPasswordConfirmation } from 'src/core/validators/usuario/validator-password-confirmation';
 import { MailModule } from 'src/mail/mail.module';
 import { AuthService } from 'src/auth/auth.service';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
+import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: 'topSecret51',
-      signOptions: {
-        expiresIn: 3600,
-      },
-    }),
     TypeOrmModule.forFeature([UsuarioRepository]),
     TypeOrmModule.forFeature([FotoRepository]),
     MailModule,
+    JwtModule.register({}),
   ],
   controllers: [UsuarioController],
   providers: [
@@ -38,6 +33,7 @@ import { PassportModule } from '@nestjs/passport';
     FotoService,
     ValidatorPasswordConfirmation,
     AuthService,
+    JwtTokens,
   ],
 })
 export class UsuariosModule {}

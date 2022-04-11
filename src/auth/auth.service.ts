@@ -1,29 +1,36 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsuarioRepository } from 'src/usuarios/usuario.repository';
 import * as bcrypt from 'bcrypt';
-import { UsuarioAuthDto } from './dtos/usuario-auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './jwt-payload.interface';
+
+import { JwtPayload } from './strategies/jwt-payload.interface';
+import { JwtTokens } from './strategies/jwt-tokens';
+import { ITokens } from './strategies/jwt-tokens.interface';
+import { UsuarioRepository } from 'src/usuarios/usuario.repository';
+import { UsuarioAuthDto } from './dtos/usuario-auth.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usuarioRepository: UsuarioRepository,
     private jwtService: JwtService,
+    private jwtTokens: JwtTokens,
   ) {}
 
-  async signIn(
-    usuarioAuthDto: UsuarioAuthDto,
-  ): Promise<{ accessToken: string }> {
+  async signIn(usuarioAuthDto: UsuarioAuthDto): Promise<ITokens> {
     const { email, password } = usuarioAuthDto;
     const usuario = await this.usuarioRepository.findOne({ email: email });
 
     if (usuario && (await bcrypt.compare(password, usuario.senha))) {
       const payload: JwtPayload = { email };
-      const accessToken: string = await this.jwtService.sign(payload);
-      return { accessToken };
+      return await this.jwtTokens.gerarTokens(payload);
     } else {
-      throw new UnauthorizedException('Cheque suas credenciais');
+      throw new UnauthorizedException('Usuário ou Senha inválidos');
     }
+  }
+
+  async reautenticar(req: Request) {
+    const email = await this.jwtTokens.verificarRefrestToken(req);
+    const payload: JwtPayload = { email };
+    return await this.jwtTokens.gerarTokens(payload);
   }
 }

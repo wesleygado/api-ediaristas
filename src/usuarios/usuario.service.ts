@@ -8,7 +8,6 @@ import 'reflect-metadata';
 import { FotoService } from 'src/fotos/foto.service';
 import { ValidatorPasswordConfirmation } from 'src/core/validators/usuario/validator-password-confirmation';
 import { Request } from 'express';
-import TipoUsuario from './enum/tipoUsuario-enum';
 import { MailService } from 'src/mail/mail.service';
 
 @Injectable()

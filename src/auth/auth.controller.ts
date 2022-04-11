@@ -1,22 +1,19 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Post, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsuarioAuthDto } from './dtos/usuario-auth.dto';
+import { ITokens } from './strategies/jwt-tokens.interface';
 
 @Controller('/auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/token')
-  signIn(
-    @Body() usuarioAuthDto: UsuarioAuthDto,
-  ): Promise<{ accessToken: string }> {
+  autenticar(@Body() usuarioAuthDto: UsuarioAuthDto): Promise<ITokens> {
     return this.authService.signIn(usuarioAuthDto);
   }
 
-  @Get('/test')
-  @UseGuards(AuthGuard('jwt'))
-  teste(@Req() req) {
-    console.log(req);
+  @Post('/refresh')
+  reautenticar(@Request() req) {
+    return this.authService.reautenticar(req);
   }
 }

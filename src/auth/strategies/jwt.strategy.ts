@@ -7,14 +7,15 @@ import { UsuarioRepository } from 'src/usuarios/usuario.repository';
 import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     @InjectRepository(UsuarioRepository)
     private usuarioRepository: UsuarioRepository,
   ) {
     super({
-      secretOrKey: 'topSecret51',
+      secretOrKey: 'topSecret512',
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
     });
   }
   async validate(payload: JwtPayload): Promise<UsuarioApi> {
