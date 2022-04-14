@@ -5,12 +5,12 @@ import { DiaristaService } from './diarista.service';
 export class DiaristaController {
   constructor(private readonly diaristaService: DiaristaService) {}
 
-  @Get('/localidades?')
+  @Get('localidades')
   async findByCep(@Query('cep') cep: string) {
     return this.diaristaService.buscarDiaristasPorCep(cep);
   }
 
-  @Get('/disponibilidade?')
+  @Get('disponibilidade')
   async verificarDisponibilidadePorCep(@Query('cep') cep: string) {
     return this.diaristaService.verificarDisponibilidadePorCep(cep);
   }

@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioRequestDto } from './dtos/usuario-request.dto';
-import { UsuarioResponseDto } from './dtos/usuario-response.dto';
+import { UsuarioCadastroResponseDto } from './dtos/usuario-cadastro-response.dto';
 import { UsuarioMapper } from './usuario.mapper';
 import { UsuarioRepository } from './usuario.repository';
 import 'reflect-metadata';
@@ -9,6 +9,8 @@ import { FotoService } from 'src/fotos/foto.service';
 import { ValidatorPasswordConfirmation } from 'src/core/validators/usuario/validator-password-confirmation';
 import { Request } from 'express';
 import { MailService } from 'src/mail/mail.service';
+import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
+import { JwtPayload } from 'src/auth/strategies/jwt-payload.interface';
 
 @Injectable()
 export class UsuarioService {
@@ -19,6 +21,7 @@ export class UsuarioService {
     private foto: FotoService,
     private validator: ValidatorPasswordConfirmation,
     private mailService: MailService,
+    private jwtTokens: JwtTokens,
   ) {}
 
   buscarDiaristasPorCep() {
@@ -37,17 +40,15 @@ export class UsuarioService {
     usuarioRequestDto: UsuarioRequestDto,
     file: Express.Multer.File,
     req: Request,
-  ): Promise<UsuarioResponseDto> {
+  ): Promise<UsuarioCadastroResponseDto> {
     this.validator.validarConfirmacaoDeSenha(
       usuarioRequestDto.password,
       usuarioRequestDto.passwordConfirmation,
     );
 
-    const foto = await this.foto.salvar(file, req);
-    const usuarioParaCadastrar = this.mapper.toUsuarioRequestDto(
-      usuarioRequestDto,
-      foto,
-    );
+    await this.foto.salvar(file, req);
+    const usuarioParaCadastrar =
+      this.mapper.toUsuarioRequestDto(usuarioRequestDto);
 
     usuarioParaCadastrar.reputacao = await this.calcularReputacaoMedia(
       usuarioRequestDto.tipoUsuario,
@@ -56,8 +57,16 @@ export class UsuarioService {
     const usuarioCadastrado = await this.usuarioRepository.createUser(
       usuarioParaCadastrar,
     );
+
+    const usuarioCadastroDTO = await this.mapper.toUsuarioCadastroResponseDto(
+      usuarioCadastrado,
+    );
+
+    const { email } = usuarioCadastrado;
+    const payload: JwtPayload = { email };
+    usuarioCadastroDTO.tokens = await this.jwtTokens.gerarTokens(payload);
     await this.mailService.enviarEmailDeConfirmacao(usuarioCadastrado);
-    return this.mapper.toUsuarioResponseDto(usuarioCadastrado);
+    return usuarioCadastroDTO;
   }
 
   async calcularReputacaoMedia(tipoUsuario): Promise<number> {

@@ -34,12 +34,9 @@ export class UsuarioApi {
 
   @Column({
     name: 'tipo_usuario',
-    nullable: false,
-    type: 'enum',
-    enum: TipoUsuario,
   })
   @Expose({ name: 'tipo_usuario' })
-  tipoUsuario: TipoUsuario;
+  tipoUsuario: number;
 
   @Column({ nullable: true, unique: true, length: 11 })
   cpf: string;

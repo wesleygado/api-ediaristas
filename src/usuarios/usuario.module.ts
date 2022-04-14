@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 import { UsuarioService } from './usuario.service';
 import { UsuarioController } from './usuario.controller';
@@ -15,13 +15,17 @@ import { ValidatorPasswordConfirmation } from 'src/core/validators/usuario/valid
 import { MailModule } from 'src/mail/mail.module';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
+import { TokensService } from 'src/tokens/tokens.service';
+import { TokensModule } from 'src/tokens/tokens.module';
+import { TokenRepository } from 'src/tokens/tokens.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UsuarioRepository]),
     TypeOrmModule.forFeature([FotoRepository]),
-    MailModule,
+    TypeOrmModule.forFeature([TokenRepository]),
     JwtModule.register({}),
+    MailModule,
   ],
   controllers: [UsuarioController],
   providers: [
@@ -34,6 +38,7 @@ import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
     ValidatorPasswordConfirmation,
     AuthService,
     JwtTokens,
+    TokensService,
   ],
 })
 export class UsuariosModule {}

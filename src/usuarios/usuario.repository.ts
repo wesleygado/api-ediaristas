@@ -41,14 +41,6 @@ export class UsuarioRepository extends Repository<UsuarioApi> {
   }
 
   async getMediaReputacaoDiarista(tipoUsuario): Promise<number> {
-    if (tipoUsuario == 1) {
-      tipoUsuario = 'Cliente';
-    }
-
-    if (tipoUsuario == 2) {
-      tipoUsuario = 'Diarista';
-    }
-
     const media = await this.createQueryBuilder('usuario')
       .select('AVG(usuario.reputacao)', 'avg')
       .where('usuario.tipo_usuario = :tipo_usuario', {

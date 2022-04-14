@@ -1,6 +1,5 @@
 import TipoUsuario from '../enum/tipoUsuario-enum';
 import { Expose } from 'class-transformer';
-import { Foto } from 'src/fotos/entities/foto.entity';
 
 export class UsuarioResponseDto {
   id: number;
@@ -13,7 +12,7 @@ export class UsuarioResponseDto {
   senha: string;
 
   @Expose({ name: 'tipo_usuario' })
-  tipoUsuario: TipoUsuario;
+  tipoUsuario: number;
 
   cpf: string;
 

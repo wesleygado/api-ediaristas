@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsNumberString,
   IsOptional,
   Length,
   MaxLength,
@@ -41,7 +42,8 @@ export class UsuarioRequestDto {
 
   @IsNotEmpty()
   @Expose({ name: 'tipo_usuario' })
-  tipoUsuario: TipoUsuario;
+  @IsNumberString()
+  tipoUsuario: number;
 
   @MinLength(11, { message: 'CPF deve possuir 11 caracteres' })
   @MaxLength(11, { message: 'CPF deve possuir 11 caracteres' })
@@ -67,6 +69,7 @@ export class UsuarioRequestDto {
   chavePix: string;
 
   @Expose({ name: 'foto_usuario' })
+  @IsOptional()
   fotoUsuario: Foto;
   /* fotoDocumento: Foto; */
 }

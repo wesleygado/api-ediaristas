@@ -22,16 +22,7 @@ export class RolesGuard implements CanActivate {
     }
 
     const { user } = context.switchToHttp().getRequest();
-    if (user.tipoUsuario == 'Cliente') {
-      user.tipoUsuario = '1';
-    }
-
-    if (user.tipoUsuario == 'Diarista') {
-      user.tipoUsuario = '2';
-    }
-
     console.log(user.tipoUsuario);
-
     return requiredRoles.some((role) => user.tipoUsuario?.includes(role));
   }
 }

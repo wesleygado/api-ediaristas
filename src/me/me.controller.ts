@@ -13,7 +13,6 @@ export class MeController {
 
   @Get()
   @UseGuards(AuthGuard(), RolesGuard)
-  @Roles(TipoUsuario.DIARISTA, TipoUsuario.CLIENTE)
   me(@GetUser() usuario: UsuarioApi) {
     return this.meService.obterUsuarioLogado(usuario);
   }

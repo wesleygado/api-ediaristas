@@ -15,6 +15,6 @@ async function bootstrap() {
   });
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.useStaticAssets(join(__dirname, '..', 'public'));
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();

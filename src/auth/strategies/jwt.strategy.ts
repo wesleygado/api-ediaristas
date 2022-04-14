@@ -2,7 +2,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { UsuarioCadastroResponseDto } from 'src/usuarios/dtos/usuario-cadastro-response.dto';
 import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
+import { UsuarioMapper } from 'src/usuarios/usuario.mapper';
 import { UsuarioRepository } from 'src/usuarios/usuario.repository';
 import { JwtPayload } from './jwt-payload.interface';
 
@@ -11,6 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     @InjectRepository(UsuarioRepository)
     private usuarioRepository: UsuarioRepository,
+    private mapper: UsuarioMapper,
   ) {
     super({
       secretOrKey: 'topSecret512',
@@ -18,9 +21,9 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       ignoreExpiration: false,
     });
   }
-  async validate(payload: JwtPayload): Promise<UsuarioApi> {
+  async validate(payload: JwtPayload): Promise<UsuarioCadastroResponseDto> {
     const { email } = payload;
-    const usuario: UsuarioApi = await this.usuarioRepository.findOne({
+    const usuario = await this.usuarioRepository.findOne({
       email: email,
     });
 
@@ -28,6 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException();
     }
 
-    return usuario;
+    const usuarioDTO = await this.mapper.toUsuarioCadastroResponseDto(usuario);
+    return usuarioDTO;
   }
 }

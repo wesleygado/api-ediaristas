@@ -1,4 +1,5 @@
 import { Body, Controller, Post, Request } from '@nestjs/common';
+import { TokenDto } from 'src/tokens/dtos/token.dto';
 import { AuthService } from './auth.service';
 import { UsuarioAuthDto } from './dtos/usuario-auth.dto';
 import { ITokens } from './strategies/jwt-tokens.interface';
@@ -15,5 +16,10 @@ export class AuthController {
   @Post('/refresh')
   reautenticar(@Request() req) {
     return this.authService.reautenticar(req);
+  }
+
+  @Post('/logout')
+  logOut(@Body() tokenDto: TokenDto) {
+    return this.authService.logout(tokenDto);
   }
 }

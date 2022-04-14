@@ -10,10 +10,9 @@ export class MeService {
   ) {}
 
   async obterUsuarioLogado(usuario) {
-    const email = usuario.email;
-    const usuarioEntity = await this.usuarioRepository.findOne({
-      email: email,
+    const usuarioLogado = await this.usuarioRepository.findOne({
+      email: usuario.email,
     });
-    return this.mapper.toUsuarioResponseDto(usuarioEntity);
+    return this.mapper.toUsuarioResponseDto(usuarioLogado);
   }
 }

@@ -1,18 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
 
 import { JwtPayload } from './strategies/jwt-payload.interface';
 import { JwtTokens } from './strategies/jwt-tokens';
 import { ITokens } from './strategies/jwt-tokens.interface';
 import { UsuarioRepository } from 'src/usuarios/usuario.repository';
 import { UsuarioAuthDto } from './dtos/usuario-auth.dto';
+import { TokenDto } from 'src/tokens/dtos/token.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usuarioRepository: UsuarioRepository,
-    private jwtService: JwtService,
     private jwtTokens: JwtTokens,
   ) {}
 
@@ -31,6 +30,10 @@ export class AuthService {
   async reautenticar(req: Request) {
     const email = await this.jwtTokens.verificarRefrestToken(req);
     const payload: JwtPayload = { email };
-    return await this.jwtTokens.gerarTokens(payload);
+    return this.jwtTokens.gerarTokens(payload);
+  }
+
+  async logout(tokenDto: TokenDto) {
+    return this.jwtTokens.desativarToken(tokenDto);
   }
 }

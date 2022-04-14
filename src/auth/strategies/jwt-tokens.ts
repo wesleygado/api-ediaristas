@@ -1,9 +1,14 @@
 import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { TokenDto } from 'src/tokens/dtos/token.dto';
+import { TokensService } from 'src/tokens/tokens.service';
 import { UsuarioRepository } from 'src/usuarios/usuario.repository';
 
 import { JwtPayload } from './jwt-payload.interface';
@@ -14,6 +19,7 @@ export class JwtTokens {
   constructor(
     private jwtService: JwtService,
     private usuarioRepository: UsuarioRepository,
+    private tokenService: TokensService,
   ) {}
   async gerarTokens(payload: JwtPayload): Promise<ITokens> {
     const [accessToken, refreshToken] = await Promise.all([
@@ -43,6 +49,14 @@ export class JwtTokens {
       throw new NotFoundException('Usuário não encontrado');
     }
 
+    const tokenExist = await this.tokenService.findOne(accessToken);
+    console.log(tokenExist);
+    if (!tokenExist) {
+      await this.tokenService.create(accessToken);
+    } else {
+      throw new UnauthorizedException('Não Autorizado');
+    }
+
     try {
       this.jwtService.verify(accessToken, {
         secret: 'topSecret51-rt',
@@ -56,6 +70,17 @@ export class JwtTokens {
         throw new UnauthorizedException('Token Expirado');
       }
       throw new UnauthorizedException(err.name);
+    }
+  }
+
+  async desativarToken(tokenDto: TokenDto) {
+    console.log(tokenDto.token);
+    const tokenExist = await this.tokenService.findOne(tokenDto.token);
+    if (!tokenExist) {
+      await this.tokenService.create(tokenDto.token);
+      throw new HttpException('Reset Content', HttpStatus.RESET_CONTENT);
+    } else {
+      throw new UnauthorizedException('Token Inválido');
     }
   }
 }
