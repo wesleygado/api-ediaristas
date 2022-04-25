@@ -21,6 +21,7 @@ export class UsuarioRepository extends Repository<UsuarioApi> {
       nascimento,
       telefone,
       chavePix,
+      fotoDocumento,
       fotoUsuario,
       reputacao,
     } = usuarioRequestDto;
@@ -33,6 +34,7 @@ export class UsuarioRepository extends Repository<UsuarioApi> {
       nascimento,
       telefone,
       chavePix,
+      fotoDocumento,
       fotoUsuario,
       reputacao,
     });

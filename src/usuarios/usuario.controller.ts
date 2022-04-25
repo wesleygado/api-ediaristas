@@ -11,9 +11,7 @@ import { UsuarioRequestDto } from './dtos/usuario-request.dto';
 import { UsuarioService } from './usuario.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express, Request } from 'express';
-import { diskStorage } from 'multer';
-import * as path from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import multerConfig from './mullter-config';
 
 @Controller('api/usuarios')
 export class UsuarioController {
@@ -25,20 +23,7 @@ export class UsuarioController {
   }
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor('foto_usuario', {
-      storage: diskStorage({
-        destination: './public/images',
-        filename: (req, file, cb) => {
-          const fileName: string =
-            path.parse(file.originalname).name.replace(/\s/g, '') + uuidv4();
-
-          const extension: string = path.parse(file.originalname).ext;
-          cb(null, `${fileName}${extension}`);
-        },
-      }),
-    }),
-  )
+  @UseInterceptors(FileInterceptor('foto_documento', multerConfig))
   async create(
     @Body() usuarioRequestDto: UsuarioRequestDto,
     @UploadedFile() file: Express.Multer.File,

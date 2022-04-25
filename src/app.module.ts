@@ -16,6 +16,8 @@ import { HateoasIndex } from './core/hateoas/hateoas-index';
 import { UrlGeneratorModule } from 'nestjs-url-generator';
 import { ConfigModule } from '@nestjs/config';
 import { TypeormConfigModule } from 'src/database.module';
+import { DiariasModule } from './diarias/diarias.module';
+import { ClienteModule } from './clientes/cliente.module';
 
 @Module({
   imports: [
@@ -35,8 +37,10 @@ import { TypeormConfigModule } from 'src/database.module';
     MeModule,
     TokensModule,
     UrlGeneratorModule.forRoot({
-      appUrl: 'https://localhost:3000',
+      appUrl: 'http://localhost:8000',
     }),
+    DiariasModule,
+    ClienteModule,
   ],
   controllers: [AppController],
   providers: [HateoasIndex],

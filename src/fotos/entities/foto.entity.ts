@@ -6,7 +6,7 @@ export class Foto {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ name: 'file_name', nullable: false, unique: true })
   @Expose({ name: 'file_name' })
   fileName: string;
 

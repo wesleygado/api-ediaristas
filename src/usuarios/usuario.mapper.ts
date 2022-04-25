@@ -10,7 +10,10 @@ import { JwtPayload } from 'src/auth/strategies/jwt-payload.interface';
 @Injectable()
 export class UsuarioMapper {
   constructor(private jwtTokens: JwtTokens) {}
-  toUsuarioRequestDto(usuario: UsuarioRequestDto): UsuarioRequestDto {
+  toUsuarioRequestDto(
+    usuario: UsuarioRequestDto,
+    foto: Foto,
+  ): UsuarioRequestDto {
     const usuarioDTO = new UsuarioRequestDto();
 
     usuarioDTO.nomeCompleto = usuario.nomeCompleto;
@@ -23,6 +26,12 @@ export class UsuarioMapper {
     usuarioDTO.telefone = usuario.telefone;
     usuarioDTO.chavePix = usuario.chavePix;
     usuarioDTO.reputacao = usuario.reputacao;
+    if (usuario.tipoUsuario === 1) {
+      usuarioDTO.fotoDocumento = foto;
+    }
+    if (usuario.tipoUsuario === 2) {
+      usuarioDTO.fotoUsuario = foto;
+    }
     return usuarioDTO;
   }
 

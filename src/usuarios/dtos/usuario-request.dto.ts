@@ -63,13 +63,17 @@ export class UsuarioRequestDto {
   telefone: string;
 
   @IsOptional()
-  @Length(11, 11, { message: 'Chave Pix deve ter 11 caracteres' })
+  /*   @Length(11, 11, { message: 'Chave Pix deve ter 11 caracteres' })
+   */
   @Expose({ name: 'chave_pix' })
   @Validate(ChavePixJaExiste)
   chavePix: string;
 
-  @Expose({ name: 'foto_usuario' })
   @IsOptional()
+  @Expose({ name: 'foto_documento' })
+  fotoDocumento: Foto;
+
+  @IsOptional()
+  @Expose({ name: 'foto_usuario' })
   fotoUsuario: Foto;
-  /* fotoDocumento: Foto; */
 }

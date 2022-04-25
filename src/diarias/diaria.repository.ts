@@ -1,0 +1,66 @@
+import { EntityRepository, Repository } from 'typeorm';
+import { DiariaRequestDto } from './dto/diaria-request.dto';
+import { Diaria } from './entities/diaria.entity';
+
+@EntityRepository(Diaria)
+export class DiariaRepository extends Repository<Diaria> {
+  async getDiaria(): Promise<Diaria[]> {
+    const query = this.createQueryBuilder('Diaria');
+    const diarias = await query.getMany();
+    return diarias;
+  }
+
+  async createDiaria(diariaDto: DiariaRequestDto): Promise<Diaria> {
+    const {
+      dataAtendimento,
+      tempoAtendimento,
+      preco,
+      logradouro,
+      numero,
+      bairro,
+      complemento,
+      cidade,
+      estado,
+      cep,
+      quantidadeBanheiros,
+      quantidadeCozinhas,
+      quantidadeOutros,
+      quantidadeQuartos,
+      quantidadeQuintais,
+      quantidadeSalas,
+      observacoes,
+      servico,
+      valorComissao,
+      cliente,
+      status,
+      codigoIbge,
+    } = diariaDto;
+    console.log(diariaDto);
+    const diaria = this.create({
+      localDateTime: dataAtendimento,
+      tempoAtendimento,
+      preco,
+      logradouro,
+      numero,
+      bairro,
+      complemento,
+      cidade,
+      estado,
+      cep,
+      quantidadeBanheiros,
+      quantidadeCozinhas,
+      quantidadeOutros,
+      quantidadeQuartos,
+      quantidadeQuintais,
+      quantidadeSalas,
+      observacoes,
+      servico,
+      valorComissao: 20,
+      cliente,
+      status,
+      codigoIbge,
+    });
+    await this.save(diaria);
+    return diaria;
+  }
+}

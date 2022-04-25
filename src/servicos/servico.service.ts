@@ -17,4 +17,10 @@ export class ServicoService {
       this.servicoMapper.toServicoResponseDto(servico),
     );
   }
+  async buscarServicoPorId(servicoId: number): Promise<ServicoResponseDto> {
+    const servico: ServicoResponseDto = await this.manager.query(
+      `Select * from servico where id = ${servicoId}`,
+    );
+    return servico;
+  }
 }

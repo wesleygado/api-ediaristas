@@ -45,10 +45,11 @@ export class UsuarioService {
       usuarioRequestDto.password,
       usuarioRequestDto.passwordConfirmation,
     );
-
-    await this.foto.salvar(file, req);
-    const usuarioParaCadastrar =
-      this.mapper.toUsuarioRequestDto(usuarioRequestDto);
+    const foto = await this.foto.salvar(file, req);
+    const usuarioParaCadastrar = this.mapper.toUsuarioRequestDto(
+      usuarioRequestDto,
+      foto,
+    );
 
     usuarioParaCadastrar.reputacao = await this.calcularReputacaoMedia(
       usuarioRequestDto.tipoUsuario,
@@ -65,7 +66,7 @@ export class UsuarioService {
     const { email } = usuarioCadastrado;
     const payload: JwtPayload = { email };
     usuarioCadastroDTO.tokens = await this.jwtTokens.gerarTokens(payload);
-    await this.mailService.enviarEmailDeConfirmacao(usuarioCadastrado);
+    /*     await this.mailService.enviarEmailDeConfirmacao(usuarioCadastrado);*/
     return usuarioCadastroDTO;
   }
 

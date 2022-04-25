@@ -25,20 +25,18 @@ export class JwtTokens {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: 'topSecret512',
-        expiresIn: 30,
+        expiresIn: 300,
       }),
       this.jwtService.signAsync(payload, {
         secret: 'topSecret51-rt',
-        expiresIn: 60,
+        expiresIn: 600,
       }),
     ]);
-    return { access_token: accessToken, refresh_token: refreshToken };
+    return { access: accessToken, refresh: refreshToken };
   }
 
   async verificarRefrestToken(req) {
-    const accessToken = req.headers['authorization']
-      .replace('Bearer', '')
-      .trim();
+    const accessToken = req.body.refresh;
 
     const email = this.jwtService.decode(accessToken)['email'];
     const usuario = await this.usuarioRepository.findOne({
@@ -74,10 +72,10 @@ export class JwtTokens {
   }
 
   async desativarToken(tokenDto: TokenDto) {
-    console.log(tokenDto.token);
-    const tokenExist = await this.tokenService.findOne(tokenDto.token);
+    console.log(tokenDto.refresh);
+    const tokenExist = await this.tokenService.findOne(tokenDto.refresh);
     if (!tokenExist) {
-      await this.tokenService.create(tokenDto.token);
+      await this.tokenService.create(tokenDto.refresh);
       throw new HttpException('Reset Content', HttpStatus.RESET_CONTENT);
     } else {
       throw new UnauthorizedException('Token Inválido');

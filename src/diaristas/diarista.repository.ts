@@ -7,7 +7,8 @@ export class DiaristaRepository extends Repository<UsuarioApi> {
     const query = this.createQueryBuilder('usuario')
       .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
       .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas');
-    return await query.getMany();
+    const usuarios = await query.getMany();
+    return usuarios;
   }
 
   async findByCidadesAtendidasCodigoIbge(

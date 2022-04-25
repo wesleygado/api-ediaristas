@@ -1,4 +1,3 @@
-import { type } from 'os';
 import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
