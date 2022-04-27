@@ -18,6 +18,7 @@ import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
 import { TokensService } from 'src/tokens/tokens.service';
 import { TokensModule } from 'src/tokens/tokens.module';
 import { TokenRepository } from 'src/tokens/tokens.repository';
+import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { TokenRepository } from 'src/tokens/tokens.repository';
     AuthService,
     JwtTokens,
     TokensService,
+    HateoasUsuario,
   ],
 })
 export class UsuariosModule {}

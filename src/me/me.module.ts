@@ -9,6 +9,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
 import { TokensService } from 'src/tokens/tokens.service';
 import { TokenRepository } from 'src/tokens/tokens.repository';
+import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
 
 @Module({
   imports: [
@@ -18,6 +19,12 @@ import { TokenRepository } from 'src/tokens/tokens.repository';
     JwtModule.register({}),
   ],
   controllers: [MeController],
-  providers: [MeService, UsuarioMapper, JwtTokens, TokensService],
+  providers: [
+    MeService,
+    UsuarioMapper,
+    JwtTokens,
+    TokensService,
+    HateoasUsuario,
+  ],
 })
 export class MeModule {}

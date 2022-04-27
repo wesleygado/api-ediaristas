@@ -10,7 +10,7 @@ import { MeController } from 'src/me/me.controller';
 
 @Injectable()
 export class HateoasIndex extends HateoasBase implements HateoasInterface {
-  gerarLinksHateoasIndex(): HateoasLinks[] {
+  gerarLinksHateoas(): HateoasLinks[] {
     this.LINKS = [];
 
     this.adicionaLink(

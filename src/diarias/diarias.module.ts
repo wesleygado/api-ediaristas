@@ -16,9 +16,14 @@ import { ValidatorPrecoDiaria } from 'src/core/validators/diaria/validator-preco
 import { ValidatorCep } from 'src/core/validators/diaria/validator-cep';
 import { ViaCepService } from 'src/core/providers/via-cep.service';
 import { ValidatorIbge } from 'src/core/validators/diaria/validator-ibge';
+import { ValidatorDisponibilidade } from 'src/core/validators/diaria/validator-disponibilidade';
+import { DiaristaRepository } from 'src/diaristas/diarista.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DiariaRepository])],
+  imports: [
+    TypeOrmModule.forFeature([DiariaRepository]),
+    TypeOrmModule.forFeature([DiaristaRepository]),
+  ],
   controllers: [DiariasController],
   providers: [
     DiariasService,
@@ -34,6 +39,7 @@ import { ValidatorIbge } from 'src/core/validators/diaria/validator-ibge';
     ValidatorCep,
     ViaCepService,
     ValidatorIbge,
+    ValidatorDisponibilidade,
   ],
 })
 export class DiariasModule {}

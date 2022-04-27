@@ -11,6 +11,7 @@ import { Request } from 'express';
 import { MailService } from 'src/mail/mail.service';
 import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
 import { JwtPayload } from 'src/auth/strategies/jwt-payload.interface';
+import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
 
 @Injectable()
 export class UsuarioService {
@@ -22,6 +23,7 @@ export class UsuarioService {
     private validator: ValidatorPasswordConfirmation,
     private mailService: MailService,
     private jwtTokens: JwtTokens,
+    private hateOas: HateoasUsuario,
   ) {}
 
   buscarDiaristasPorCep() {
@@ -63,6 +65,9 @@ export class UsuarioService {
       usuarioCadastrado,
     );
 
+    usuarioCadastroDTO.links = this.hateOas.gerarLinksHateoas(
+      usuarioCadastroDTO.tipoUsuario,
+    );
     const { email } = usuarioCadastrado;
     const payload: JwtPayload = { email };
     usuarioCadastroDTO.tokens = await this.jwtTokens.gerarTokens(payload);

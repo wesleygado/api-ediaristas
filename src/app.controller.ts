@@ -6,6 +6,6 @@ export class AppController {
   constructor(private hateOas: HateoasIndex) {}
   @Get()
   index() {
-    return { links: this.hateOas.gerarLinksHateoasIndex() };
+    return { links: this.hateOas.gerarLinksHateoas() };
   }
 }
