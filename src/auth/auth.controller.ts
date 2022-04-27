@@ -10,19 +10,16 @@ export class AuthController {
 
   @Post('/token')
   autenticar(@Body() usuarioAuthDto: UsuarioAuthDto): Promise<ITokens> {
-    console.log('esta autenticando');
     return this.authService.signIn(usuarioAuthDto);
   }
 
   @Post('/refresh')
   reautenticar(@Request() req) {
-    console.log('esta atualizando');
     return this.authService.reautenticar(req);
   }
 
   @Post('/logout')
   logOut(@Body() tokenDto: TokenDto) {
-    console.log('esta logout');
     return this.authService.logout(tokenDto);
   }
 }

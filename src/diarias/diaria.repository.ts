@@ -35,7 +35,6 @@ export class DiariaRepository extends Repository<Diaria> {
       status,
       codigoIbge,
     } = diariaDto;
-    console.log(diariaDto);
     const diaria = this.create({
       localDateTime: dataAtendimento,
       tempoAtendimento,
@@ -55,7 +54,7 @@ export class DiariaRepository extends Repository<Diaria> {
       quantidadeSalas,
       observacoes,
       servico,
-      valorComissao: 20,
+      valorComissao: valorComissao,
       cliente,
       status,
       codigoIbge,

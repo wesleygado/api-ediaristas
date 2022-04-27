@@ -29,7 +29,6 @@ export class DiaristaService {
       this.diaristaMapper.toDiaristaLocalidadeResponseDto(usuario),
     );
 
-    console.log(diaristas);
     return new DiaristaLocalidadesPagedResponse(
       diaristas,
       pageSize,

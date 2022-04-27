@@ -49,7 +49,6 @@ export class UsuarioRepository extends Repository<UsuarioApi> {
         tipo_usuario: tipoUsuario,
       })
       .getRawOne();
-    console.log(tipoUsuario);
     return media.avg;
   }
 }

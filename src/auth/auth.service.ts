@@ -30,7 +30,6 @@ export class AuthService {
   async reautenticar(req: Request) {
     const email = await this.jwtTokens.verificarRefrestToken(req);
     const payload: JwtPayload = { email };
-    console.log('ta dando refresh');
     return this.jwtTokens.gerarTokens(payload);
   }
 

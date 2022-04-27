@@ -1,11 +1,19 @@
 import { Exclude, Expose } from 'class-transformer';
-import { IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
-import { ClienteResponseDto } from 'src/clientes/dto/cliente-response.dto';
+import {
+  IsNotEmpty,
+  IsOptional,
+  MaxLength,
+  MinLength,
+  Validate,
+} from 'class-validator';
+import { DataAtendimento } from 'src/core/validators/diaria/validator-data-atendimento';
+import { ServicoExiste } from 'src/core/validators/diaria/validator-servico';
 import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
 
 export class DiariaRequestDto {
   @IsNotEmpty()
   @Expose({ name: 'data_atendimento' })
+  @Validate(DataAtendimento)
   dataAtendimento: Date;
 
   @IsNotEmpty()
@@ -65,7 +73,7 @@ export class DiariaRequestDto {
   @IsOptional()
   observacoes: string;
 
-  @IsNotEmpty()
+  @Validate(ServicoExiste)
   servico: number;
 
   @Expose({ name: 'codigo_ibge' })

@@ -21,6 +21,6 @@ export class ServicoService {
     const servico: ServicoResponseDto = await this.manager.query(
       `Select * from servico where id = ${servicoId}`,
     );
-    return servico;
+    return servico[0];
   }
 }

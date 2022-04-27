@@ -16,7 +16,6 @@ import { CpfJaExiste } from 'src/core/validators/usuario/validator-cpf';
 import { EmailJaExiste } from 'src/core/validators/usuario/validator-email';
 import { IdadeValida } from 'src/core/validators/usuario/validator-idade';
 import { Foto } from 'src/fotos/entities/foto.entity';
-import TipoUsuario from '../enum/tipoUsuario-enum';
 
 export class UsuarioRequestDto {
   id: number;

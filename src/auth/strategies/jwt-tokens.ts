@@ -25,11 +25,11 @@ export class JwtTokens {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: 'topSecret512',
-        expiresIn: 300,
+        expiresIn: 300000,
       }),
       this.jwtService.signAsync(payload, {
         secret: 'topSecret51-rt',
-        expiresIn: 600,
+        expiresIn: 600000,
       }),
     ]);
     return { access: accessToken, refresh: refreshToken };
@@ -48,7 +48,6 @@ export class JwtTokens {
     }
 
     const tokenExist = await this.tokenService.findOne(accessToken);
-    console.log(tokenExist);
     if (!tokenExist) {
       await this.tokenService.create(accessToken);
     } else {
@@ -72,7 +71,6 @@ export class JwtTokens {
   }
 
   async desativarToken(tokenDto: TokenDto) {
-    console.log(tokenDto.refresh);
     const tokenExist = await this.tokenService.findOne(tokenDto.refresh);
     if (!tokenExist) {
       await this.tokenService.create(tokenDto.refresh);
