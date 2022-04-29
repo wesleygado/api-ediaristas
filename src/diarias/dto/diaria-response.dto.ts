@@ -1,5 +1,7 @@
 import { Expose } from 'class-transformer';
 import { ClienteResponseDto } from 'src/clientes/dto/cliente-response.dto';
+import { HateoasLinks } from 'src/core/hateoas/hateoas.interface';
+import { DiaristaDiariaResponseDto } from 'src/diaristas/dtos/diarista-diaria.dto';
 
 export class DiariaResponseDto {
   id: number;
@@ -65,4 +67,8 @@ export class DiariaResponseDto {
   updated_at: Date;
 
   cliente: ClienteResponseDto;
+
+  diarista: DiaristaDiariaResponseDto;
+
+  links: HateoasLinks[];
 }

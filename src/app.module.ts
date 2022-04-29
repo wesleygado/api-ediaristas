@@ -18,6 +18,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeormConfigModule } from 'src/database.module';
 import { DiariasModule } from './diarias/diarias.module';
 import { ClienteModule } from './clientes/cliente.module';
+import { PagamentosModule } from './pagamentos/pagamentos.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ClienteModule } from './clientes/cliente.module';
     }),
     DiariasModule,
     ClienteModule,
+    PagamentosModule,
   ],
   controllers: [AppController],
   providers: [HateoasIndex],

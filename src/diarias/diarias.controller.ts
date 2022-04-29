@@ -1,6 +1,7 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
 import TipoUsuario from 'src/usuarios/enum/tipoUsuario-enum';
@@ -12,7 +13,8 @@ export class DiariasController {
   constructor(private readonly diariasService: DiariasService) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'), new RolesGuard(TipoUsuario.CLIENTE))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles()
   cadastrar(
     @Body() diariaRequestDto: DiariaRequestDto,
     @GetUser() usuario: UsuarioApi,

@@ -47,6 +47,7 @@ export class DiariaMapper {
     diariaReponseDto.created_at = diaria.created_at;
     diariaReponseDto.updated_at = diaria.updated_at;
     diariaReponseDto.cliente = cliente;
+    diariaReponseDto.diarista = null;
     return diariaReponseDto;
   }
 }

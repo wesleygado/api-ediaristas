@@ -1,11 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
-import {
-  IsNotEmpty,
-  IsOptional,
-  MaxLength,
-  MinLength,
-  Validate,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, MaxLength, Validate } from 'class-validator';
+import { HateoasLinks } from 'src/core/hateoas/hateoas.interface';
 import { DataAtendimento } from 'src/core/validators/diaria/validator-data-atendimento';
 import { ServicoExiste } from 'src/core/validators/diaria/validator-servico';
 import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
@@ -87,4 +82,7 @@ export class DiariaRequestDto {
 
   @Exclude()
   status: number;
+
+  @Exclude()
+  links: HateoasLinks[];
 }

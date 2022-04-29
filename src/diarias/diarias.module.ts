@@ -3,7 +3,6 @@ import { DiariasService } from './diarias.service';
 import { DiariasController } from './diarias.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DiariaRepository } from './diaria.repository';
-import { DiaristaMapper } from 'src/diaristas/diarista.mapper';
 import { DiariaMapper } from './diariaMapper';
 import { ServicoService } from 'src/servicos/servico.service';
 import { ClienteMapper } from 'src/clientes/clienteMapper';
@@ -18,6 +17,7 @@ import { ViaCepService } from 'src/core/providers/via-cep.service';
 import { ValidatorIbge } from 'src/core/validators/diaria/validator-ibge';
 import { ValidatorDisponibilidade } from 'src/core/validators/diaria/validator-disponibilidade';
 import { DiaristaRepository } from 'src/diaristas/diarista.repository';
+import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 
 @Module({
   imports: [
@@ -40,6 +40,7 @@ import { DiaristaRepository } from 'src/diaristas/diarista.repository';
     ViaCepService,
     ValidatorIbge,
     ValidatorDisponibilidade,
+    HateoasDiaria,
   ],
 })
 export class DiariasModule {}

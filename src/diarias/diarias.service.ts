@@ -13,6 +13,7 @@ import { ValidatorPrecoDiaria } from 'src/core/validators/diaria/validator-preco
 import { ValidatorCep } from 'src/core/validators/diaria/validator-cep';
 import { ValidatorIbge } from 'src/core/validators/diaria/validator-ibge';
 import { ValidatorDisponibilidade } from 'src/core/validators/diaria/validator-disponibilidade';
+import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 
 @Injectable()
 export class DiariasService {
@@ -28,6 +29,7 @@ export class DiariasService {
     private validatorCep: ValidatorCep,
     private validatorIbge: ValidatorIbge,
     private validatorDisponibilidade: ValidatorDisponibilidade,
+    private hateOas: HateoasDiaria,
   ) {}
 
   async cadastrar(request: DiariaRequestDto, userRequest: UsuarioApi) {
@@ -53,7 +55,18 @@ export class DiariasService {
     const diariaCadastrada = await this.diariaRepository.createDiaria(
       diariaDTO,
     );
-    return this.diariaMapper.toDiariaResponseDto(diariaCadastrada);
+
+    diariaDTO.links = this.hateOas.gerarLinksHateoas(
+      userRequest.tipoUsuario,
+      diariaCadastrada,
+    );
+
+    const diariaDtoResponse = await this.diariaMapper.toDiariaResponseDto(
+      diariaCadastrada,
+    );
+
+    diariaDtoResponse.links = diariaDTO.links;
+    return diariaDtoResponse;
   }
 
   private async calcularComissao(model: DiariaRequestDto): Promise<number> {

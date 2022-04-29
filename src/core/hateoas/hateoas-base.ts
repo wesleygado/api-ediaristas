@@ -16,6 +16,7 @@ export class HateoasBase {
     descricao: string,
     controller: ControllerClass,
     controllerMethod: ControllerMethod,
+    param?: any,
   ) {
     this.LINKS.push({
       type: metodo,
@@ -23,6 +24,7 @@ export class HateoasBase {
       uri: this.urlGeneratorService.generateUrlFromController({
         controller: controller,
         controllerMethod: controllerMethod,
+        params: param,
       }),
     });
   }
