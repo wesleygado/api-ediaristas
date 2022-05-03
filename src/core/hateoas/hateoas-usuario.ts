@@ -17,6 +17,13 @@ export class HateoasUsuario extends HateoasBase implements HateoasInterface {
       );
     }
 
+    this.adicionaLink(
+      'GET',
+      'listar_diárias_por_usuario_logado',
+      DiariasController,
+      DiariasController.prototype.listarDiarias,
+    );
+
     return this.LINKS;
   }
 }

@@ -1,4 +1,5 @@
 import { Expose } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 import { ClienteResponseDto } from 'src/clientes/dto/cliente-response.dto';
 import { HateoasLinks } from 'src/core/hateoas/hateoas.interface';
 import { DiaristaDiariaResponseDto } from 'src/diaristas/dtos/diarista-diaria.dto';
@@ -68,6 +69,7 @@ export class DiariaResponseDto {
 
   cliente: ClienteResponseDto;
 
+  @IsOptional()
   diarista: DiaristaDiariaResponseDto;
 
   links: HateoasLinks[];

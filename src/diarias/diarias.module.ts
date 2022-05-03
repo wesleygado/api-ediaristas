@@ -18,11 +18,15 @@ import { ValidatorIbge } from 'src/core/validators/diaria/validator-ibge';
 import { ValidatorDisponibilidade } from 'src/core/validators/diaria/validator-disponibilidade';
 import { DiaristaRepository } from 'src/diaristas/diarista.repository';
 import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
+import { DiaristaMapper } from 'src/diaristas/diarista.mapper';
+import { UsuarioRepository } from 'src/usuarios/usuario.repository';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([DiariaRepository]),
     TypeOrmModule.forFeature([DiaristaRepository]),
+    TypeOrmModule.forFeature([UsuarioRepository]),
   ],
   controllers: [DiariasController],
   providers: [
@@ -41,6 +45,7 @@ import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
     ValidatorIbge,
     ValidatorDisponibilidade,
     HateoasDiaria,
+    DiaristaMapper,
   ],
 })
 export class DiariasModule {}

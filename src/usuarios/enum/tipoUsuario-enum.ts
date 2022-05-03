@@ -1,4 +1,4 @@
-enum TipoUsuario {
+export enum TipoUsuario {
   CLIENTE = 1,
   DIARISTA = 2,
 }

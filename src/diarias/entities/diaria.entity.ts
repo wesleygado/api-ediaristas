@@ -87,7 +87,10 @@ export class Diaria {
   @JoinColumn({ name: 'cliente_id' })
   cliente: UsuarioApi;
 
-  @ManyToOne(() => UsuarioApi, (diarista) => diarista.id, { nullable: true })
+  @ManyToOne(() => UsuarioApi, (diarista) => diarista.id, {
+    nullable: true,
+    eager: true,
+  })
   @JoinColumn({ name: 'diarista_id' })
   diarista: UsuarioApi;
 

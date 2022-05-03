@@ -39,7 +39,6 @@ export class ValidatorPrecoDiaria {
     if (valorTotal < servico.valor_minimo) {
       return servico.valor_minimo / 100;
     }
-    console.log(valorTotal / 100);
     return valorTotal / 100;
   }
 }

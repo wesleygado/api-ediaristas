@@ -11,8 +11,12 @@ export class ClienteMapper {
     clienteDTO.reputacao = usuario.reputacao;
     clienteDTO.telefone = usuario.telefone;
     clienteDTO.tipoUsuario = usuario.tipoUsuario;
-    clienteDTO.fotoUsuario = usuario.fotoUsuario.url;
 
+    if (!usuario.fotoUsuario) {
+      clienteDTO.fotoUsuario = null;
+    } else {
+      clienteDTO.fotoUsuario = usuario.fotoUsuario.url;
+    }
     return clienteDTO;
   }
 }

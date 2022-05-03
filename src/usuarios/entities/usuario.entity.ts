@@ -34,6 +34,8 @@ export class UsuarioApi {
 
   @Column({
     name: 'tipo_usuario',
+    type: 'enum',
+    enum: TipoUsuario,
   })
   @Expose({ name: 'tipo_usuario' })
   tipoUsuario: number;

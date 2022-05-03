@@ -1,3 +1,4 @@
+import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { Diaria } from './entities/diaria.entity';
@@ -61,5 +62,13 @@ export class DiariaRepository extends Repository<Diaria> {
     });
     await this.save(diaria);
     return diaria;
+  }
+
+  async findByCliente(cliente: UsuarioApi): Promise<Diaria[]> {
+    return await this.find({ cliente: cliente });
+  }
+
+  async findByDiarista(diarista: UsuarioApi): Promise<Diaria[]> {
+    return await this.find({ diarista: diarista });
   }
 }

@@ -27,7 +27,6 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
         params,
       );
     }
-    console.log(diaria.id);
     return this.LINKS;
   }
 }

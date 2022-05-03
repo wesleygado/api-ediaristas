@@ -12,7 +12,6 @@ export class PagamentosService {
     private pagamentoValidator: ValidatorPagamentoStatus,
   ) {}
   async pagar(pagamentoDto: PagamentoRequestDto, id: number) {
-    console.log(id);
     const diaria = await this.buscarDiariaPorId(id);
     await this.pagamentoValidator.validarStatus(diaria);
     diaria.status = DiariaStatus.PAGO;

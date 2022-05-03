@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { DiariaRepository } from './diaria.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DiariaMapper } from './diariaMapper';
@@ -14,6 +14,8 @@ import { ValidatorCep } from 'src/core/validators/diaria/validator-cep';
 import { ValidatorIbge } from 'src/core/validators/diaria/validator-ibge';
 import { ValidatorDisponibilidade } from 'src/core/validators/diaria/validator-disponibilidade';
 import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
+import TipoUsuario from 'src/usuarios/enum/tipoUsuario-enum';
+import { DiariaResponseDto } from './dto/diaria-response.dto';
 
 @Injectable()
 export class DiariasService {
@@ -63,10 +65,37 @@ export class DiariasService {
 
     const diariaDtoResponse = await this.diariaMapper.toDiariaResponseDto(
       diariaCadastrada,
+      userRequest,
     );
 
     diariaDtoResponse.links = diariaDTO.links;
     return diariaDtoResponse;
+  }
+
+  async listarPorUsuarioLogado(usuarioLogado: UsuarioApi) {
+    let diarias = [];
+    if (usuarioLogado.tipoUsuario === TipoUsuario.CLIENTE) {
+      diarias = await this.diariaRepository.findByCliente(usuarioLogado);
+    }
+
+    if (usuarioLogado.tipoUsuario === TipoUsuario.DIARISTA) {
+      diarias = await this.diariaRepository.findByDiarista(usuarioLogado);
+    }
+
+    return diarias;
+  }
+
+  async buscarPorId(
+    id: number,
+    usuario: UsuarioApi,
+  ): Promise<DiariaResponseDto> {
+    const diaria = await this.diariaRepository.findOne({ id: id });
+
+    if (!diaria) {
+      throw new BadRequestException(`Diária com ${id} não encontrada`);
+    }
+
+    return this.diariaMapper.toDiariaResponseDto(diaria, usuario);
   }
 
   private async calcularComissao(model: DiariaRequestDto): Promise<number> {

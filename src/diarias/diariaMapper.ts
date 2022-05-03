@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ClienteMapper } from 'src/clientes/clienteMapper';
+import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
+import { DiaristaMapper } from 'src/diaristas/diarista.mapper';
 import { ServicoService } from 'src/servicos/servico.service';
+import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
+import { UsuarioRepository } from 'src/usuarios/usuario.repository';
+import { DiariaRepository } from './diaria.repository';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { DiariaResponseDto } from './dto/diaria-response.dto';
 import { Diaria } from './entities/diaria.entity';
@@ -10,17 +15,22 @@ export class DiariaMapper {
   constructor(
     private servico: ServicoService,
     private clienteMapper: ClienteMapper,
+    private diaristaMapper: DiaristaMapper,
+    private usuarioRepository: UsuarioRepository,
+    private hateOas: HateoasDiaria,
   ) {}
   toDiariaRequestDto(request: DiariaRequestDto) {
     const diariaDTO = request;
     return diariaDTO;
   }
 
-  async toDiariaResponseDto(diaria: Diaria) {
-    const servico = await this.servico.buscarServicoPorId(diaria.servico);
-    const cliente = this.clienteMapper.toResponse(diaria.cliente);
-
+  async toDiariaResponseDto(diaria: Diaria, usuario: UsuarioApi) {
     const diariaReponseDto = new DiariaResponseDto();
+    const servico = await this.servico.buscarServicoPorId(diaria.servico);
+    const cliente = this.clienteMapper.toResponse(usuario);
+    const diariaDTO = this.diaristaMapper.toDiaristaDiariaResponseDto(
+      diaria.diarista,
+    );
     diariaReponseDto.id = diaria.id;
     diariaReponseDto.status = diaria.status;
     diariaReponseDto.valorComissao = diaria.valorComissao;
@@ -47,7 +57,11 @@ export class DiariaMapper {
     diariaReponseDto.created_at = diaria.created_at;
     diariaReponseDto.updated_at = diaria.updated_at;
     diariaReponseDto.cliente = cliente;
-    diariaReponseDto.diarista = null;
+    diariaReponseDto.diarista = diariaDTO;
+    diariaReponseDto.links = this.hateOas.gerarLinksHateoas(
+      usuario.tipoUsuario,
+      diaria,
+    );
     return diariaReponseDto;
   }
 }
