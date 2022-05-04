@@ -16,6 +16,7 @@ import {
 import TipoUsuario from '../enum/tipoUsuario-enum';
 import * as bcrypt from 'bcrypt';
 import { Expose } from 'class-transformer';
+import { EnderecoDiarista } from 'src/endereco-diarista/entities/endereco-diarista.entity';
 
 @Entity()
 export class UsuarioApi {
@@ -69,6 +70,15 @@ export class UsuarioApi {
   )
   @JoinTable({ name: 'cidades_atendidas_usuarios' })
   cidadesAtendidas: CidadesAtendidas[];
+
+  @OneToOne((type) => EnderecoDiarista, {
+    nullable: true,
+    eager: true,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
+  @JoinColumn({ name: 'endereco_id' })
+  endereco: EnderecoDiarista;
 
   @CreateDateColumn({
     type: 'timestamp',

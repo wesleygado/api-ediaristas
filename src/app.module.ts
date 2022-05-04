@@ -19,6 +19,7 @@ import { TypeormConfigModule } from 'src/database.module';
 import { DiariasModule } from './diarias/diarias.module';
 import { ClienteModule } from './clientes/cliente.module';
 import { PagamentosModule } from './pagamentos/pagamentos.module';
+import { EnderecoDiaristaModule } from './endereco-diarista/endereco-diarista.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { PagamentosModule } from './pagamentos/pagamentos.module';
     DiariasModule,
     ClienteModule,
     PagamentosModule,
+    EnderecoDiaristaModule,
   ],
   controllers: [AppController],
   providers: [HateoasIndex],
