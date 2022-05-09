@@ -15,6 +15,7 @@ import { ChavePixJaExiste } from 'src/core/validators/usuario/validator-chave-pi
 import { CpfJaExiste } from 'src/core/validators/usuario/validator-cpf';
 import { EmailJaExiste } from 'src/core/validators/usuario/validator-email';
 import { IdadeValida } from 'src/core/validators/usuario/validator-idade';
+import { EnderecoDiarista } from 'src/endereco-diarista/entities/endereco-diarista.entity';
 import { Foto } from 'src/fotos/entities/foto.entity';
 
 export class UsuarioRequestDto {
@@ -62,8 +63,6 @@ export class UsuarioRequestDto {
   telefone: string;
 
   @IsOptional()
-  /*   @Length(11, 11, { message: 'Chave Pix deve ter 11 caracteres' })
-   */
   @Expose({ name: 'chave_pix' })
   @Validate(ChavePixJaExiste)
   chavePix: string;
@@ -75,4 +74,8 @@ export class UsuarioRequestDto {
   @IsOptional()
   @Expose({ name: 'foto_usuario' })
   fotoUsuario: Foto;
+
+  @IsOptional()
+  @Expose()
+  endereco: EnderecoDiarista;
 }

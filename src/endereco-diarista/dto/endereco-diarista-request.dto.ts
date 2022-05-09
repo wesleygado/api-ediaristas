@@ -1,6 +1,10 @@
+import { Exclude } from 'class-transformer';
 import { IsNotEmpty, IsOptional, Length, MaxLength } from 'class-validator';
 
 export class EnderecoDiaristaRequestDto {
+  @Exclude()
+  id: number;
+
   @IsNotEmpty()
   @Length(3, 60)
   logradouro: string;
@@ -18,14 +22,14 @@ export class EnderecoDiaristaRequestDto {
   complemento: string;
 
   @IsNotEmpty()
-  @Length(10, 20)
+  @Length(8, 20)
   cep: string;
 
   @IsNotEmpty()
-  @Length(3, 8)
+  @Length(3, 20)
   cidade: string;
 
   @IsNotEmpty()
   @Length(2, 2)
-  estadp: string;
+  estado: string;
 }
