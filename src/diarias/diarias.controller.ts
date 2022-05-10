@@ -6,7 +6,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ValidatorDiariaUsuario } from 'src/core/validators/diaria/validator-diaria-usuario';
 import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
 import { TipoUsuario } from 'src/usuarios/enum/tipoUsuario-enum';
-import { DiariaMapper } from './diariaMapper';
+import { DiariaMapper } from './diaria.mapper';
 import { DiariasService } from './diarias.service';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 

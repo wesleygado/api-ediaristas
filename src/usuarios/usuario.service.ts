@@ -1,4 +1,4 @@
-import { BadRequestException, ConsoleLogger, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioRequestDto } from './dtos/usuario-request.dto';
 import { UsuarioCadastroResponseDto } from './dtos/usuario-cadastro-response.dto';

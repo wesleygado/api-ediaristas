@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DiariaRepository } from './diaria.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DiariaMapper } from './diariaMapper';
+import { DiariaMapper } from './diaria.mapper';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { ServicoService } from 'src/servicos/servico.service';
 import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';

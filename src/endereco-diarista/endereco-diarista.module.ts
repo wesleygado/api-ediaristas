@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioRepository } from 'src/usuarios/usuario.repository';
 import { EnderecoDiaristaMapper } from './endereco-diarista.mapper';
 import { EnderecoDiaristaRepository } from './endereco-diarista.repository';
+import { IbgeService } from 'src/consulta-cidade/consulta-cidade.service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { EnderecoDiaristaRepository } from './endereco-diarista.repository';
     TypeOrmModule.forFeature([EnderecoDiaristaRepository]),
   ],
   controllers: [EnderecoDiaristaController],
-  providers: [EnderecoDiaristaService, EnderecoDiaristaMapper],
+  providers: [EnderecoDiaristaService, EnderecoDiaristaMapper, IbgeService],
 })
 export class EnderecoDiaristaModule {}

@@ -3,7 +3,7 @@ import { DiariasService } from './diarias.service';
 import { DiariasController } from './diarias.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DiariaRepository } from './diaria.repository';
-import { DiariaMapper } from './diariaMapper';
+import { DiariaMapper } from './diaria.mapper';
 import { ServicoService } from 'src/servicos/servico.service';
 import { ClienteMapper } from 'src/clientes/clienteMapper';
 import { ServicoMapper } from 'src/servicos/servico.mapper';

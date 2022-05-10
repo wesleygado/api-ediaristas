@@ -67,6 +67,7 @@ export class UsuarioApi {
   @ManyToMany(
     (type) => CidadesAtendidas,
     (cidadesAtendidas) => cidadesAtendidas.usuarios,
+    { nullable: true, eager: true },
   )
   @JoinTable({ name: 'cidades_atendidas_usuarios' })
   cidadesAtendidas: CidadesAtendidas[];
