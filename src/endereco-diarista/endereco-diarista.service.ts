@@ -34,7 +34,7 @@ export class EnderecoDiaristaService {
   async exibirEndereco(usuario: UsuarioApi) {
     if (!usuario.endereco) {
       throw new NotFoundException(
-        `Endereço do usuárui ${usuario.email} nâo encontrado`,
+        `Endereço do usuário: ${usuario.email} nâo encontrado`,
       );
     }
     return this.enderecoDiaristaMapper.toEnderecoDiaristaResponse(

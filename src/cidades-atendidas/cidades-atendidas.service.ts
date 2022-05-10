@@ -4,6 +4,7 @@ import { IbgeService } from 'src/consulta-cidade/consulta-cidade.service';
 import { ViaCepService } from 'src/core/providers/via-cep.service';
 import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
 import { UsuarioRepository } from 'src/usuarios/usuario.repository';
+import { json } from 'stream/consumers';
 import { CidadesAtendidasRepository } from './cidade-atendida.repository';
 import { CidadeAtendidaResponseDto } from './dto/cidade-atendida-response.dto';
 import { CidadesAtendidasRequestDto } from './dto/cidades-atendidas-request.dto copy';
@@ -50,7 +51,7 @@ export class CidadesAtendidasService {
     usuarioLogado.cidadesAtendidas = cidadesAtendidas;
     await this.usuarioRepository.save(usuarioLogado);
 
-    return 'Cidades Atendidas com Sucesso';
+    return JSON.parse('Cidades Atendidas com Sucesso');
   }
   private async cadastrarCidadeAtendida(codigoIbge: string) {
     const cidade = await this.consultaCidade.buscarCidadePorCodigoIbge(

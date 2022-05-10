@@ -91,7 +91,7 @@ export class DiariasService {
     const diaria = await this.diariaRepository.findOne({ id: id });
     console.log(diaria);
     if (!diaria) {
-      throw new BadRequestException(`Diária com ${id} não encontrada`);
+      throw new BadRequestException(`Diária com Id:${id} não encontrada`);
     }
 
     return this.diariaMapper.toDiariaResponseDto(diaria, usuario);

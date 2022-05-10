@@ -99,7 +99,10 @@ export class Diaria {
   @Column({ nullable: false })
   servico: number;
 
-  @ManyToMany(() => UsuarioApi)
+  @ManyToMany(() => UsuarioApi, (diarista) => diarista.id, {
+    nullable: true,
+    eager: true,
+  })
   @JoinTable({
     name: 'diaria_candidato',
   })

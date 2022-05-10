@@ -3,8 +3,8 @@ import { HateoasInterface, HateoasLinks } from './hateoas.interface';
 import { HateoasBase } from './hateoas-base';
 import { DiariasController } from 'src/diarias/diarias.controller';
 import TipoUsuario from 'src/usuarios/enum/tipoUsuario-enum';
-import { EnderecoDiarista } from 'src/endereco-diarista/entities/endereco-diarista.entity';
 import { EnderecoDiaristaController } from 'src/endereco-diarista/endereco-diarista.controller';
+import { CidadesAtendidasController } from 'src/cidades-atendidas/cidades-atendidas.controller';
 
 @Injectable()
 export class HateoasUsuario extends HateoasBase implements HateoasInterface {
@@ -33,6 +33,20 @@ export class HateoasUsuario extends HateoasBase implements HateoasInterface {
         'exibir_endereço',
         EnderecoDiaristaController,
         EnderecoDiaristaController.prototype.exibirEndereco,
+      );
+
+      this.adicionaLink(
+        'PUT',
+        'relacionar_cidades',
+        CidadesAtendidasController,
+        CidadesAtendidasController.prototype.atualizarCidadesAtendidas,
+      );
+
+      this.adicionaLink(
+        'GET',
+        'listar_cidades',
+        CidadesAtendidasController,
+        CidadesAtendidasController.prototype.listarCidadesAtendidas,
       );
     }
 

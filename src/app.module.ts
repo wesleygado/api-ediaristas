@@ -20,6 +20,7 @@ import { DiariasModule } from './diarias/diarias.module';
 import { ClienteModule } from './clientes/cliente.module';
 import { PagamentosModule } from './pagamentos/pagamentos.module';
 import { EnderecoDiaristaModule } from './endereco-diarista/endereco-diarista.module';
+import { CandidaturaModule } from './candidatura/candidatura.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { EnderecoDiaristaModule } from './endereco-diarista/endereco-diarista.mo
     ClienteModule,
     PagamentosModule,
     EnderecoDiaristaModule,
+    CandidaturaModule,
   ],
   controllers: [AppController],
   providers: [HateoasIndex],
