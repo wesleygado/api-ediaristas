@@ -89,7 +89,6 @@ export class DiariasService {
     usuario: UsuarioApi,
   ): Promise<DiariaResponseDto> {
     const diaria = await this.diariaRepository.findOne({ id: id });
-    console.log(diaria);
     if (!diaria) {
       throw new BadRequestException(`Diária com Id:${id} não encontrada`);
     }

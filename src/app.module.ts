@@ -21,6 +21,7 @@ import { ClienteModule } from './clientes/cliente.module';
 import { PagamentosModule } from './pagamentos/pagamentos.module';
 import { EnderecoDiaristaModule } from './endereco-diarista/endereco-diarista.module';
 import { CandidaturaModule } from './candidatura/candidatura.module';
+import { OportunidadeModule } from './oportunidade/oportunidade.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { CandidaturaModule } from './candidatura/candidatura.module';
     PagamentosModule,
     EnderecoDiaristaModule,
     CandidaturaModule,
+    OportunidadeModule,
   ],
   controllers: [AppController],
   providers: [HateoasIndex],

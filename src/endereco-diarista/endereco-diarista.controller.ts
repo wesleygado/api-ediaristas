@@ -31,7 +31,6 @@ export class EnderecoDiaristaController {
     @Body() enderecoDiarista: EnderecoDiaristaRequestDto,
     @GetUser() usuarioLogado: UsuarioApi,
   ) {
-    console.log(usuarioLogado);
     return this.enderecoDiaristaService.alterarEndereco(
       enderecoDiarista,
       usuarioLogado,

@@ -5,6 +5,7 @@ import { DiariasController } from 'src/diarias/diarias.controller';
 import TipoUsuario from 'src/usuarios/enum/tipoUsuario-enum';
 import { EnderecoDiaristaController } from 'src/endereco-diarista/endereco-diarista.controller';
 import { CidadesAtendidasController } from 'src/cidades-atendidas/cidades-atendidas.controller';
+import { OportunidadeController } from 'src/oportunidade/oportunidade.controller';
 
 @Injectable()
 export class HateoasUsuario extends HateoasBase implements HateoasInterface {
@@ -47,6 +48,13 @@ export class HateoasUsuario extends HateoasBase implements HateoasInterface {
         'listar_cidades',
         CidadesAtendidasController,
         CidadesAtendidasController.prototype.listarCidadesAtendidas,
+      );
+
+      this.adicionaLink(
+        'GET',
+        'listar_oportunidades',
+        OportunidadeController,
+        OportunidadeController.prototype.buscarOportunidades,
       );
     }
 

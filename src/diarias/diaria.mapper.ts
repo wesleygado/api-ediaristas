@@ -23,7 +23,7 @@ export class DiariaMapper {
     return diariaDTO;
   }
 
-  async toDiariaResponseDto(diaria: Diaria, usuario: UsuarioApi) {
+  async toDiariaResponseDto(diaria: Diaria, usuario?: UsuarioApi) {
     const diariaReponseDto = new DiariaResponseDto();
     const servico = await this.servico.buscarServicoPorId(diaria.servico);
     const cliente = this.clienteMapper.toResponse(diaria.cliente);

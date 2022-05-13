@@ -30,7 +30,6 @@ export class CidadesAtendidasService {
     usuarioLogado: UsuarioApi,
   ): Promise<string> {
     const cidadesAtendidas = [];
-    console.log(usuarioLogado);
     request.cidades.forEach(async (cidadeAtendidaRequest) => {
       const codigoIbge = cidadeAtendidaRequest.codigoIbge;
 
@@ -42,12 +41,9 @@ export class CidadesAtendidasService {
       } catch (error) {
         cidadeAtendida = await this.cadastrarCidadeAtendida(codigoIbge);
       }
-      console.log(cidadeAtendida);
       cidadesAtendidas.push(cidadeAtendida);
     });
 
-    console.log(usuarioLogado.cidadesAtendidas);
-    console.log(cidadesAtendidas);
     usuarioLogado.cidadesAtendidas = cidadesAtendidas;
     await this.usuarioRepository.save(usuarioLogado);
 

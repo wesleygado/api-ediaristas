@@ -72,5 +72,5 @@ export class DiariaResponseDto {
   @IsOptional()
   diarista: DiaristaDiariaResponseDto;
 
-  links: HateoasLinks[];
+  links?: HateoasLinks[];
 }
