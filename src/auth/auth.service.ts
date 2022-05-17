@@ -4,9 +4,9 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './strategies/jwt-payload.interface';
 import { JwtTokens } from './strategies/jwt-tokens';
 import { ITokens } from './strategies/jwt-tokens.interface';
-import { UsuarioRepository } from 'src/usuarios/usuario.repository';
+import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 import { UsuarioAuthDto } from './dtos/usuario-auth.dto';
-import { TokenDto } from 'src/tokens/dtos/token.dto';
+import { TokenDto } from 'src/auth/tokens/dtos/token.dto';
 
 @Injectable()
 export class AuthService {

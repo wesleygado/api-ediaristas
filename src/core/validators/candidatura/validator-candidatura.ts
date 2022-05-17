@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Diaria } from 'src/diarias/entities/diaria.entity';
-import DiariaStatus from 'src/diarias/enum/diaria-status';
-import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
+import { Diaria } from 'src/api/diarias/entities/diaria.entity';
+import DiariaStatus from 'src/api/diarias/enum/diaria-status';
+import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 
 @Injectable()
 export class ValidatorCandidatura {

@@ -1,27 +1,25 @@
 import { Module } from '@nestjs/common';
-import { UsuariosModule } from './usuarios/usuario.module';
-import * as ormconfig from 'src/database.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { FotoModule } from './fotos/foto.module';
-import { CidadesAtendidasModule } from './cidades-atendidas/cidades-atendidas.module';
-import { DiaristaModule } from './diaristas/diarista.module';
-import { EnderecoModule } from './consulta-endereco/endereco.module';
-import { ServicoModule } from './servicos/servico.module';
-import { MailModule } from './mail/mail.module';
+import { UsuariosModule } from './api/usuarios/usuario.module';
+import { FotoModule } from './api/fotos/foto.module';
+import { CidadesAtendidasModule } from './api/cidades-atendidas/cidades-atendidas.module';
+import { DiaristaModule } from './api/diaristas/diarista.module';
+import { EnderecoModule } from './core/services/consulta-endereco/endereco.module';
+import { ServicoModule } from './api/servicos/servico.module';
+import { MailModule } from './core/services/mail/mail.module';
 import { AuthModule } from './auth/auth.module';
-import { MeModule } from './me/me.module';
-import { TokensModule } from './tokens/tokens.module';
+import { MeModule } from './api/me/me.module';
+import { TokensModule } from './auth/tokens/tokens.module';
 import { AppController } from './app.controller';
 import { HateoasIndex } from './core/hateoas/hateoas-index';
 import { UrlGeneratorModule } from 'nestjs-url-generator';
 import { ConfigModule } from '@nestjs/config';
-import { TypeormConfigModule } from 'src/database.module';
-import { DiariasModule } from './diarias/diarias.module';
-import { ClienteModule } from './clientes/cliente.module';
-import { PagamentosModule } from './pagamentos/pagamentos.module';
-import { EnderecoDiaristaModule } from './endereco-diarista/endereco-diarista.module';
-import { CandidaturaModule } from './candidatura/candidatura.module';
-import { OportunidadeModule } from './oportunidade/oportunidade.module';
+import { TypeormConfigModule } from 'src/core/database/database.module';
+import { DiariasModule } from './api/diarias/diarias.module';
+import { ClienteModule } from './api/clientes/cliente.module';
+import { PagamentosModule } from './api/pagamentos/pagamentos.module';
+import { EnderecoDiaristaModule } from './api/endereco-diarista/endereco-diarista.module';
+import { CandidaturaModule } from './api/candidaturas/candidatura.module';
+import { OportunidadeModule } from './api/oportunidade/oportunidade.module';
 
 @Module({
   imports: [

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { EnderecoController } from 'src/consulta-endereco/endereco.controller';
-import { DiaristaController } from 'src/diaristas/diarista.controller';
-import { ServicoController } from 'src/servicos/servico.controller';
+import { EnderecoController } from 'src/core/services/consulta-endereco/endereco.controller';
+import { DiaristaController } from 'src/api/diaristas/diarista.controller';
+import { ServicoController } from 'src/api/servicos/servico.controller';
 import { HateoasInterface, HateoasLinks } from './hateoas.interface';
 import { HateoasBase } from './hateoas-base';
-import { UsuarioController } from 'src/usuarios/usuario.controller';
+import { UsuarioController } from 'src/api/usuarios/usuario.controller';
 import { AuthController } from 'src/auth/auth.controller';
-import { MeController } from 'src/me/me.controller';
+import { MeController } from 'src/api/me/me.controller';
 
 @Injectable()
 export class HateoasIndex extends HateoasBase implements HateoasInterface {

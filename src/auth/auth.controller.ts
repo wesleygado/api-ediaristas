@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Request } from '@nestjs/common';
-import { TokenDto } from 'src/tokens/dtos/token.dto';
+import { TokenDto } from 'src/auth/tokens/dtos/token.dto';
 import { AuthService } from './auth.service';
 import { UsuarioAuthDto } from './dtos/usuario-auth.dto';
 import { ITokens } from './strategies/jwt-tokens.interface';

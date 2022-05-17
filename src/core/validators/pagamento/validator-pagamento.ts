@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Diaria } from 'src/diarias/entities/diaria.entity';
-import DiariaStatus from 'src/diarias/enum/diaria-status';
+import { Diaria } from 'src/api/diarias/entities/diaria.entity';
+import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 
 @Injectable()
 export class ValidatorPagamentoStatus {

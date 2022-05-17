@@ -1,7 +1,7 @@
 import { ForbiddenException } from '@nestjs/common';
-import { DiariaResponseDto } from 'src/diarias/dto/diaria-response.dto';
-import { UsuarioApi } from 'src/usuarios/entities/usuario.entity';
-import TipoUsuario from 'src/usuarios/enum/tipoUsuario-enum';
+import { DiariaResponseDto } from 'src/api/diarias/dto/diaria-response.dto';
+import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
+import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
 
 export class ValidatorDiariaUsuario {
   validarDiariaUsuario(usuario: UsuarioApi, diaria: DiariaResponseDto) {

@@ -7,9 +7,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { TokenDto } from 'src/tokens/dtos/token.dto';
-import { TokensService } from 'src/tokens/tokens.service';
-import { UsuarioRepository } from 'src/usuarios/usuario.repository';
+import { TokenDto } from 'src/auth/tokens/dtos/token.dto';
+import { TokensService } from 'src/auth/tokens/tokens.service';
+import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 
 import { JwtPayload } from './jwt-payload.interface';
 import { ITokens } from './jwt-tokens.interface';

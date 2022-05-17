@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TokensModule } from 'src/tokens/tokens.module';
-import { TokenRepository } from 'src/tokens/tokens.repository';
-import { TokensService } from 'src/tokens/tokens.service';
-import { UsuarioMapper } from 'src/usuarios/usuario.mapper';
-import { UsuarioRepository } from 'src/usuarios/usuario.repository';
+import { TokensModule } from 'src/auth/tokens/tokens.module';
+import { TokenRepository } from 'src/auth/tokens/tokens.repository';
+import { TokensService } from 'src/auth/tokens/tokens.service';
+import { UsuarioMapper } from 'src/api/usuarios/usuario.mapper';
+import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';

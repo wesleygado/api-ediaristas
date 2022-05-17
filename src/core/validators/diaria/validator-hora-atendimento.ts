@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Injectable } from '@nestjs/common';
-import { DiariaRequestDto } from 'src/diarias/dto/diaria-request.dto';
+import { DiariaRequestDto } from 'src/api/diarias/dto/diaria-request.dto';
 
 @Injectable()
 export class ValidatorHoraAtendimento {

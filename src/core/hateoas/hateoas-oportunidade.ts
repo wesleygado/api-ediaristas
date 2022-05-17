@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { HateoasInterface, HateoasLinks } from './hateoas.interface';
 import { HateoasBase } from './hateoas-base';
-import { PagamentosController } from 'src/pagamentos/pagamentos.controller';
-import DiariaStatus from 'src/diarias/enum/diaria-status';
-import TipoUsuario from 'src/usuarios/enum/tipoUsuario-enum';
-import { Diaria } from 'src/diarias/entities/diaria.entity';
-import { DiariasController } from 'src/diarias/diarias.controller';
-import { CandidaturaController } from 'src/candidatura/candidatura.controller';
+import { Diaria } from 'src/api/diarias/entities/diaria.entity';
+import { CandidaturaController } from 'src/api/candidaturas/candidatura.controller';
 
 @Injectable()
 export class HateoasOportunidade

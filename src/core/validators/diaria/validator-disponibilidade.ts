@@ -1,6 +1,6 @@
 import { BadRequestException, Body, Injectable } from '@nestjs/common';
-import { DiariaRequestDto } from 'src/diarias/dto/diaria-request.dto';
-import { DiaristaRepository } from 'src/diaristas/diarista.repository';
+import { DiariaRequestDto } from 'src/api/diarias/dto/diaria-request.dto';
+import { DiaristaRepository } from 'src/api/diaristas/diarista.repository';
 
 @Injectable()
 export class ValidatorDisponibilidade {

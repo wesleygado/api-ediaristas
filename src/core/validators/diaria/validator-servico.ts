@@ -4,7 +4,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { ServicoService } from 'src/servicos/servico.service';
+import { ServicoService } from 'src/api/servicos/servico.service';
 
 @ValidatorConstraint({ name: 'ServicoExiste', async: true })
 @Injectable()

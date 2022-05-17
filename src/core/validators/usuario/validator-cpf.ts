@@ -3,7 +3,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { UsuarioRepository } from 'src/usuarios/usuario.repository';
+import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 
 @ValidatorConstraint({ name: 'CpfJaExiste', async: true })
 @Injectable()

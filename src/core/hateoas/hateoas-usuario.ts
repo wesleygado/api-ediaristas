@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { HateoasInterface, HateoasLinks } from './hateoas.interface';
 import { HateoasBase } from './hateoas-base';
-import { DiariasController } from 'src/diarias/diarias.controller';
-import TipoUsuario from 'src/usuarios/enum/tipoUsuario-enum';
-import { EnderecoDiaristaController } from 'src/endereco-diarista/endereco-diarista.controller';
-import { CidadesAtendidasController } from 'src/cidades-atendidas/cidades-atendidas.controller';
-import { OportunidadeController } from 'src/oportunidade/oportunidade.controller';
+import { DiariasController } from 'src/api/diarias/diarias.controller';
+import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
+import { EnderecoDiaristaController } from 'src/api/endereco-diarista/endereco-diarista.controller';
+import { CidadesAtendidasController } from 'src/api/cidades-atendidas/cidades-atendidas.controller';
+import { OportunidadeController } from 'src/api/oportunidade/oportunidade.controller';
 
 @Injectable()
 export class HateoasUsuario extends HateoasBase implements HateoasInterface {

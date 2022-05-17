@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { DiariaRequestDto } from 'src/diarias/dto/diaria-request.dto';
-import { ServicoService } from 'src/servicos/servico.service';
+import { DiariaRequestDto } from 'src/api/diarias/dto/diaria-request.dto';
+import { ServicoService } from 'src/api/servicos/servico.service';
 
 @Injectable()
 export class ValidatorPrecoDiaria {
