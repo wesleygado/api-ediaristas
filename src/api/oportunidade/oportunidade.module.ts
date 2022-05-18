@@ -11,11 +11,13 @@ import { DiaristaMapper } from 'src/api/diaristas/diarista.mapper';
 import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 import { ServicoMapper } from 'src/api/servicos/servico.mapper';
+import { ServicoRepository } from '../servicos/servico.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([DiariaRepository]),
     TypeOrmModule.forFeature([UsuarioRepository]),
+    TypeOrmModule.forFeature([ServicoRepository]),
   ],
   controllers: [OportunidadeController],
   providers: [

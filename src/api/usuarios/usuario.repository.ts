@@ -7,8 +7,7 @@ import { UsuarioApi } from './entities/usuario.entity';
 export class UsuarioRepository extends Repository<UsuarioApi> {
   async getUsers(): Promise<UsuarioApi[]> {
     const query = this.createQueryBuilder('usuarioApi');
-    const usuarios = await query.getMany();
-    return usuarios;
+    return await query.getMany();
   }
 
   async createUser(usuarioRequestDto: UsuarioRequestDto): Promise<UsuarioApi> {
@@ -45,12 +44,12 @@ export class UsuarioRepository extends Repository<UsuarioApi> {
   }
 
   async getMediaReputacaoDiarista(tipoUsuario): Promise<number> {
-    const media = await this.createQueryBuilder('usuario')
+    const { avg } = await this.createQueryBuilder('usuario')
       .select('AVG(usuario.reputacao)', 'avg')
       .where('usuario.tipo_usuario = :tipo_usuario', {
         tipo_usuario: tipoUsuario,
       })
       .getRawOne();
-    return media.avg;
+    return avg;
   }
 }

@@ -16,12 +16,17 @@ import { ValidatorDisponibilidade } from 'src/core/validators/diaria/validator-d
 import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
 import { DiariaResponseDto } from './dto/diaria-response.dto';
+import { ServicoRepository } from '../servicos/servico.repository';
+import { ValidatorDiaria } from 'src/core/validators/diaria/validator-diaria';
+import { ValidatorDiariaUsuario } from 'src/core/validators/diaria/validator-diaria-usuario';
 
 @Injectable()
 export class DiariasService {
   constructor(
     @InjectRepository(DiariaRepository)
     private diariaRepository: DiariaRepository,
+    @InjectRepository(ServicoRepository)
+    private servicoRepository: ServicoRepository,
     private diariaMapper: DiariaMapper,
     private servico: ServicoService,
     private cliente: ClienteMapper,
@@ -32,23 +37,16 @@ export class DiariasService {
     private validatorIbge: ValidatorIbge,
     private validatorDisponibilidade: ValidatorDisponibilidade,
     private hateOas: HateoasDiaria,
+    private validatorDiaria: ValidatorDiaria,
+    private validarUsuario: ValidatorDiariaUsuario,
   ) {}
 
-  async cadastrar(request: DiariaRequestDto, userRequest: UsuarioApi) {
-    const diariaDTO = this.diariaMapper.toDiariaRequestDto(request);
-
-    /* VALIDAÇÕES */
-    this.validatorHora.validarHoraAtendimento(request, 22);
-    diariaDTO.codigoIbge =
-      await this.validatorDisponibilidade.validarDisponibilidade(request);
-    diariaDTO.tempoAtendimento =
-      await this.validatorTempo.validarTempoAtendimento(request);
-    diariaDTO.preco = await this.validatorPreco.validarPrecoAtendimento(
-      request,
-    );
-    diariaDTO.cep = await this.validatorCep.validarCep(request);
-    diariaDTO.codigoIbge = await this.validatorIbge.validarIbge(request);
-    /*---------*/
+  async cadastrar(
+    diariaDTO: DiariaRequestDto,
+    userRequest: UsuarioApi,
+  ): Promise<DiariaResponseDto> {
+    const servico = await this.servicoRepository.findOne(diariaDTO.servico);
+    await this.validatorDiaria.validarDiaria(diariaDTO, 22);
 
     diariaDTO.valorComissao = await this.calcularComissao(diariaDTO);
     diariaDTO.cliente = userRequest;
@@ -56,32 +54,45 @@ export class DiariasService {
 
     const diariaCadastrada = await this.diariaRepository.createDiaria(
       diariaDTO,
-    );
-
-    diariaDTO.links = this.hateOas.gerarLinksHateoas(
-      userRequest.tipoUsuario,
-      diariaCadastrada,
+      servico,
     );
 
     const diariaDtoResponse = await this.diariaMapper.toDiariaResponseDto(
       diariaCadastrada,
-      userRequest,
     );
 
-    diariaDtoResponse.links = diariaDTO.links;
+    diariaDtoResponse.links = this.hateOas.gerarLinksHateoas(
+      userRequest.tipoUsuario,
+      diariaCadastrada,
+    );
     return diariaDtoResponse;
   }
 
   async listarPorUsuarioLogado(usuarioLogado: UsuarioApi) {
     if (usuarioLogado.tipoUsuario === TipoUsuario.CLIENTE) {
       const diarias = await this.diariaRepository.findByCliente(usuarioLogado);
-      return diarias;
+      return Promise.all(
+        diarias.map(async (diaria) => {
+          const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
+          diariaDTO.links = this.hateOas.gerarLinksHateoas(
+            usuarioLogado.tipoUsuario,
+            diaria,
+          );
+          return diariaDTO;
+        }),
+      );
     }
-
-    if (usuarioLogado.tipoUsuario === TipoUsuario.DIARISTA) {
-      const diarias = await this.diariaRepository.findByDiarista(usuarioLogado);
-      return diarias;
-    }
+    const diarias = await this.diariaRepository.findByDiarista(usuarioLogado);
+    return Promise.all(
+      diarias.map(async (diaria) => {
+        const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
+        diariaDTO.links = this.hateOas.gerarLinksHateoas(
+          usuarioLogado.tipoUsuario,
+          diaria,
+        );
+        return diariaDTO;
+      }),
+    );
   }
 
   async buscarPorId(
@@ -92,8 +103,12 @@ export class DiariasService {
     if (!diaria) {
       throw new BadRequestException(`Diária com Id:${id} não encontrada`);
     }
-
-    return this.diariaMapper.toDiariaResponseDto(diaria, usuario);
+    const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
+    diariaDTO.links = this.hateOas.gerarLinksHateoas(
+      usuario.tipoUsuario,
+      diaria,
+    );
+    return this.validarUsuario.validarDiariaUsuario(usuario, diariaDTO);
   }
 
   private async calcularComissao(model: DiariaRequestDto): Promise<number> {

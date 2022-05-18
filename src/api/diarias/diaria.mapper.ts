@@ -23,9 +23,8 @@ export class DiariaMapper {
     return diariaDTO;
   }
 
-  async toDiariaResponseDto(diaria: Diaria, usuario?: UsuarioApi) {
+  async toDiariaResponseDto(diaria: Diaria) {
     const diariaReponseDto = new DiariaResponseDto();
-    const servico = await this.servico.buscarServicoPorId(diaria.servico);
     const cliente = this.clienteMapper.toResponse(diaria.cliente);
     const diariaDTO = this.diaristaMapper.toDiaristaDiariaResponseDto(
       diaria.diarista,
@@ -34,7 +33,7 @@ export class DiariaMapper {
     diariaReponseDto.status = diaria.status;
     diariaReponseDto.valorComissao = diaria.valorComissao;
     diariaReponseDto.motivoCancelamento = diaria.movitoCancelamento;
-    diariaReponseDto.nomeServico = servico.name;
+    diariaReponseDto.nomeServico = diaria.servico.name;
     diariaReponseDto.complemento = diaria.complemento;
     diariaReponseDto.dataAtendimento = diaria.localDateTime;
     diariaReponseDto.tempoAtendimento = diaria.tempoAtendimento;
@@ -52,15 +51,11 @@ export class DiariaMapper {
     diariaReponseDto.quantidadeQuintais = diaria.quantidadeQuintais;
     diariaReponseDto.quantidadeSalas = diaria.quantidadeSalas;
     diariaReponseDto.observacoes = diaria.observacoes;
-    diariaReponseDto.servico = servico.id;
+    diariaReponseDto.servico = diaria.servico.id;
     diariaReponseDto.created_at = diaria.created_at;
     diariaReponseDto.updated_at = diaria.updated_at;
     diariaReponseDto.cliente = cliente;
     diariaReponseDto.diarista = diariaDTO;
-    diariaReponseDto.links = this.hateOas.gerarLinksHateoas(
-      usuario.tipoUsuario,
-      diaria,
-    );
     return diariaReponseDto;
   }
 }

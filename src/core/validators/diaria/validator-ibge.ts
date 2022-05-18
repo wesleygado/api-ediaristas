@@ -11,7 +11,8 @@ export class ValidatorIbge {
     const codigoIbge = diaria.codigoIbge;
 
     // eslint-disable-next-line prettier/prettier
-    const codigoIbgeValido = (await this.validatorCep.buscarEnderecoPorCep(cep)).ibge;
+    const codigoIbgeValido = (await this.validatorCep.buscarEnderecoPorCep(cep))
+      .ibge;
 
     if (codigoIbge !== codigoIbgeValido) {
       throw new BadRequestException('Ibge inválido');

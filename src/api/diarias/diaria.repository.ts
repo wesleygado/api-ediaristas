@@ -1,5 +1,6 @@
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import { EntityRepository, Repository } from 'typeorm';
+import { Servico } from '../servicos/entities/services.entity';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { Diaria } from './entities/diaria.entity';
 
@@ -11,7 +12,10 @@ export class DiariaRepository extends Repository<Diaria> {
     return diarias;
   }
 
-  async createDiaria(diariaDto: DiariaRequestDto): Promise<Diaria> {
+  async createDiaria(
+    diariaDto: DiariaRequestDto,
+    servico: Servico,
+  ): Promise<Diaria> {
     const {
       dataAtendimento,
       tempoAtendimento,
@@ -30,7 +34,6 @@ export class DiariaRepository extends Repository<Diaria> {
       quantidadeQuintais,
       quantidadeSalas,
       observacoes,
-      servico,
       valorComissao,
       cliente,
       status,

@@ -5,6 +5,7 @@ export class ServicoResponseDto {
   @Expose({ name: 'nome' })
   name: string;
 
+  @Expose({ name: 'valor_minimo' })
   valor_minimo: number;
 
   @Expose({ name: 'qtd_horas' })
@@ -12,18 +13,43 @@ export class ServicoResponseDto {
 
   @Expose({ name: 'porcentagem_comissao' })
   porcentagem: number;
-  valor_quarto: number;
-  horas_quarto: number;
-  valor_sala: number;
-  horas_sala: number;
-  valor_banheiro: number;
-  horas_banheiro: number;
-  valor_cozinha: number;
-  horas_cozinha: number;
-  valor_quintal: number;
-  horas_quintal: number;
-  valor_outros: number;
-  horas_outros: number;
+
+  @Expose({ name: 'valor_quarto' })
+  valorQuarto: number;
+
+  @Expose({ name: 'horas_quarto' })
+  horasQuarto: number;
+
+  @Expose({ name: 'valor_sala' })
+  valorSala: number;
+
+  @Expose({ name: 'valor_sala' })
+  horasSala: number;
+
+  @Expose({ name: 'valor_banheiro' })
+  valorBanheiro: number;
+
+  @Expose({ name: 'horas_banheiro' })
+  horasBanheiro: number;
+
+  @Expose({ name: 'valor_cozinha' })
+  valorCozinha: number;
+
+  @Expose({ name: 'horas_cozinha' })
+  horasCozinha: number;
+
+  @Expose({ name: 'valor_quintal' })
+  valorQuintal: number;
+
+  @Expose({ name: 'horas_quintal' })
+  horasQuintal: number;
+
+  @Expose({ name: 'valor_outros' })
+  valorOutros: number;
+
+  @Expose({ name: 'horas_outros' })
+  horasOutros: number;
+
   icone: string;
   posicao: number;
 }

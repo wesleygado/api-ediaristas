@@ -31,19 +31,13 @@ export class DiariasController {
   @Get()
   @UseGuards(AuthGuard('jwt'))
   async listarDiarias(@GetUser() usuario: UsuarioApi) {
-    const diarias = await this.diariasService.listarPorUsuarioLogado(usuario);
-    return Promise.all(
-      diarias.map((diaria) =>
-        this.diariaMapper.toDiariaResponseDto(diaria, usuario),
-      ),
-    );
+    return await this.diariasService.listarPorUsuarioLogado(usuario);
   }
 
   @Get(':id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(TipoUsuario.CLIENTE, TipoUsuario.DIARISTA)
   async buscarPorId(@GetUser() usuario: UsuarioApi, @Param('id') id: number) {
-    const diaria = await this.diariasService.buscarPorId(id, usuario);
-    return this.validarUsuario.validarDiariaUsuario(usuario, diaria);
+    return await this.diariasService.buscarPorId(id, usuario);
   }
 }

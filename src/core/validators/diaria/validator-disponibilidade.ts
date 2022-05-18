@@ -16,7 +16,6 @@ export class ValidatorDisponibilidade {
         'Não há diaristas disponíveis para este CEP',
       );
     }
-
     return codigoIbge;
   }
 }

@@ -3,6 +3,8 @@ import { IsOptional } from 'class-validator';
 import { ClienteResponseDto } from 'src/api/clientes/dto/cliente-response.dto';
 import { HateoasLinks } from 'src/core/hateoas/hateoas.interface';
 import { DiaristaDiariaResponseDto } from 'src/api/diaristas/dtos/diarista-diaria.dto';
+import { ServicoResponseDto } from 'src/api/servicos/dto/servicoResponse.dto';
+import { Servico } from 'src/api/servicos/entities/services.entity';
 
 export class DiariaResponseDto {
   id: number;

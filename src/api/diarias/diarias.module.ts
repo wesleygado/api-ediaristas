@@ -21,12 +21,15 @@ import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 import { DiaristaMapper } from 'src/api/diaristas/diarista.mapper';
 import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 import { ValidatorDiariaUsuario } from 'src/core/validators/diaria/validator-diaria-usuario';
+import { ServicoRepository } from '../servicos/servico.repository';
+import { ValidatorDiaria } from 'src/core/validators/diaria/validator-diaria';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([DiariaRepository]),
     TypeOrmModule.forFeature([DiaristaRepository]),
     TypeOrmModule.forFeature([UsuarioRepository]),
+    TypeOrmModule.forFeature([ServicoRepository]),
   ],
   controllers: [DiariasController],
   providers: [
@@ -47,6 +50,7 @@ import { ValidatorDiariaUsuario } from 'src/core/validators/diaria/validator-dia
     HateoasDiaria,
     DiaristaMapper,
     ValidatorDiariaUsuario,
+    ValidatorDiaria,
   ],
 })
 export class DiariasModule {}

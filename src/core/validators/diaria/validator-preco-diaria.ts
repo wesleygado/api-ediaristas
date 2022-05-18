@@ -29,12 +29,12 @@ export class ValidatorPrecoDiaria {
     );
 
     let valorTotal = 0;
-    valorTotal += diariaDTO.quantidadeBanheiros * servico.valor_banheiro;
-    valorTotal += diariaDTO.quantidadeSalas * servico.valor_sala;
-    valorTotal += diariaDTO.quantidadeCozinhas * servico.valor_cozinha;
-    valorTotal += diariaDTO.quantidadeQuartos * servico.valor_quarto;
-    valorTotal += diariaDTO.quantidadeQuintais * servico.valor_quintal;
-    valorTotal += diariaDTO.quantidadeOutros * servico.valor_outros;
+    valorTotal += diariaDTO.quantidadeBanheiros * servico.valorBanheiro;
+    valorTotal += diariaDTO.quantidadeSalas * servico.valorSala;
+    valorTotal += diariaDTO.quantidadeCozinhas * servico.valorCozinha;
+    valorTotal += diariaDTO.quantidadeQuartos * servico.valorQuarto;
+    valorTotal += diariaDTO.quantidadeQuintais * servico.valorQuintal;
+    valorTotal += diariaDTO.quantidadeOutros * servico.valorOutros;
 
     if (valorTotal < servico.valor_minimo) {
       return servico.valor_minimo / 100;

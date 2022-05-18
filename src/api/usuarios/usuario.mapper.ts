@@ -26,12 +26,8 @@ export class UsuarioMapper {
     usuarioDTO.telefone = usuario.telefone;
     usuarioDTO.chavePix = usuario.chavePix;
     usuarioDTO.reputacao = usuario.reputacao;
-    if (usuario.tipoUsuario === 1) {
-      usuarioDTO.fotoDocumento = foto;
-    }
-    if (usuario.tipoUsuario === 2) {
-      usuarioDTO.fotoUsuario = foto;
-    }
+    usuarioDTO.fotoDocumento = null;
+    usuarioDTO.fotoUsuario = foto;
     return usuarioDTO;
   }
 

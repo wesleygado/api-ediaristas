@@ -1,30 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { ServicoResponseDto } from './dto/servicoResponse.dto';
+import { Servico } from './entities/services.entity';
 
 @Injectable()
 export class ServicoMapper {
-  toServicoResponseDto(servico): ServicoResponseDto {
+  toServicoResponseDto(servico: Servico): ServicoResponseDto {
     const servicoDTO = new ServicoResponseDto();
     servicoDTO.id = servico.id;
     servicoDTO.name = servico.name;
-    servicoDTO.valor_minimo = servico.valor_minimo / 100;
-    servicoDTO.quantidade_horas = servico.quantidade_horas;
+    servicoDTO.valor_minimo = servico.valorMinimo / 100;
+    servicoDTO.quantidade_horas = servico.quantidadeHoras;
     servicoDTO.porcentagem = servico.porcentagem;
-    servicoDTO.valor_quarto = servico.valor_quarto / 100;
-    servicoDTO.horas_quarto = servico.horas_quarto;
-    servicoDTO.valor_sala = servico.valor_sala / 100;
-    servicoDTO.horas_sala = servico.horas_sala;
-    servicoDTO.valor_banheiro = servico.valor_banheiro / 100;
-    servicoDTO.horas_banheiro = servico.horas_banheiro;
-    servicoDTO.valor_cozinha = servico.valor_cozinha / 100;
-    servicoDTO.horas_cozinha = servico.horas_cozinha;
-    servicoDTO.valor_quintal = servico.valor_quintal / 100;
-    servicoDTO.horas_quintal = servico.horas_quintal;
-    servicoDTO.valor_outros = servico.valor_outros / 100;
-    servicoDTO.horas_outros = servico.horas_outros;
+    servicoDTO.valorQuarto = servico.valorQuarto / 100;
+    servicoDTO.horasQuarto = servico.horasQuarto;
+    servicoDTO.valorSala = servico.valorSala / 100;
+    servicoDTO.horasSala = servico.horasSala;
+    servicoDTO.valorBanheiro = servico.valorBanheiro / 100;
+    servicoDTO.horasBanheiro = servico.horasBanheiro;
+    servicoDTO.valorCozinha = servico.valorCozinha / 100;
+    servicoDTO.horasCozinha = servico.horasCozinha;
+    servicoDTO.valorQuintal = servico.valorQuintal / 100;
+    servicoDTO.horasQuintal = servico.horasQuintal;
+    servicoDTO.valorOutros = servico.valorOutros / 100;
+    servicoDTO.horasOutros = servico.horasOutros;
     servicoDTO.icone = servico.icone;
     servicoDTO.posicao = servico.posicao;
-
     return servicoDTO;
   }
 }

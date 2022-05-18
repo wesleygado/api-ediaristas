@@ -13,7 +13,7 @@ import { AppController } from './app.controller';
 import { HateoasIndex } from './core/hateoas/hateoas-index';
 import { UrlGeneratorModule } from 'nestjs-url-generator';
 import { ConfigModule } from '@nestjs/config';
-import { TypeormConfigModule } from 'src/core/database/database.module';
+import { TypeormConfigModule } from 'src/database.module';
 import { DiariasModule } from './api/diarias/diarias.module';
 import { ClienteModule } from './api/clientes/cliente.module';
 import { PagamentosModule } from './api/pagamentos/pagamentos.module';

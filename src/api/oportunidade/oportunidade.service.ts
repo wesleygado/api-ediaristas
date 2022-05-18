@@ -38,7 +38,6 @@ export class OportunidadeService {
     for (let i = 0; i < diaria.length; i++) {
       diariaResponseDto[i] = await this.diariaMapper.toDiariaResponseDto(
         diaria[i],
-        usuarioLogado,
       );
       diariaResponseDto[i].links = this.hateoas.gerarLinksHateoas(diaria[i]);
     }

@@ -1,4 +1,5 @@
 import { IsOptional } from 'class-validator';
+import { Servico } from 'src/api/servicos/entities/services.entity';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import {
   Column,
@@ -96,8 +97,12 @@ export class Diaria {
   @JoinColumn({ name: 'diarista_id' })
   diarista: UsuarioApi;
 
-  @Column({ nullable: false })
-  servico: number;
+  @ManyToOne(() => Servico, (servico) => servico.id, {
+    nullable: false,
+    eager: true,
+  })
+  @JoinColumn({ name: 'servico_id' })
+  servico: Servico;
 
   @ManyToMany(() => UsuarioApi, (diarista) => diarista.id, {
     nullable: true,

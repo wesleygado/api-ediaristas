@@ -24,12 +24,12 @@ export class ValidatorTempoAtendimento {
     );
 
     let tempoTotal = 0;
-    tempoTotal += diariaDTO.quantidadeBanheiros * servico.horas_banheiro;
-    tempoTotal += diariaDTO.quantidadeSalas * servico.horas_sala;
-    tempoTotal += diariaDTO.quantidadeCozinhas * servico.horas_cozinha;
-    tempoTotal += diariaDTO.quantidadeQuartos * servico.horas_quarto;
-    tempoTotal += diariaDTO.quantidadeQuintais * servico.horas_quintal;
-    tempoTotal += diariaDTO.quantidadeOutros * servico.horas_outros;
+    tempoTotal += diariaDTO.quantidadeBanheiros * servico.horasBanheiro;
+    tempoTotal += diariaDTO.quantidadeSalas * servico.horasSala;
+    tempoTotal += diariaDTO.quantidadeCozinhas * servico.horasCozinha;
+    tempoTotal += diariaDTO.quantidadeQuartos * servico.horasQuarto;
+    tempoTotal += diariaDTO.quantidadeQuintais * servico.horasQuintal;
+    tempoTotal += diariaDTO.quantidadeOutros * servico.horasOutros;
     return tempoTotal;
   }
 }
