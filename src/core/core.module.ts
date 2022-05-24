@@ -1,0 +1,16 @@
+import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DiariaRepository } from 'src/api/diarias/diaria.repository';
+import { GoogleMatrixService } from './services/consulta-distancia/providers/google-matrix.service';
+import { DiaristaIndiceService } from './services/diarista-indice/diarista-indice.service';
+import { ScheduleTask } from './tasks/schedule-task';
+
+@Module({
+  imports: [
+    ScheduleModule.forRoot(),
+    TypeOrmModule.forFeature([DiariaRepository]),
+  ],
+  providers: [ScheduleTask, DiaristaIndiceService, GoogleMatrixService],
+})
+export class CoreModule {}

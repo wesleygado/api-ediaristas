@@ -26,7 +26,7 @@ export class OportunidadeService {
     );
 
     /*Solução temporária - Mas tá funcionando!*/
-    diaria = diaria.filter((diaria) => diaria.candidatos.length < 3);
+    diaria = diaria.filter((diaria) => diaria.candidatos.length <= 3);
     for (let i = 0; i < diaria.length; i++) {
       for (let j = 0; j < diaria[i].candidatos.length; j++) {
         if (diaria[i].candidatos[j].id === usuarioLogado.id) {

@@ -98,4 +98,31 @@ export class DiariaRepository extends Repository<Diaria> {
 
     return diaria;
   }
+
+  async getAptasParaSelecaoDiarista(): Promise<Diaria[]> {
+    let diaria = await this.createQueryBuilder('diaria')
+      .select('diaria')
+      .where('diaria.status = :status', { status: 2 })
+      .andWhere('diaria.diarista IS NULL')
+      .innerJoinAndSelect('diaria.candidatos', 'candidatos')
+      .leftJoinAndSelect('candidatos.endereco', 'endereco')
+      .getMany();
+
+    diaria = diaria.filter((diaria) => {
+      const dataAgora = new Date(Date.now());
+      const diferencaDatas = new Date(
+        dataAgora.getTime() - diaria.created_at.getTime(),
+      );
+      const diferencaHoras = diferencaDatas.getTime() / 3600000;
+      if (diferencaHoras < 24) {
+        return diaria;
+      }
+    });
+
+    diaria = diaria.filter(
+      (diaria) =>
+        diaria.candidatos.length <= 3 || diaria.candidatos.length >= 0,
+    );
+    return diaria;
+  }
 }

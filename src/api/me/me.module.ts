@@ -10,10 +10,14 @@ import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
 import { TokensService } from 'src/auth/tokens/tokens.service';
 import { TokenRepository } from 'src/auth/tokens/tokens.repository';
 import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
+import { GoogleMatrixService } from 'src/core/services/consulta-distancia/providers/google-matrix.service';
+import { DiaristaIndiceService } from 'src/core/services/diarista-indice/diarista-indice.service';
+import { DiariaRepository } from '../diarias/diaria.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([TokenRepository]),
+    TypeOrmModule.forFeature([DiariaRepository]),
     TypeOrmModule.forFeature([UsuarioRepository]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({}),
@@ -25,6 +29,8 @@ import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
     JwtTokens,
     TokensService,
     HateoasUsuario,
+    GoogleMatrixService,
+    DiaristaIndiceService,
   ],
 })
 export class MeModule {}

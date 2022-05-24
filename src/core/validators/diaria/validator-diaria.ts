@@ -76,7 +76,6 @@ export class ValidatorDiaria {
   async validarPrecoAtendimento(diariaDTO: DiariaRequestDto): Promise<void> {
     const preco = diariaDTO.preco;
     const valorTotal = await this.calcularValorTotal(diariaDTO);
-    console.log(valorTotal);
 
     const obj = {
       preco: 'preco inválido',

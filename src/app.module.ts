@@ -20,6 +20,9 @@ import { PagamentosModule } from './api/pagamentos/pagamentos.module';
 import { EnderecoDiaristaModule } from './api/endereco-diarista/endereco-diarista.module';
 import { CandidaturaModule } from './api/candidaturas/candidatura.module';
 import { OportunidadeModule } from './api/oportunidade/oportunidade.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ScheduleTask } from './core/tasks/schedule-task';
+import { CoreModule } from './core/core.module';
 
 @Module({
   imports: [
@@ -47,6 +50,7 @@ import { OportunidadeModule } from './api/oportunidade/oportunidade.module';
     EnderecoDiaristaModule,
     CandidaturaModule,
     OportunidadeModule,
+    CoreModule,
   ],
   controllers: [AppController],
   providers: [HateoasIndex],
