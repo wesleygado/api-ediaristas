@@ -24,7 +24,7 @@ export class CandidaturaService {
 
     diaria.candidatos.push(usuarioLogado);
     this.diariaRepository.save(diaria);
-    return 'Candidatura realizada com sucesso';
+    return { mensagem: 'Candidatura realizada com sucesso' };
   }
 
   async buscarDiariaPorId(id: number): Promise<Diaria> {

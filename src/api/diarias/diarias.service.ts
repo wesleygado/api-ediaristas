@@ -19,6 +19,7 @@ import { DiariaResponseDto } from './dto/diaria-response.dto';
 import { ServicoRepository } from '../servicos/servico.repository';
 import { ValidatorDiaria } from 'src/core/validators/diaria/validator-diaria';
 import { ValidatorDiariaUsuario } from 'src/core/validators/diaria/validator-diaria-usuario';
+import { Diaria } from './entities/diaria.entity';
 
 @Injectable()
 export class DiariasService {
@@ -73,6 +74,9 @@ export class DiariasService {
       const diarias = await this.diariaRepository.findByCliente(usuarioLogado);
       return Promise.all(
         diarias.map(async (diaria) => {
+          if (!diaria.servico) {
+            return null;
+          }
           const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
           diariaDTO.links = this.hateOas.gerarLinksHateoas(
             usuarioLogado.tipoUsuario,
@@ -82,17 +86,22 @@ export class DiariasService {
         }),
       );
     }
-    const diarias = await this.diariaRepository.findByDiarista(usuarioLogado);
-    return Promise.all(
-      diarias.map(async (diaria) => {
-        const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
-        diariaDTO.links = this.hateOas.gerarLinksHateoas(
-          usuarioLogado.tipoUsuario,
-          diaria,
-        );
-        return diariaDTO;
-      }),
-    );
+    if (usuarioLogado.tipoUsuario === TipoUsuario.DIARISTA) {
+      const diarias = await this.diariaRepository.findByDiarista(usuarioLogado);
+      return Promise.all(
+        diarias.map(async (diaria) => {
+          if (!diaria.servico) {
+            return null;
+          }
+          const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
+          diariaDTO.links = this.hateOas.gerarLinksHateoas(
+            usuarioLogado.tipoUsuario,
+            diaria,
+          );
+          return diariaDTO;
+        }),
+      );
+    }
   }
 
   async buscarPorId(

@@ -17,7 +17,7 @@ export class CandidaturaController {
   candidatar(
     @Param() id: number,
     @GetUser() usuarioLogado: UsuarioApi,
-  ): Promise<any> {
+  ): Promise<{ mensagem: string }> {
     return this.candidaturaService.candidatar(id, usuarioLogado);
   }
 }

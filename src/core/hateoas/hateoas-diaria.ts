@@ -6,6 +6,8 @@ import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
 import { Diaria } from 'src/api/diarias/entities/diaria.entity';
 import { DiariasController } from 'src/api/diarias/diarias.controller';
+import { ConfirmacaoPresencaService } from '../services/confirmacao-presenca/confirmacao-presenca.service';
+import { ConfirmacaoPresencaController } from '../services/confirmacao-presenca/confirmacao-presenca.controller';
 
 @Injectable()
 export class HateoasDiaria extends HateoasBase implements HateoasInterface {
@@ -29,6 +31,16 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
       );
     }
 
+    if (this.aptaParaConfirmacaoPresenca(diaria)) {
+      this.adicionaLink(
+        'PATCH',
+        'confirmar_diarista',
+        ConfirmacaoPresencaController,
+        ConfirmacaoPresencaController.prototype.confirmacaoPresenca,
+        params,
+      );
+    }
+
     this.adicionaLink(
       'GET',
       'self',
@@ -38,5 +50,16 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
     );
 
     return this.LINKS;
+  }
+
+  private aptaParaConfirmacaoPresenca(diaria: Diaria): boolean {
+    const hoje = new Date(Date.now());
+    if (
+      diaria.status === DiariaStatus.CONFIRMADO &&
+      diaria.localDateTime < hoje
+    ) {
+      return true;
+    }
+    return false;
   }
 }
