@@ -23,6 +23,7 @@ import { OportunidadeModule } from './api/oportunidade/oportunidade.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduleTask } from './core/tasks/schedule-task';
 import { CoreModule } from './core/core.module';
+import { AvaliacaoModule } from './api/avaliacao/avaliacao.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { CoreModule } from './core/core.module';
     CandidaturaModule,
     OportunidadeModule,
     CoreModule,
+    AvaliacaoModule,
   ],
   controllers: [AppController],
   providers: [HateoasIndex],

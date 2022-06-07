@@ -1,34 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
+import TipoUsuario from '../usuarios/enum/tipoUsuario-enum';
 import { AvaliacaoService } from './avaliacao.service';
-import { CreateAvaliacaoDto } from './dto/create-avaliacao.dto';
-import { UpdateAvaliacaoDto } from './dto/update-avaliacao.dto';
+import { AvaliacaoRequestDto } from './dto/avaliacao-request.dto';
+import { AvaliacaoResponseDto } from './dto/avaliacao-response.dto';
 
-@Controller('avaliacao')
+@Controller('/api/diarias/:id/avaliacao')
 export class AvaliacaoController {
   constructor(private readonly avaliacaoService: AvaliacaoService) {}
 
-  @Post()
-  create(@Body() createAvaliacaoDto: CreateAvaliacaoDto) {
-    return this.avaliacaoService.create(createAvaliacaoDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.avaliacaoService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.avaliacaoService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAvaliacaoDto: UpdateAvaliacaoDto) {
-    return this.avaliacaoService.update(+id, updateAvaliacaoDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.avaliacaoService.remove(+id);
+  @Patch()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(TipoUsuario.CLIENTE, TipoUsuario.DIARISTA)
+  create(
+    @Body() AvaliacaoRequestDto: AvaliacaoRequestDto,
+    @GetUser() usuarioLoado: UsuarioApi,
+    @Param('id') id: number,
+  ) {
+    return this.avaliacaoService.avaliarDiaria(
+      AvaliacaoRequestDto,
+      id,
+      usuarioLoado,
+    );
   }
 }
