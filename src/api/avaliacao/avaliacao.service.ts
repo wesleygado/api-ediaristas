@@ -1,5 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NovaAvaliacaoEvent } from 'src/core/events/nova-avaliacao-event';
+import { AvalicaoValidator } from 'src/core/validators/avaliacao/validator-avaliacao';
 import { DiariaRepository } from '../diarias/diaria.repository';
 import { Diaria } from '../diarias/entities/diaria.entity';
 import { UsuarioApi } from '../usuarios/entities/usuario.entity';
@@ -18,6 +20,8 @@ export class AvaliacaoService {
     @InjectRepository(DiariaRepository)
     private readonly diariaRepository: DiariaRepository,
     private readonly avaliacaoMappar: AvaliacaoMapper,
+    private readonly avaliacaoValidator: AvalicaoValidator,
+    private readonly avaliacaoEvent: NovaAvaliacaoEvent,
   ) {}
 
   async avaliarDiaria(
@@ -27,7 +31,6 @@ export class AvaliacaoService {
   ): Promise<{ message: string }> {
     const diaria = await this.buscarDiariaPorId(id);
 
-    await this.validarUsuarioDiaria(usuarioLogado, diaria);
     const avaliador = usuarioLogado;
 
     const avaliacao = this.avaliacaoMappar.toModel(avaliacaoRequest);
@@ -35,7 +38,12 @@ export class AvaliacaoService {
     avaliacao.diaria = diaria;
     avaliacao.visibilidade = true;
     avaliacao.avaliado = this.getAvaliado(avaliacao);
-    this.avaliacaoRepository.save(avaliacao);
+    await this.avaliacaoValidator.validar(avaliacao, usuarioLogado, diaria);
+
+    const atualizacaoCadastrada = await this.avaliacaoRepository.save(
+      avaliacao,
+    );
+    this.avaliacaoEvent.NovaAvaliacaoEvent(atualizacaoCadastrada);
 
     return { message: 'Avaliação realizada com sucesso' };
   }
@@ -49,18 +57,5 @@ export class AvaliacaoService {
       return model.diaria.diarista;
     }
     return model.diaria.cliente;
-  }
-
-  private async validarUsuarioDiaria(
-    usuarioLogado: UsuarioApi,
-    diaria: Diaria,
-  ) {
-    if (
-      usuarioLogado.id !== diaria.diarista.id &&
-      usuarioLogado.id !== diaria.cliente.id
-    ) {
-      const mensagem = 'Acesso Negado';
-      throw new ForbiddenException(mensagem);
-    }
   }
 }

@@ -24,12 +24,14 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduleTask } from './core/tasks/schedule-task';
 import { CoreModule } from './core/core.module';
 import { AvaliacaoModule } from './api/avaliacao/avaliacao.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    EventEmitterModule.forRoot(),
     UsuariosModule,
     TypeormConfigModule,
     FotoModule,
