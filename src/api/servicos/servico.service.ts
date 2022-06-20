@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
 import { ServicoResponseDto } from './dto/servicoResponse.dto';
 import { ServicoMapper } from './servico.mapper';
 import { ServicoRepository } from './servico.repository';
@@ -10,7 +9,6 @@ export class ServicoService {
   constructor(
     @InjectRepository(ServicoRepository)
     private readonly servicoRepository: ServicoRepository,
-    private readonly manager: EntityManager,
     private readonly servicoMapper: ServicoMapper,
   ) {}
   async findAll(): Promise<ServicoResponseDto[]> {

@@ -12,12 +12,15 @@ import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 import { ServicoMapper } from 'src/api/servicos/servico.mapper';
 import { ServicoRepository } from '../servicos/servico.repository';
+import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
+import { AvaliacaoMapper } from '../avaliacao/avaliacao.mapper';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([DiariaRepository]),
     TypeOrmModule.forFeature([UsuarioRepository]),
     TypeOrmModule.forFeature([ServicoRepository]),
+    TypeOrmModule.forFeature([AvaliacaoRepository]),
   ],
   controllers: [OportunidadeController],
   providers: [
@@ -29,6 +32,7 @@ import { ServicoRepository } from '../servicos/servico.repository';
     DiaristaMapper,
     HateoasDiaria,
     ServicoMapper,
+    AvaliacaoMapper,
   ],
 })
 export class OportunidadeModule {}

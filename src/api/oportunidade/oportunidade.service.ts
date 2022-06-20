@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateCandidaturaDto } from 'src/api/candidaturas/dto/create-candidatura.dto';
 import { HateoasOportunidade } from 'src/core/hateoas/hateoas-oportunidade';
 import { DiariaMapper } from 'src/api/diarias/diaria.mapper';
 import { DiariaRepository } from 'src/api/diarias/diaria.repository';
-import { DiariaResponseDto } from 'src/api/diarias/dto/diaria-response.dto';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
-import { OportunidadeDiariaDtoResponse } from './dto/oportunidade-diaria.dto';
+import { AvaliacaoMapper } from '../avaliacao/avaliacao.mapper';
+import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
 
 @Injectable()
 export class OportunidadeService {
@@ -15,15 +14,15 @@ export class OportunidadeService {
     private diariaRepository: DiariaRepository,
     private hateoas: HateoasOportunidade,
     private diariaMapper: DiariaMapper,
+    private avaliacaoMapper: AvaliacaoMapper,
+    @InjectRepository(AvaliacaoRepository)
+    private readonly avaliacaoRepository: AvaliacaoRepository,
   ) {}
   async buscarOportunidades(usuarioLogado: UsuarioApi) {
     const cidades = usuarioLogado.cidadesAtendidas.map(
       (cidade) => cidade.codigoIbge,
     );
-    let diaria = await this.diariaRepository.findOportunidades(
-      cidades,
-      usuarioLogado,
-    );
+    let diaria = await this.diariaRepository.findOportunidades(cidades);
 
     /*Solução temporária - Mas tá funcionando!*/
     diaria = diaria.filter((diaria) => diaria.candidatos.length <= 3);
@@ -38,6 +37,12 @@ export class OportunidadeService {
     for (let i = 0; i < diaria.length; i++) {
       diariaResponseDto[i] = await this.diariaMapper.toDiariaResponseDto(
         diaria[i],
+      );
+      const avaliacoes = await this.avaliacaoRepository.findByAvaliado(
+        diaria[i].cliente,
+      );
+      diariaResponseDto[i].avaliacao = avaliacoes.map((avaliacao) =>
+        this.avaliacaoMapper.toResponse(avaliacao),
       );
       diariaResponseDto[i].links = this.hateoas.gerarLinksHateoas(diaria[i]);
     }

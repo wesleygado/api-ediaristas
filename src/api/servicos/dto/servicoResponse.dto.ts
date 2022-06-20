@@ -1,4 +1,4 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Expose } from 'class-transformer';
 
 export class ServicoResponseDto {
   id: number;
@@ -23,7 +23,7 @@ export class ServicoResponseDto {
   @Expose({ name: 'valor_sala' })
   valorSala: number;
 
-  @Expose({ name: 'valor_sala' })
+  @Expose({ name: 'horas_sala' })
   horasSala: number;
 
   @Expose({ name: 'valor_banheiro' })

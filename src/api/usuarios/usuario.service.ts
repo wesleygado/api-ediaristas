@@ -65,12 +65,12 @@ export class UsuarioService {
       usuarioCadastrado,
     );
 
-    usuarioCadastroDTO.links = this.hateOas.gerarLinksHateoas(
+    usuarioCadastroDTO.links = await this.hateOas.gerarLinksHateoas(
       usuarioCadastroDTO.tipoUsuario,
     );
     const { email } = usuarioCadastrado;
     const payload: JwtPayload = { email };
-    usuarioCadastroDTO.tokens = await this.jwtTokens.gerarTokens(payload);
+    usuarioCadastroDTO.token = await this.jwtTokens.gerarTokens(payload);
     /*     await this.mailService.enviarEmailDeConfirmacao(usuarioCadastrado);*/
     return usuarioCadastroDTO;
   }

@@ -15,16 +15,15 @@ import { UrlGeneratorModule } from 'nestjs-url-generator';
 import { ConfigModule } from '@nestjs/config';
 import { TypeormConfigModule } from 'src/database.module';
 import { DiariasModule } from './api/diarias/diarias.module';
-import { ClienteModule } from './api/clientes/cliente.module';
 import { PagamentosModule } from './api/pagamentos/pagamentos.module';
 import { EnderecoDiaristaModule } from './api/endereco-diarista/endereco-diarista.module';
 import { CandidaturaModule } from './api/candidaturas/candidatura.module';
 import { OportunidadeModule } from './api/oportunidade/oportunidade.module';
-import { ScheduleModule } from '@nestjs/schedule';
-import { ScheduleTask } from './core/tasks/schedule-task';
 import { CoreModule } from './core/core.module';
 import { AvaliacaoModule } from './api/avaliacao/avaliacao.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AvaliacaoRepository } from './api/avaliacao/avaliacao.repository';
 
 @Module({
   imports: [
@@ -48,13 +47,13 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       appUrl: 'http://localhost:8000',
     }),
     DiariasModule,
-    ClienteModule,
     PagamentosModule,
     EnderecoDiaristaModule,
     CandidaturaModule,
     OportunidadeModule,
     CoreModule,
     AvaliacaoModule,
+    TypeOrmModule.forFeature([AvaliacaoRepository]),
   ],
   controllers: [AppController],
   providers: [HateoasIndex],

@@ -19,10 +19,12 @@ export class DiaristaRepository extends Repository<UsuarioApi> {
       .leftJoinAndSelect('usuario.fotoUsuario', 'foto')
       .leftJoinAndSelect('usuario.cidadesAtendidas', 'cidadesAtendidas')
       .where('cidadesAtendidas.codigoIbge = :ibge', { ibge: codigoIbge })
+      .andWhere('usuario.tipoUsuario = 2')
       .orderBy('usuario.reputacao', 'DESC');
     const usuarios = await query.limit(pageSize).getMany();
     const count = await query.getCount();
 
+    console.log(usuarios[1]);
     return { content: usuarios, totalElement: count };
   }
 

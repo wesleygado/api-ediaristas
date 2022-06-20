@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ClienteMapper } from 'src/api/clientes/clienteMapper';
-import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 import { DiaristaMapper } from 'src/api/diaristas/diarista.mapper';
-import { ServicoService } from 'src/api/servicos/servico.service';
-import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
-import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { DiariaResponseDto } from './dto/diaria-response.dto';
 import { Diaria } from './entities/diaria.entity';
@@ -12,11 +8,8 @@ import { Diaria } from './entities/diaria.entity';
 @Injectable()
 export class DiariaMapper {
   constructor(
-    private servico: ServicoService,
     private clienteMapper: ClienteMapper,
     private diaristaMapper: DiaristaMapper,
-    private usuarioRepository: UsuarioRepository,
-    private hateOas: HateoasDiaria,
   ) {}
   toDiariaRequestDto(request: DiariaRequestDto) {
     const diariaDTO = request;

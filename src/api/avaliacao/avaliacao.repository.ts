@@ -11,7 +11,6 @@ export class AvaliacaoRepository extends Repository<Avaliacao> {
       .where('avaliacao.avaliado_id = :id', { id: usuario.id })
       .select('AVG(avaliacao.nota)', 'avg')
       .getRawOne();
-    console.log(avg);
     return avg;
   }
 
@@ -19,7 +18,40 @@ export class AvaliacaoRepository extends Repository<Avaliacao> {
     const numeroDeAvaliacoes = await this.createQueryBuilder('avaliacao')
       .where('avaliacao.diaria = :id', { id: diaria.id })
       .getCount();
-    console.log(numeroDeAvaliacoes);
     return numeroDeAvaliacoes >= 2 ? true : false;
+  }
+
+  async findByAvaliado(avaliado: UsuarioApi): Promise<Avaliacao[]> {
+    const avaliacoes = await this.createQueryBuilder('avaliacao')
+      .leftJoinAndSelect('avaliacao.avaliado', 'avaliado')
+      .leftJoinAndSelect('avaliacao.avaliador', 'avaliador')
+      .where('avaliacao.avaliado_id = :id', { id: avaliado.id })
+      .limit(2)
+      .getMany();
+
+    avaliacoes.sort((a, b) => b.created_at.valueOf() - a.created_at.valueOf());
+    return avaliacoes;
+  }
+
+  async findByAvaliadorAndDiaria(
+    avaliador: UsuarioApi,
+    diaria: Diaria,
+  ): Promise<boolean> {
+    console.log(diaria.id);
+    const avaliacoes = await this.createQueryBuilder('avaliacao')
+      .leftJoinAndSelect('avaliacao.avaliador', 'avaliador')
+      .leftJoinAndSelect('avaliacao.diaria', 'diaria')
+      .where(
+        'avaliacao.avaliador_id = :avaliadorId AND avaliacao.diaria_id = :diariaId',
+        {
+          avaliadorId: avaliador.id,
+          diariaId: diaria.id,
+        },
+      )
+      .limit(2)
+      .getMany();
+
+    console.log(avaliacoes);
+    return avaliacoes.length > 0 ? true : false;
   }
 }

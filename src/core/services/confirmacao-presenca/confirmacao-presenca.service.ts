@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DiariaRepository } from 'src/api/diarias/diaria.repository';
 import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
-import { ValidatorCandidatura } from 'src/core/validators/candidatura/validator-candidatura';
 import { ValidatorConfirmacaoDiaria } from 'src/core/validators/confirmacao-diaria/validator-confirmacao-diaria';
 
 export class ConfirmacaoPresencaService {

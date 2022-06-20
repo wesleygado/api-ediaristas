@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
-import { CannotAttachTreeChildrenEntityError } from 'typeorm';
 import { EnderecoDiaristaRequestDto } from './dto/endereco-diarista-request.dto';
 import { EnderecoDiaristaMapper } from './endereco-diarista.mapper';
 import { EnderecoDiaristaRepository } from './endereco-diarista.repository';

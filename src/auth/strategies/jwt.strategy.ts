@@ -2,7 +2,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UsuarioCadastroResponseDto } from 'src/api/usuarios/dtos/usuario-cadastro-response.dto';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import { UsuarioMapper } from 'src/api/usuarios/usuario.mapper';
 import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';

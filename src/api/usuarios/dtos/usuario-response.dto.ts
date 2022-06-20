@@ -1,4 +1,3 @@
-import TipoUsuario from '../enum/tipoUsuario-enum';
 import { Expose } from 'class-transformer';
 import { HateoasLinks } from 'src/core/hateoas/hateoas.interface';
 
@@ -23,6 +22,9 @@ export class UsuarioResponseDto {
 
   @Expose({ name: 'chave_pix' })
   chavePix: string;
+
+  @Expose({ name: 'foto_usuario' })
+  foto: string;
 
   links: HateoasLinks[];
 }

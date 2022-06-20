@@ -13,12 +13,14 @@ import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
 import { GoogleMatrixService } from 'src/core/services/consulta-distancia/providers/google-matrix.service';
 import { DiaristaIndiceService } from 'src/core/services/diarista-indice/diarista-indice.service';
 import { DiariaRepository } from '../diarias/diaria.repository';
+import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([TokenRepository]),
     TypeOrmModule.forFeature([DiariaRepository]),
     TypeOrmModule.forFeature([UsuarioRepository]),
+    TypeOrmModule.forFeature([AvaliacaoRepository]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({}),
   ],

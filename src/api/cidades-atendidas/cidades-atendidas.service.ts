@@ -26,7 +26,7 @@ export class CidadesAtendidasService {
   async atualizarCidadesAtendidas(
     request: CidadesAtendidasRequestDto,
     usuarioLogado: UsuarioApi,
-  ): Promise<string> {
+  ): Promise<{ message: string }> {
     const cidadesAtendidas = [];
     request.cidades.forEach(async (cidadeAtendidaRequest) => {
       const codigoIbge = cidadeAtendidaRequest.codigoIbge;
@@ -45,7 +45,7 @@ export class CidadesAtendidasService {
     usuarioLogado.cidadesAtendidas = cidadesAtendidas;
     await this.usuarioRepository.save(usuarioLogado);
 
-    return JSON.parse('Cidades Atendidas com Sucesso');
+    return { message: 'Cidades Atendidas atualizadas com Sucesso' };
   }
   private async cadastrarCidadeAtendida(codigoIbge: string) {
     const cidade = await this.consultaCidade.buscarCidadePorCodigoIbge(

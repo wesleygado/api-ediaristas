@@ -1,15 +1,13 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NovaAvaliacaoEvent } from 'src/core/events/nova-avaliacao-event';
 import { AvalicaoValidator } from 'src/core/validators/avaliacao/validator-avaliacao';
 import { DiariaRepository } from '../diarias/diaria.repository';
-import { Diaria } from '../diarias/entities/diaria.entity';
 import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 import TipoUsuario from '../usuarios/enum/tipoUsuario-enum';
 import { AvaliacaoMapper } from './avaliacao.mapper';
 import { AvaliacaoRepository } from './avaliacao.repository';
 import { AvaliacaoRequestDto } from './dto/avaliacao-request.dto';
-import { AvaliacaoResponseDto } from './dto/avaliacao-response.dto';
 import { Avaliacao } from './entities/avaliacao.entity';
 
 @Injectable()

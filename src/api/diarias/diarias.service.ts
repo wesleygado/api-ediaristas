@@ -5,21 +5,14 @@ import { DiariaMapper } from './diaria.mapper';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { ServicoService } from 'src/api/servicos/servico.service';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
-import { ClienteMapper } from 'src/api/clientes/clienteMapper';
 import DiariaStatus from './enum/diaria-status';
-import { ValidatorHoraAtendimento } from 'src/core/validators/diaria/validator-hora-atendimento';
-import { ValidatorTempoAtendimento } from 'src/core/validators/diaria/validator-tempo-atendimento';
-import { ValidatorPrecoDiaria } from 'src/core/validators/diaria/validator-preco-diaria';
-import { ValidatorCep } from 'src/core/validators/diaria/validator-cep';
-import { ValidatorIbge } from 'src/core/validators/diaria/validator-ibge';
-import { ValidatorDisponibilidade } from 'src/core/validators/diaria/validator-disponibilidade';
 import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
 import { DiariaResponseDto } from './dto/diaria-response.dto';
 import { ServicoRepository } from '../servicos/servico.repository';
 import { ValidatorDiaria } from 'src/core/validators/diaria/validator-diaria';
 import { ValidatorDiariaUsuario } from 'src/core/validators/diaria/validator-diaria-usuario';
-import { Diaria } from './entities/diaria.entity';
+import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
 
 @Injectable()
 export class DiariasService {
@@ -30,16 +23,11 @@ export class DiariasService {
     private servicoRepository: ServicoRepository,
     private diariaMapper: DiariaMapper,
     private servico: ServicoService,
-    private cliente: ClienteMapper,
-    private validatorHora: ValidatorHoraAtendimento,
-    private validatorTempo: ValidatorTempoAtendimento,
-    private validatorPreco: ValidatorPrecoDiaria,
-    private validatorCep: ValidatorCep,
-    private validatorIbge: ValidatorIbge,
-    private validatorDisponibilidade: ValidatorDisponibilidade,
     private hateOas: HateoasDiaria,
     private validatorDiaria: ValidatorDiaria,
     private validarUsuario: ValidatorDiariaUsuario,
+    @InjectRepository(AvaliacaoRepository)
+    private avalicaoRepository: AvaliacaoRepository,
   ) {}
 
   async cadastrar(
@@ -62,13 +50,12 @@ export class DiariasService {
       diariaCadastrada,
     );
 
-    diariaDtoResponse.links = this.hateOas.gerarLinksHateoas(
+    diariaDtoResponse.links = await this.hateOas.gerarLinksHateoas(
       userRequest.tipoUsuario,
       diariaCadastrada,
     );
     return diariaDtoResponse;
   }
-
   async listarPorUsuarioLogado(usuarioLogado: UsuarioApi) {
     if (usuarioLogado.tipoUsuario === TipoUsuario.CLIENTE) {
       const diarias = await this.diariaRepository.findByCliente(usuarioLogado);
@@ -77,10 +64,17 @@ export class DiariasService {
           if (!diaria.servico) {
             return null;
           }
+          const avaliacao =
+            await this.avalicaoRepository.findByAvaliadorAndDiaria(
+              usuarioLogado,
+              diaria,
+            );
           const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
-          diariaDTO.links = this.hateOas.gerarLinksHateoas(
+          diariaDTO.links = await this.hateOas.gerarLinksHateoas(
             usuarioLogado.tipoUsuario,
             diaria,
+            usuarioLogado,
+            avaliacao,
           );
           return diariaDTO;
         }),
@@ -93,10 +87,17 @@ export class DiariasService {
           if (!diaria.servico) {
             return null;
           }
+          const avaliacao =
+            await this.avalicaoRepository.findByAvaliadorAndDiaria(
+              usuarioLogado,
+              diaria,
+            );
           const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
-          diariaDTO.links = this.hateOas.gerarLinksHateoas(
+          diariaDTO.links = await this.hateOas.gerarLinksHateoas(
             usuarioLogado.tipoUsuario,
             diaria,
+            usuarioLogado,
+            avaliacao,
           );
           return diariaDTO;
         }),
@@ -113,7 +114,7 @@ export class DiariasService {
       throw new BadRequestException(`Diária com Id:${id} não encontrada`);
     }
     const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
-    diariaDTO.links = this.hateOas.gerarLinksHateoas(
+    diariaDTO.links = await this.hateOas.gerarLinksHateoas(
       usuario.tipoUsuario,
       diaria,
     );

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 
 import { UsuarioService } from './usuario.service';
 import { UsuarioController } from './usuario.controller';
@@ -16,15 +16,16 @@ import { MailModule } from 'src/core/services/mail/mail.module';
 import { AuthService } from 'src/auth/auth.service';
 import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
 import { TokensService } from 'src/auth/tokens/tokens.service';
-import { TokensModule } from 'src/auth/tokens/tokens.module';
 import { TokenRepository } from 'src/auth/tokens/tokens.repository';
 import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
+import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UsuarioRepository]),
     TypeOrmModule.forFeature([FotoRepository]),
     TypeOrmModule.forFeature([TokenRepository]),
+    TypeOrmModule.forFeature([AvaliacaoRepository]),
     JwtModule.register({}),
     MailModule,
   ],

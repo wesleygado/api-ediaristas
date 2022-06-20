@@ -5,6 +5,7 @@ import { Servico } from './entities/services.entity';
 @Injectable()
 export class ServicoMapper {
   toServicoResponseDto(servico: Servico): ServicoResponseDto {
+    console.log(servico.valorSala);
     const servicoDTO = new ServicoResponseDto();
     servicoDTO.id = servico.id;
     servicoDTO.name = servico.name;

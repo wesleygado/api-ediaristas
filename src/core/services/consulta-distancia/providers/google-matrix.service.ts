@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { BadRequestException } from '@nestjs/common';
 import axios from 'axios';
-import { DiariaResponseDto } from 'src/api/diarias/dto/diaria-response.dto';
 import { ConsultaDistanciaInterface } from '../consulta-distancia.interface';
 import { DistanciaResponseDto } from '../distancia-response.dto';
 

@@ -9,13 +9,7 @@ import { ClienteMapper } from 'src/api/clientes/clienteMapper';
 import { ServicoMapper } from 'src/api/servicos/servico.mapper';
 import { ServicoExiste } from 'src/core/validators/diaria/validator-servico';
 import { DataAtendimento } from 'src/core/validators/diaria/validator-data-atendimento';
-import { ValidatorHoraAtendimento } from 'src/core/validators/diaria/validator-hora-atendimento';
-import { ValidatorTempoAtendimento } from 'src/core/validators/diaria/validator-tempo-atendimento';
-import { ValidatorPrecoDiaria } from 'src/core/validators/diaria/validator-preco-diaria';
-import { ValidatorCep } from 'src/core/validators/diaria/validator-cep';
 import { ViaCepService } from 'src/core/providers/via-cep.service';
-import { ValidatorIbge } from 'src/core/validators/diaria/validator-ibge';
-import { ValidatorDisponibilidade } from 'src/core/validators/diaria/validator-disponibilidade';
 import { DiaristaRepository } from 'src/api/diaristas/diarista.repository';
 import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 import { DiaristaMapper } from 'src/api/diaristas/diarista.mapper';
@@ -23,6 +17,7 @@ import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 import { ValidatorDiariaUsuario } from 'src/core/validators/diaria/validator-diaria-usuario';
 import { ServicoRepository } from '../servicos/servico.repository';
 import { ValidatorDiaria } from 'src/core/validators/diaria/validator-diaria';
+import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
 
 @Module({
   imports: [
@@ -30,6 +25,7 @@ import { ValidatorDiaria } from 'src/core/validators/diaria/validator-diaria';
     TypeOrmModule.forFeature([DiaristaRepository]),
     TypeOrmModule.forFeature([UsuarioRepository]),
     TypeOrmModule.forFeature([ServicoRepository]),
+    TypeOrmModule.forFeature([AvaliacaoRepository]),
   ],
   controllers: [DiariasController],
   providers: [
@@ -40,13 +36,7 @@ import { ValidatorDiaria } from 'src/core/validators/diaria/validator-diaria';
     ServicoMapper,
     ServicoExiste,
     DataAtendimento,
-    ValidatorHoraAtendimento,
-    ValidatorTempoAtendimento,
-    ValidatorPrecoDiaria,
-    ValidatorCep,
     ViaCepService,
-    ValidatorIbge,
-    ValidatorDisponibilidade,
     HateoasDiaria,
     DiaristaMapper,
     ValidatorDiariaUsuario,

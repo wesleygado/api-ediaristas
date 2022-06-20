@@ -4,7 +4,6 @@ import { HateoasLinks } from 'src/core/hateoas/hateoas.interface';
 import { DataAtendimento } from 'src/core/validators/diaria/validator-data-atendimento';
 import { ServicoExiste } from 'src/core/validators/diaria/validator-servico';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
-import { ServicoResponseDto } from 'src/api/servicos/dto/servicoResponse.dto';
 
 export class DiariaRequestDto {
   @IsNotEmpty()
@@ -12,7 +11,6 @@ export class DiariaRequestDto {
   @Validate(DataAtendimento)
   dataAtendimento: Date;
 
-  @IsNotEmpty()
   @Expose({ name: 'tempo_atendimento' })
   tempoAtendimento: number;
 

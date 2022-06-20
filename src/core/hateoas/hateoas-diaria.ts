@@ -6,12 +6,19 @@ import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
 import { Diaria } from 'src/api/diarias/entities/diaria.entity';
 import { DiariasController } from 'src/api/diarias/diarias.controller';
-import { ConfirmacaoPresencaService } from '../services/confirmacao-presenca/confirmacao-presenca.service';
 import { ConfirmacaoPresencaController } from '../services/confirmacao-presenca/confirmacao-presenca.controller';
+import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
+import { AvaliacaoController } from 'src/api/avaliacao/avaliacao.controller';
+import { Avaliacao } from 'src/api/avaliacao/entities/avaliacao.entity';
 
 @Injectable()
 export class HateoasDiaria extends HateoasBase implements HateoasInterface {
-  gerarLinksHateoas(tipoUsuario?: number, diaria?: Diaria): HateoasLinks[] {
+  gerarLinksHateoas(
+    tipoUsuario?: number,
+    diaria?: Diaria,
+    usuarioLogado?: UsuarioApi,
+    avaliacaoApta?: boolean,
+  ): HateoasLinks[] {
     this.LINKS = [];
 
     const params = {
@@ -49,6 +56,16 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
       params,
     );
 
+    if (this.isAptaParaAvaliacao(diaria, avaliacaoApta)) {
+      this.adicionaLink(
+        'PATCH',
+        'avaliar_diaria',
+        AvaliacaoController,
+        AvaliacaoController.prototype.create,
+        params,
+      );
+    }
+
     return this.LINKS;
   }
 
@@ -61,5 +78,9 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
       return true;
     }
     return false;
+  }
+
+  private isAptaParaAvaliacao(diaria: Diaria, avaliacaoApta: boolean) {
+    return diaria.status === DiariaStatus.CONCLUIDO && !avaliacaoApta;
   }
 }

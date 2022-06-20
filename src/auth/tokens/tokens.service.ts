@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { throws } from 'assert';
-import { TokenDto } from './dtos/token.dto';
 import { TokenRepository } from './tokens.repository';
 
 @Injectable()

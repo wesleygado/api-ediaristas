@@ -1,4 +1,3 @@
-import { EnderecoDiaristaRequestDto } from './dto/endereco-diarista-request.dto';
 import { EnderecoDiaristaResponseDto } from './dto/endereco-diarista-response.dto';
 import { EnderecoDiarista } from './entities/endereco-diarista.entity';
 

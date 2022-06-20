@@ -1,10 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
-  isNumber,
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { ServicoService } from 'src/api/servicos/servico.service';
 
 @ValidatorConstraint({ name: 'dataAtendimento', async: true })
 @Injectable()

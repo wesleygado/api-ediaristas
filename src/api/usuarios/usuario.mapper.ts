@@ -5,7 +5,6 @@ import { UsuarioApi } from './entities/usuario.entity';
 import { UsuarioResponseDto } from './dtos/usuario-response.dto';
 import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
 import { Injectable } from '@nestjs/common';
-import { JwtPayload } from 'src/auth/strategies/jwt-payload.interface';
 
 @Injectable()
 export class UsuarioMapper {
@@ -41,6 +40,7 @@ export class UsuarioMapper {
     usuarioDTO.nascimento = usuario.nascimento;
     usuarioDTO.telefone = usuario.telefone;
     usuarioDTO.chavePix = usuario.chavePix;
+    usuarioDTO.foto = usuario.fotoUsuario.url;
     return usuarioDTO;
   }
 

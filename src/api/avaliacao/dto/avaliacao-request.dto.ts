@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsPositive, Length, Max, Min } from 'class-validator';
+import { IsNotEmpty, IsPositive, Length, Max } from 'class-validator';
 
 export class AvaliacaoRequestDto {
   @IsNotEmpty()

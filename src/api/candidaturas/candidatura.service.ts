@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { json } from 'express';
 import { ValidatorCandidatura } from 'src/core/validators/candidatura/validator-candidatura';
 import { DiariaRepository } from 'src/api/diarias/diaria.repository';
 import { Diaria } from 'src/api/diarias/entities/diaria.entity';

@@ -1,16 +1,15 @@
-import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { DiariaRequestDto } from 'src/api/diarias/dto/diaria-request.dto';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
 import { CidadesAtendidasService } from './cidades-atendidas.service';
 import { CidadeAtendidaResponseDto } from './dto/cidade-atendida-response.dto';
 import { CidadesAtendidasRequestDto } from './dto/cidades-atendidas-request.dto copy';
 
-@Controller('api/usuarios')
+@Controller('api/usuario')
 export class CidadesAtendidasController {
   constructor(private readonly cidadesService: CidadesAtendidasService) {}
 
@@ -29,7 +28,7 @@ export class CidadesAtendidasController {
   atualizarCidadesAtendidas(
     @GetUser() usuario: UsuarioApi,
     @Body() request: CidadesAtendidasRequestDto,
-  ): Promise<string> {
+  ): Promise<{ message: string }> {
     return this.cidadesService.atualizarCidadesAtendidas(request, usuario);
   }
 }

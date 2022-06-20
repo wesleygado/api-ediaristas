@@ -9,7 +9,7 @@ import { CidadeResponseDto } from './dto/cidade-response.dto';
 
 @Injectable()
 export class IbgeService implements ConsultaCidade {
-  BASE_URL = 'https://servicodados.ibge.gov.br/api/v1';
+  BASE_URL = 'https://servicodadosssss.ibge.gov.br/api/v1';
 
   async buscarCidadePorCodigoIbge(
     codigoIbge: string,

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { MeService } from './me.service';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { AuthGuard } from '@nestjs/passport';
@@ -6,10 +6,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
 import { UsuarioResponseDto } from 'src/api/usuarios/dtos/usuario-response.dto';
-import Request from 'express';
-import { GoogleMatrixService } from 'src/core/services/consulta-distancia/providers/google-matrix.service';
 import { DiaristaIndiceService } from 'src/core/services/diarista-indice/diarista-indice.service';
-import { DiariasService } from '../diarias/diarias.service';
 import { DiariaRepository } from '../diarias/diaria.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 

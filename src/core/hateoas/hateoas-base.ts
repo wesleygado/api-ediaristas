@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import {
   ControllerClass,
   ControllerMethod,
-  Params,
   UrlGeneratorService,
 } from 'nestjs-url-generator';
 import { HateoasLinks } from './hateoas.interface';

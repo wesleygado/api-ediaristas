@@ -17,7 +17,9 @@ export class MeService {
     });
 
     const usuarioMe = this.mapper.toUsuarioResponseDto(usuarioLogado);
-    usuarioMe.links = this.hateOas.gerarLinksHateoas(usuarioLogado.tipoUsuario);
+    usuarioMe.links = await this.hateOas.gerarLinksHateoas(
+      usuarioLogado.tipoUsuario,
+    );
 
     return usuarioMe;
   }

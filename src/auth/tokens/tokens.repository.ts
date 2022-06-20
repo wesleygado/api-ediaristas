@@ -1,5 +1,4 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { TokenDto } from './dtos/token.dto';
 import { Token } from './entities/token.entity';
 
 @EntityRepository(Token)

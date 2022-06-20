@@ -1,5 +1,3 @@
-import { HateoasLinks } from 'src/core/hateoas/hateoas.interface';
-
 export class EnderecoDiaristaResponseDto {
   id: number;
   logradouro: string;
