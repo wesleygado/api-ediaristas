@@ -24,14 +24,14 @@ export class HateoasUsuario extends HateoasBase implements HateoasInterface {
     if (tipoUsuario == TipoUsuario.DIARISTA) {
       this.adicionaLink(
         'PUT',
-        'Atualizar_endereço',
+        'cadastrar_endereco',
         EnderecoDiaristaController,
         EnderecoDiaristaController.prototype.atualizarEndereco,
       );
 
       this.adicionaLink(
         'GET',
-        'exibir_endereço',
+        'exibir_endereco',
         EnderecoDiaristaController,
         EnderecoDiaristaController.prototype.exibirEndereco,
       );
