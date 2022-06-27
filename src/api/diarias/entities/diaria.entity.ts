@@ -1,4 +1,6 @@
 import { IsOptional } from 'class-validator';
+import { type } from 'os';
+import { Pagamento } from 'src/api/pagamentos/entities/pagamento.entity';
 import { Servico } from 'src/api/servicos/entities/services.entity';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import {
@@ -9,6 +11,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -112,6 +115,9 @@ export class Diaria {
     name: 'diaria_candidato',
   })
   candidatos: UsuarioApi[];
+
+  @OneToMany((type) => Pagamento, (pagamento) => pagamento.id)
+  pagamentos: Pagamento[];
 
   @CreateDateColumn({
     type: 'timestamp',

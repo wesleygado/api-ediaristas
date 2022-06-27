@@ -28,10 +28,15 @@ export class DiariasController {
     return await this.diariasService.listarPorUsuarioLogado(usuario);
   }
 
-  @Get(':id')
+  @Get()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(TipoUsuario.CLIENTE, TipoUsuario.DIARISTA)
   async buscarPorId(@GetUser() usuario: UsuarioApi, @Param('id') id: number) {
     return await this.diariasService.buscarPorId(id, usuario);
+  }
+
+  @Get('/candidato')
+  async listaDiarias() {
+    return this.diariasService.listaDiarias();
   }
 }

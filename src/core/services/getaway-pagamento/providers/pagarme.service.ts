@@ -1,12 +1,19 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { classToPlain, instanceToPlain } from 'class-transformer';
 import { Diaria } from 'src/api/diarias/entities/diaria.entity';
+import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import { Pagamento } from 'src/api/pagamentos/entities/pagamento.entity';
 import { PagamentoStatus } from 'src/api/pagamentos/enum/pagamento-status';
 import { PagamentoRepository } from 'src/api/pagamentos/pagamento.repository';
 import { GatewayPagamentoService } from '../adapters/gateway-pagamento.service';
+import { PagarMeReembolsoRequest } from './dtos/pagar-me-reembolso-request.dto';
+import { PagarMeReembolsoResponse } from './dtos/pagar-me-reembolso-response.dto';
 import { PagarMeTransacaoRequest } from './dtos/pagar-me-transacao-request.dto';
 import { PagarMeTransacaoResponse } from './dtos/pagar-me-transacao-response.dto';
 
@@ -27,6 +34,23 @@ export class PagarMeService implements GatewayPagamentoService {
       throw new BadRequestException(error.response.data.errors);
     }
   }
+  async realizarEstornoTotal(diaria: Diaria): Promise<Pagamento> {
+    try {
+      return await this.tryRealizerEstornoTotal(diaria);
+    } catch (error) {
+      throw new BadRequestException(error.response.data.errors);
+    }
+  }
+
+  private async tryRealizerEstornoTotal(diaria: Diaria): Promise<Pagamento> {
+    this.validarDiariaParaReembolso(diaria);
+    const pagamento = await this.getPagamentoDaDiaria(diaria);
+    const url = `${this.BASE_URL}/transactions/${pagamento[0].transacaoId}/refund`;
+    const request = new PagarMeReembolsoRequest();
+    request.apiKey = this.API_KEY;
+    const response = await axios.post(url, instanceToPlain(request));
+    return this.criarPagamentoReembolso(diaria, response.data);
+  }
 
   private async tryPagar(diaria: Diaria, cardHash: string): Promise<Pagamento> {
     const transacaoRequest = this.criarTransacaoRequest(diaria, cardHash);
@@ -43,6 +67,18 @@ export class PagarMeService implements GatewayPagamentoService {
     pagamento.valor = diaria.preco;
     pagamento.transacaoId = body.id;
     pagamento.status = this.criarPagamentoStatus(body.status);
+    pagamento.diaria = diaria;
+    return await this.pagamento.save(pagamento);
+  }
+
+  private async criarPagamentoReembolso(
+    diaria: Diaria,
+    body: PagarMeReembolsoResponse,
+  ): Promise<Pagamento> {
+    const pagamento = new Pagamento();
+    pagamento.valor = this.converterCentavosParaReais(body.refundedAmount);
+    pagamento.transacaoId = body.id;
+    pagamento.status = PagamentoStatus.REEMBOLSADO;
     pagamento.diaria = diaria;
     return await this.pagamento.save(pagamento);
   }
@@ -67,5 +103,29 @@ export class PagarMeService implements GatewayPagamentoService {
 
   private converterReaisParaCentavos(preco: number): number {
     return preco * 100;
+  }
+
+  private converterCentavosParaReais(preco: number): number {
+    return preco / 100;
+  }
+
+  private async getPagamentoDaDiaria(diaria: Diaria): Promise<Pagamento[]> {
+    const pagamento = await this.pagamento.find({
+      where: [{ diaria_id: diaria.id }, { status: PagamentoStatus.ACEITO }],
+      take: 1,
+    });
+
+    if (!pagamento) {
+      throw new NotFoundException('Pagamento não encontrado');
+    }
+
+    return pagamento;
+  }
+
+  private validarDiariaParaReembolso(diaria: Diaria) {
+    if (diaria.status != DiariaStatus.PAGO)
+      throw new BadRequestException(
+        'Não pode ser feito reembolso de diária não paga',
+      );
   }
 }

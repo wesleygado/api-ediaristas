@@ -1,8 +1,9 @@
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, LessThan, Repository } from 'typeorm';
 import { Servico } from '../servicos/entities/services.entity';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { Diaria } from './entities/diaria.entity';
+import DiariaStatus from './enum/diaria-status';
 
 @EntityRepository(Diaria)
 export class DiariaRepository extends Repository<Diaria> {
@@ -91,7 +92,7 @@ export class DiariaRepository extends Repository<Diaria> {
   async getAptasParaSelecaoDiarista(): Promise<Diaria[]> {
     let diaria = await this.createQueryBuilder('diaria')
       .select('diaria')
-      .where('diaria.status = :status', { status: 2 })
+      .where('diaria.status = :status', { status: DiariaStatus.PAGO })
       .andWhere('diaria.diarista IS NULL')
       .innerJoinAndSelect('diaria.candidatos', 'candidatos')
       .leftJoinAndSelect('candidatos.endereco', 'endereco')
@@ -113,5 +114,22 @@ export class DiariaRepository extends Repository<Diaria> {
         diaria.candidatos.length <= 3 || diaria.candidatos.length >= 0,
     );
     return diaria;
+  }
+
+  async getAptasParaCancelamento(): Promise<Diaria[]> {
+    const diariaSemCandidato = await this.createQueryBuilder('diaria')
+      .select('diaria')
+      .leftJoinAndSelect('diaria.candidatos', 'candidatos')
+      .where('usuario_api_id IS NULL')
+      .andWhere('diaria.status = :status', { status: DiariaStatus.PAGO })
+      .andWhere('diaria.data_atendimento < now() + interval 1 day')
+      .orWhere('usuario_api_id IS NULL')
+      .andWhere('diaria.status = :status', {
+        status: DiariaStatus.SEM_PAGAMENTO,
+      })
+      .andWhere('diaria.created_at + interval 1 day < now()')
+      .getMany();
+
+    return diariaSemCandidato;
   }
 }

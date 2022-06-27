@@ -1,5 +1,4 @@
-import { SerializeOptions } from '@nestjs/common';
-import { Expose, Transform } from 'class-transformer';
+import { Expose } from 'class-transformer';
 
 export class PagarMeTransacaoRequest {
   @Expose({ name: 'api_key' })

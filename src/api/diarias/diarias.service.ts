@@ -128,4 +128,8 @@ export class DiariasService {
     ).porcentagem;
     return (preco * porcentagemComissao) / 100;
   }
+
+  async listaDiarias() {
+    return await this.diariaRepository.getAptasParaCancelamento();
+  }
 }
