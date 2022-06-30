@@ -116,9 +116,6 @@ export class Diaria {
   })
   candidatos: UsuarioApi[];
 
-  @OneToMany((type) => Pagamento, (pagamento) => pagamento.id)
-  pagamentos: Pagamento[];
-
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

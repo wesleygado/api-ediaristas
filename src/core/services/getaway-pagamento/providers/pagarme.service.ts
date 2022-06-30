@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { classToPlain, instanceToPlain } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { Diaria } from 'src/api/diarias/entities/diaria.entity';
 import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import { Pagamento } from 'src/api/pagamentos/entities/pagamento.entity';
@@ -38,14 +38,16 @@ export class PagarMeService implements GatewayPagamentoService {
     try {
       return await this.tryRealizerEstornoTotal(diaria);
     } catch (error) {
-      throw new BadRequestException(error.response.data.errors);
+      throw new BadRequestException(error);
     }
   }
 
   private async tryRealizerEstornoTotal(diaria: Diaria): Promise<Pagamento> {
     this.validarDiariaParaReembolso(diaria);
     const pagamento = await this.getPagamentoDaDiaria(diaria);
-    const url = `${this.BASE_URL}/transactions/${pagamento[0].transacaoId}/refund`;
+    console.log(diaria);
+    console.log(pagamento);
+    const url = `${this.BASE_URL}/transactions/${pagamento.transacaoId}/refund`;
     const request = new PagarMeReembolsoRequest();
     request.apiKey = this.API_KEY;
     const response = await axios.post(url, instanceToPlain(request));
@@ -75,11 +77,13 @@ export class PagarMeService implements GatewayPagamentoService {
     diaria: Diaria,
     body: PagarMeReembolsoResponse,
   ): Promise<Pagamento> {
+    const response = plainToInstance(PagarMeReembolsoResponse, body);
     const pagamento = new Pagamento();
-    pagamento.valor = this.converterCentavosParaReais(body.refundedAmount);
-    pagamento.transacaoId = body.id;
+    pagamento.valor = this.converterCentavosParaReais(response.refundedAmount);
+    pagamento.transacaoId = response.id;
     pagamento.status = PagamentoStatus.REEMBOLSADO;
     pagamento.diaria = diaria;
+    console.log(pagamento);
     return await this.pagamento.save(pagamento);
   }
 
@@ -109,11 +113,8 @@ export class PagarMeService implements GatewayPagamentoService {
     return preco / 100;
   }
 
-  private async getPagamentoDaDiaria(diaria: Diaria): Promise<Pagamento[]> {
-    const pagamento = await this.pagamento.find({
-      where: [{ diaria_id: diaria.id }, { status: PagamentoStatus.ACEITO }],
-      take: 1,
-    });
+  private async getPagamentoDaDiaria(diaria: Diaria): Promise<Pagamento> {
+    const pagamento = await this.pagamento.findPagamentosParaReembolso(diaria);
 
     if (!pagamento) {
       throw new NotFoundException('Pagamento não encontrado');

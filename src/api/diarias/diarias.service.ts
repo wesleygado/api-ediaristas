@@ -46,9 +46,13 @@ export class DiariasService {
       servico,
     );
 
+    console.log(diariaCadastrada);
+
     const diariaDtoResponse = await this.diariaMapper.toDiariaResponseDto(
       diariaCadastrada,
     );
+
+    console.log(diariaDtoResponse);
 
     diariaDtoResponse.links = await this.hateOas.gerarLinksHateoas(
       userRequest.tipoUsuario,
