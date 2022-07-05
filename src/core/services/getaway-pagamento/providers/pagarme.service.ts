@@ -42,16 +42,24 @@ export class PagarMeService implements GatewayPagamentoService {
     }
   }
 
-  private async tryRealizerEstornoTotal(diaria: Diaria): Promise<Pagamento> {
-    this.validarDiariaParaReembolso(diaria);
-    const pagamento = await this.getPagamentoDaDiaria(diaria);
-    console.log(diaria);
-    console.log(pagamento);
-    const url = `${this.BASE_URL}/transactions/${pagamento.transacaoId}/refund`;
+  async realizarEstornoParcial(diaria: Diaria): Promise<Pagamento> {
+    try {
+      return await this.tryRealizerEstornoParcial(diaria);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+  async tryRealizerEstornoParcial(diaria: Diaria): Promise<Pagamento> {
     const request = new PagarMeReembolsoRequest();
     request.apiKey = this.API_KEY;
-    const response = await axios.post(url, instanceToPlain(request));
-    return this.criarPagamentoReembolso(diaria, response.data);
+    request.amount = this.converterReaisParaCentavos(diaria.preco) / 2;
+    return this.realizarEstorno(diaria, request);
+  }
+
+  private async tryRealizerEstornoTotal(diaria: Diaria): Promise<Pagamento> {
+    const request = new PagarMeReembolsoRequest();
+    request.apiKey = this.API_KEY;
+    return this.realizarEstorno(diaria, request);
   }
 
   private async tryPagar(diaria: Diaria, cardHash: string): Promise<Pagamento> {
@@ -59,6 +67,17 @@ export class PagarMeService implements GatewayPagamentoService {
     const url = `${this.BASE_URL}/transactions`;
     const response = await axios.post(url, instanceToPlain(transacaoRequest));
     return this.criarPagamento(diaria, response.data);
+  }
+
+  private async realizarEstorno(
+    diaria: Diaria,
+    request: PagarMeReembolsoRequest,
+  ): Promise<Pagamento> {
+    this.validarDiariaParaReembolso(diaria);
+    const pagamento = await this.getPagamentoDaDiaria(diaria);
+    const url = `${this.BASE_URL}/transactions/${pagamento.transacaoId}/refund`;
+    const response = await axios.post(url, instanceToPlain(request));
+    return this.criarPagamentoReembolso(diaria, response.data);
   }
 
   private async criarPagamento(
@@ -124,9 +143,15 @@ export class PagarMeService implements GatewayPagamentoService {
   }
 
   private validarDiariaParaReembolso(diaria: Diaria) {
-    if (diaria.status != DiariaStatus.PAGO)
+    const isNotPagaOrConfirmada = !(
+      diaria.status === DiariaStatus.PAGO ||
+      diaria.status === DiariaStatus.CONFIRMADO
+    );
+
+    if (isNotPagaOrConfirmada) {
       throw new BadRequestException(
-        'Não pode ser feito reembolso de diária não paga',
+        'Não pode ser feito o reembolse de diaria pois não há pagamento',
       );
+    }
   }
 }

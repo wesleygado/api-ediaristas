@@ -105,7 +105,7 @@ export class DiariaRepository extends Repository<Diaria> {
         dataAgora.getTime() - diaria.created_at.getTime(),
       );
       const diferencaHoras = diferencaDatas.getTime() / 3600000;
-      if (diferencaHoras < 24) {
+      if (diferencaHoras > 24) {
         return diaria;
       }
     });

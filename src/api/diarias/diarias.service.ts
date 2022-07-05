@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DiariaRepository } from './diaria.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DiariaMapper } from './diaria.mapper';
@@ -13,6 +17,11 @@ import { ServicoRepository } from '../servicos/servico.repository';
 import { ValidatorDiaria } from 'src/core/validators/diaria/validator-diaria';
 import { ValidatorDiariaUsuario } from 'src/core/validators/diaria/validator-diaria-usuario';
 import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
+import { request } from 'http';
+import { DiariaCancelamentoRequestDto } from './dto/diaria-cancelamento-request.dto';
+import { Diaria } from './entities/diaria.entity';
+import { GatewayPagamentoService } from 'src/core/services/getaway-pagamento/adapters/gateway-pagamento.service';
+import { Avaliacao } from '../avaliacao/entities/avaliacao.entity';
 
 @Injectable()
 export class DiariasService {
@@ -28,6 +37,7 @@ export class DiariasService {
     private validarUsuario: ValidatorDiariaUsuario,
     @InjectRepository(AvaliacaoRepository)
     private avalicaoRepository: AvaliacaoRepository,
+    private gatewayPagamento: GatewayPagamentoService,
   ) {}
 
   async cadastrar(
@@ -122,7 +132,64 @@ export class DiariasService {
       usuario.tipoUsuario,
       diaria,
     );
-    return this.validarUsuario.validarDiariaUsuario(usuario, diariaDTO);
+
+    this.validarUsuario.validarDiariaUsuario(usuario, diaria);
+    return diariaDTO;
+  }
+
+  async listaDiarias() {
+    return await this.diariaRepository.getAptasParaCancelamento();
+  }
+
+  async cancelar(
+    diariaId: number,
+    diariaCancelamentoRequestDto: DiariaCancelamentoRequestDto,
+    usuarioLogado: UsuarioApi,
+  ): Promise<{ mensagem: string }> {
+    const diaria = await this.buscarDiariaPorId(diariaId);
+    this.validarUsuario.validarDiariaUsuario(usuarioLogado, diaria);
+    this.validatorDiaria.validarDiariaCancelamento(diaria);
+
+    if (this.hasPenalizacao(diaria)) {
+      this.aplicarPenalizacao(diaria, usuarioLogado);
+    } else {
+      this.gatewayPagamento.realizarEstornoTotal(diaria);
+    }
+
+    diaria.status = DiariaStatus.CANCELADO;
+    diaria.movitoCancelamento = diariaCancelamentoRequestDto.motivoCancelamento;
+    this.diariaRepository.save(diaria);
+
+    return { mensagem: 'A diária foi cancelada com sucesso' };
+  }
+
+  private aplicarPenalizacao(diaria: Diaria, usuarioLogado: UsuarioApi) {
+    if (usuarioLogado.tipoUsuario === TipoUsuario.DIARISTA) {
+      this.penalizarDiarista(diaria);
+      this.gatewayPagamento.realizarEstornoTotal(diaria);
+    } else {
+      this.gatewayPagamento.realizarEstornoParcial(diaria);
+    }
+  }
+  private async penalizarDiarista(diaria: Diaria) {
+    const avaliacao = new Avaliacao();
+    avaliacao.nota = 1;
+    avaliacao.descricao = 'Penalização por diária cancelada';
+    avaliacao.avaliado = diaria.diarista;
+    avaliacao.visibilidade = false;
+    avaliacao.diaria = diaria;
+
+    await this.avalicaoRepository.save(avaliacao);
+  }
+
+  private async buscarDiariaPorId(diariaId: number): Promise<Diaria> {
+    const diaria = await this.diariaRepository.findOne(diariaId);
+
+    if (!diaria) {
+      throw new NotFoundException('Diária não encontrada');
+    }
+
+    return diaria;
   }
 
   private async calcularComissao(model: DiariaRequestDto): Promise<number> {
@@ -133,7 +200,18 @@ export class DiariasService {
     return (preco * porcentagemComissao) / 100;
   }
 
-  async listaDiarias() {
-    return await this.diariaRepository.getAptasParaCancelamento();
+  private hasPenalizacao(diaria: Diaria): boolean {
+    const hoje = new Date(Date.now());
+    const diferencaDatas = new Date(
+      diaria.localDateTime.getTime() - hoje.getTime(),
+    );
+    const converterParaHoras = 3600000;
+    const diferencaHoras = diferencaDatas.getTime() / converterParaHoras;
+
+    if (diferencaHoras < 24) {
+      return true;
+    }
+
+    return false;
   }
 }

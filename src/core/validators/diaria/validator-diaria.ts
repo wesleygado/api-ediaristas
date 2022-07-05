@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DiariaRequestDto } from 'src/api/diarias/dto/diaria-request.dto';
+import { Diaria } from 'src/api/diarias/entities/diaria.entity';
+import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import { DiaristaRepository } from 'src/api/diaristas/diarista.repository';
 import { ServicoService } from 'src/api/servicos/servico.service';
 import { ViaCepService } from 'src/core/providers/via-cep.service';
@@ -94,6 +96,37 @@ export class ValidatorDiaria {
       return diaria.cep;
     } catch (error) {
       throw new BadRequestException('CEP Inválido');
+    }
+  }
+
+  validarDiariaCancelamento(diaria: Diaria) {
+    this.validarStatus(diaria);
+    this.validarDataAtendimento(diaria);
+  }
+
+  private validarStatus(diaria: Diaria) {
+    const isNotPagaOrConfirmada = !(
+      diaria.status === DiariaStatus.PAGO ||
+      diaria.status === DiariaStatus.CONFIRMADO
+    );
+
+    if (isNotPagaOrConfirmada) {
+      throw new BadRequestException({
+        diaria:
+          'Diária a ser cancelada deve estar com o status Pago ou Confirmado',
+      });
+    }
+  }
+
+  private validarDataAtendimento(diaria: Diaria) {
+    const hoje = new Date(Date.now());
+    const isDataAtendimentoNoPassado = diaria.localDateTime;
+
+    if (hoje > isDataAtendimentoNoPassado) {
+      throw new BadRequestException({
+        diaria:
+          'Não é mais possível cancelar a diária, diária ultrapassou a data de atendimento',
+      });
     }
   }
 

@@ -19,7 +19,7 @@ export class ScheduleTask {
   ) {}
   private readonly logger = new Logger(ScheduleTask.name);
 
-  @Cron(CronExpression.EVERY_12_HOURS)
+  @Cron(CronExpression.EVERY_10_HOURS)
   async selecionarDiaristaDaDiaria() {
     this.logger.debug(
       'Iniciada Task de Seleção de diariastas para diárias aptas',
@@ -35,7 +35,7 @@ export class ScheduleTask {
     this.logger.debug('Task de seleção de diaristas finalizada');
   }
 
-  @Cron(CronExpression.EVERY_11_HOURS)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async cancelarDiariaSemCandidato() {
     this.logger.debug(
       'Iniciada Task de cancelamento de diárias sem candidatos',
