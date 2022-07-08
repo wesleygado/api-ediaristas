@@ -24,7 +24,6 @@ export class DiaristaRepository extends Repository<UsuarioApi> {
     const usuarios = await query.limit(pageSize).getMany();
     const count = await query.getCount();
 
-    console.log(usuarios[1]);
     return { content: usuarios, totalElement: count };
   }
 

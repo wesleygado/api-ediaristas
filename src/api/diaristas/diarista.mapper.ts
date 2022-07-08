@@ -8,7 +8,6 @@ export class DiaristaMapper {
   toDiaristaLocalidadeResponseDto(
     usuario: UsuarioApi,
   ): DiaristaLocalidadeResponseDto {
-    console.log(usuario);
     const diaristaDTO = new DiaristaLocalidadeResponseDto();
     diaristaDTO.nomeCompleto = usuario.nomeCompleto;
     diaristaDTO.reputacao = usuario.reputacao;

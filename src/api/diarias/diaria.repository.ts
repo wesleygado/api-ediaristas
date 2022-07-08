@@ -77,16 +77,22 @@ export class DiariaRepository extends Repository<Diaria> {
     return await this.find({ diarista: diarista });
   }
 
-  async findOportunidades(cidades: string[]): Promise<Diaria[]> {
-    const diaria = await this.createQueryBuilder('diaria')
+  async findOportunidades(
+    cidades: string[],
+    usuarioLogadoId: number,
+  ): Promise<Diaria[]> {
+    let diaria = await this.createQueryBuilder('diaria')
       .select('diaria')
       .leftJoinAndSelect('diaria.cliente', 'cliente')
       .leftJoinAndSelect('diaria.candidatos', 'candidatos')
       .leftJoinAndSelect('diaria.servico', 'servico')
-      .andWhere('diaria.diarista IS NULL')
+      .where('diaria.diarista IS NULL')
       .andWhere('diaria.codigoIbge IN(:cidades)', { cidades: cidades })
       .andWhere('diaria.status = :status', { status: 2 })
       .getMany();
+
+    diaria = diaria.filter((diaria) => diaria.candidatos.length <= 3);
+
     return diaria;
   }
 

@@ -75,5 +75,6 @@ export class DiariaResponseDto {
 
   links?: HateoasLinks[];
 
+  @Expose({ name: 'avaliacoes_cliente' })
   avaliacao: AvaliacaoResponseDto[];
 }

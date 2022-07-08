@@ -7,6 +7,7 @@ import { ValidatorPagamentoStatus } from 'src/core/validators/pagamento/validato
 import { PagarMeService } from 'src/core/services/getaway-pagamento/providers/pagarme.service';
 import { PagamentoRepository } from './pagamento.repository';
 import { GatewayPagamentoService } from 'src/core/services/getaway-pagamento/adapters/gateway-pagamento.service';
+import { PagamentoMapper } from './pagamento.mapper';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { GatewayPagamentoService } from 'src/core/services/getaway-pagamento/ada
   providers: [
     PagamentosService,
     ValidatorPagamentoStatus,
+    PagamentoMapper,
     {
       provide: GatewayPagamentoService,
       useClass: PagarMeService,

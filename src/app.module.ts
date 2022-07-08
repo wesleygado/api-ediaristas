@@ -44,7 +44,7 @@ import { AvaliacaoRepository } from './api/avaliacao/avaliacao.repository';
     MeModule,
     TokensModule,
     UrlGeneratorModule.forRoot({
-      appUrl: 'http://localhost:8000',
+      appUrl: `http://localhost:${process.env.PORT}`,
     }),
     DiariasModule,
     PagamentosModule,

@@ -4,8 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DiariaRepository } from 'src/api/diarias/diaria.repository';
 import { Diaria } from 'src/api/diarias/entities/diaria.entity';
 import DiariaStatus from 'src/api/diarias/enum/diaria-status';
-import { Pagamento } from 'src/api/pagamentos/entities/pagamento.entity';
-import { PagamentoStatus } from 'src/api/pagamentos/enum/pagamento-status';
 import { DiaristaIndiceService } from '../services/diarista-indice/diarista-indice.service';
 import { GatewayPagamentoService } from '../services/getaway-pagamento/adapters/gateway-pagamento.service';
 
@@ -35,7 +33,7 @@ export class ScheduleTask {
     this.logger.debug('Task de seleção de diaristas finalizada');
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_10_HOURS)
   async cancelarDiariaSemCandidato() {
     this.logger.debug(
       'Iniciada Task de cancelamento de diárias sem candidatos',

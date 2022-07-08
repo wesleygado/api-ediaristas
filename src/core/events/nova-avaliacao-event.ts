@@ -42,11 +42,6 @@ export class NovaAvaliacaoEvent {
 
   private async atualizarStatusDaDiariaAvaliada(avaliacao: Avaliacao) {
     const diaria = avaliacao.diaria;
-    console.log(
-      await this.avaliacaoRepository.isClienteAndDiaristaAvaliaramDiaria(
-        diaria,
-      ),
-    );
     if (
       await this.avaliacaoRepository.isClienteAndDiaristaAvaliaramDiaria(diaria)
     ) {

@@ -6,6 +6,7 @@ import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
 import { EnderecoDiaristaController } from 'src/api/endereco-diarista/endereco-diarista.controller';
 import { CidadesAtendidasController } from 'src/api/cidades-atendidas/cidades-atendidas.controller';
 import { OportunidadeController } from 'src/api/oportunidade/oportunidade.controller';
+import { PagamentosController } from 'src/api/pagamentos/pagamentos.controller';
 
 @Injectable()
 export class HateoasUsuario extends HateoasBase implements HateoasInterface {
@@ -31,7 +32,7 @@ export class HateoasUsuario extends HateoasBase implements HateoasInterface {
 
       this.adicionaLink(
         'GET',
-        'exibir_endereco',
+        'listar_endereco',
         EnderecoDiaristaController,
         EnderecoDiaristaController.prototype.exibirEndereco,
       );
@@ -52,15 +53,22 @@ export class HateoasUsuario extends HateoasBase implements HateoasInterface {
 
       this.adicionaLink(
         'GET',
-        'listar_oportunidades',
+        'lista_oportunidades',
         OportunidadeController,
         OportunidadeController.prototype.buscarOportunidades,
+      );
+
+      this.adicionaLink(
+        'GET',
+        'lista_pagamentos',
+        PagamentosController,
+        PagamentosController.prototype.listarPagamentos,
       );
     }
 
     this.adicionaLink(
       'GET',
-      'listar_diárias_por_usuario_logado',
+      'lista_diarias',
       DiariasController,
       DiariasController.prototype.listarDiarias,
     );

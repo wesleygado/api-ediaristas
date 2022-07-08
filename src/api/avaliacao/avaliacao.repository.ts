@@ -37,7 +37,6 @@ export class AvaliacaoRepository extends Repository<Avaliacao> {
     avaliador: UsuarioApi,
     diaria: Diaria,
   ): Promise<boolean> {
-    console.log(diaria.id);
     const avaliacoes = await this.createQueryBuilder('avaliacao')
       .leftJoinAndSelect('avaliacao.avaliador', 'avaliador')
       .leftJoinAndSelect('avaliacao.diaria', 'diaria')
@@ -51,7 +50,6 @@ export class AvaliacaoRepository extends Repository<Avaliacao> {
       .limit(2)
       .getMany();
 
-    console.log(avaliacoes);
     return avaliacoes.length > 0 ? true : false;
   }
 }

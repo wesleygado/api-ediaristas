@@ -1,5 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Diaria } from '../diarias/entities/diaria.entity';
+import DiariaStatus from '../diarias/enum/diaria-status';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 import { Pagamento } from './entities/pagamento.entity';
 import { PagamentoStatus } from './enum/pagamento-status';
 
@@ -13,6 +15,26 @@ export class PagamentoRepository extends Repository<Pagamento> {
         status: PagamentoStatus.ACEITO,
       })
       .getOne();
+
+    return pagamento;
+  }
+
+  async findPagamentosPorUsuarioLogado(
+    usuarioLogado: UsuarioApi,
+  ): Promise<Pagamento[]> {
+    const status = [
+      DiariaStatus.CONCLUIDO,
+      DiariaStatus.AVALIADO,
+      DiariaStatus.TRANSFERIDO,
+    ];
+    const pagamento = await this.createQueryBuilder('pagamento')
+      .select('pagamento')
+      .leftJoinAndSelect('pagamento.diaria', 'diaria')
+      .where('diarista_id = :id', { id: usuarioLogado.id })
+      .andWhere('diaria.status IN(:status)', {
+        status: status,
+      })
+      .getMany();
 
     return pagamento;
   }

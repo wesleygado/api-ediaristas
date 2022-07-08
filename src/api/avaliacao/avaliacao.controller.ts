@@ -8,7 +8,7 @@ import TipoUsuario from '../usuarios/enum/tipoUsuario-enum';
 import { AvaliacaoService } from './avaliacao.service';
 import { AvaliacaoRequestDto } from './dto/avaliacao-request.dto';
 
-@Controller('/api/diarias/:id/avaliacao')
+@Controller('api/diarias/:id/avaliacao')
 export class AvaliacaoController {
   constructor(private readonly avaliacaoService: AvaliacaoService) {}
 

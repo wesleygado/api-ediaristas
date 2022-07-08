@@ -102,7 +102,6 @@ export class PagarMeService implements GatewayPagamentoService {
     pagamento.transacaoId = response.id;
     pagamento.status = PagamentoStatus.REEMBOLSADO;
     pagamento.diaria = diaria;
-    console.log(pagamento);
     return await this.pagamento.save(pagamento);
   }
 

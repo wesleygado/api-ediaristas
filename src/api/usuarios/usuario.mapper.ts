@@ -40,7 +40,13 @@ export class UsuarioMapper {
     usuarioDTO.nascimento = usuario.nascimento;
     usuarioDTO.telefone = usuario.telefone;
     usuarioDTO.chavePix = usuario.chavePix;
-    usuarioDTO.foto = usuario.fotoUsuario.url;
+
+    if (!usuario.fotoUsuario) {
+      usuarioDTO.foto = null;
+    } else {
+      usuarioDTO.foto = usuario.fotoUsuario.url;
+    }
+
     return usuarioDTO;
   }
 

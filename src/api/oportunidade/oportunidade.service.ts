@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HateoasOportunidade } from 'src/core/hateoas/hateoas-oportunidade';
@@ -6,6 +7,7 @@ import { DiariaRepository } from 'src/api/diarias/diaria.repository';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import { AvaliacaoMapper } from '../avaliacao/avaliacao.mapper';
 import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
+import { CandidaturaController } from '../candidaturas/candidatura.controller';
 
 @Injectable()
 export class OportunidadeService {
@@ -22,17 +24,11 @@ export class OportunidadeService {
     const cidades = usuarioLogado.cidadesAtendidas.map(
       (cidade) => cidade.codigoIbge,
     );
-    let diaria = await this.diariaRepository.findOportunidades(cidades);
+    const diaria = await this.diariaRepository.findOportunidades(
+      cidades,
+      usuarioLogado.id,
+    );
 
-    /*Solução temporária - Mas tá funcionando!*/
-    diaria = diaria.filter((diaria) => diaria.candidatos.length <= 3);
-    for (let i = 0; i < diaria.length; i++) {
-      for (let j = 0; j < diaria[i].candidatos.length; j++) {
-        if (diaria[i].candidatos[j].id === usuarioLogado.id) {
-          diaria.splice(i, 1);
-        }
-      }
-    }
     const diariaResponseDto = [];
     for (let i = 0; i < diaria.length; i++) {
       diariaResponseDto[i] = await this.diariaMapper.toDiariaResponseDto(
