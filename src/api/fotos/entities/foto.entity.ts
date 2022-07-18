@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Expose } from 'class-transformer';
 
-@Entity()
+@Entity('foto')
 export class Foto {
   @PrimaryGeneratedColumn('increment')
   id: number;

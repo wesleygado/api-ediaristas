@@ -1,5 +1,3 @@
-import { UsuarioResponseDto } from 'src/api/usuarios/dtos/usuario-response.dto';
-
 export interface HateoasInterface {
   gerarLinksHateoas(): HateoasLinks[];
 }

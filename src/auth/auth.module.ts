@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { RolesGuard } from './guards/roles.guard';
 import { JwtTokens } from './strategies/jwt-tokens';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { UsuarioModule } from 'src/api/usuarios/usuario.module';
 
 @Module({
   imports: [

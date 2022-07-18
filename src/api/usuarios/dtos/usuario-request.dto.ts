@@ -45,8 +45,7 @@ export class UsuarioRequestDto {
   @IsNumberString()
   tipoUsuario: number;
 
-  @MinLength(11, { message: 'CPF deve possuir 11 caracteres' })
-  @MaxLength(11, { message: 'CPF deve possuir 11 caracteres' })
+  @Length(11, 11, { message: 'CPF deve possuir 11 caracteres' })
   @Validate(CpfJaExiste)
   cpf: string;
 

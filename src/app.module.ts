@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UsuariosModule } from './api/usuarios/usuario.module';
+import { UsuarioModule } from './api/usuarios/usuario.module';
 import { FotoModule } from './api/fotos/foto.module';
 import { CidadesAtendidasModule } from './api/cidades-atendidas/cidades-atendidas.module';
 import { DiaristaModule } from './api/diaristas/diarista.module';
@@ -31,7 +31,7 @@ import { AvaliacaoRepository } from './api/avaliacao/avaliacao.repository';
       isGlobal: true,
     }),
     EventEmitterModule.forRoot(),
-    UsuariosModule,
+    UsuarioModule,
     TypeormConfigModule,
     FotoModule,
     CidadesAtendidasModule,

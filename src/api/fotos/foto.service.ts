@@ -17,7 +17,7 @@ export class FotoService {
     return await this.fotoRepository.createFoto(foto);
   }
 
-  async buscarFoto(fileName: string) {
-    return await this.fotoRepository.findOne({ fileName: fileName });
+  async deletar(fotoId: number) {
+    return await this.fotoRepository.delete({ id: fotoId });
   }
 }

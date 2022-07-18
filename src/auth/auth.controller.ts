@@ -8,17 +8,17 @@ import { ITokens } from './strategies/jwt-tokens.interface';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/token')
+  @Post('token')
   autenticar(@Body() usuarioAuthDto: UsuarioAuthDto): Promise<ITokens> {
     return this.authService.signIn(usuarioAuthDto);
   }
 
-  @Post('/refresh')
+  @Post('refresh')
   reautenticar(@Request() req) {
     return this.authService.reautenticar(req);
   }
 
-  @Post('/logout')
+  @Post('logout')
   logOut(@Body() tokenDto: TokenDto) {
     return this.authService.logout(tokenDto);
   }

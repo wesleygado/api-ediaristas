@@ -31,6 +31,7 @@ import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
   ],
   controllers: [UsuarioController],
   providers: [
+    HateoasUsuario,
     ChavePixJaExiste,
     CpfJaExiste,
     EmailJaExiste,
@@ -41,7 +42,6 @@ import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
     AuthService,
     JwtTokens,
     TokensService,
-    HateoasUsuario,
   ],
 })
-export class UsuariosModule {}
+export class UsuarioModule {}

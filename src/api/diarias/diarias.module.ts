@@ -21,6 +21,7 @@ import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
 import { GatewayPagamentoService } from 'src/core/services/getaway-pagamento/adapters/gateway-pagamento.service';
 import { PagarMeService } from 'src/core/services/getaway-pagamento/providers/pagarme.service';
 import { PagamentoRepository } from '../pagamentos/pagamento.repository';
+import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PagamentoRepository } from '../pagamentos/pagamento.repository';
   ],
   controllers: [DiariasController],
   providers: [
+    HateoasUsuario,
     DiariasService,
     DiariaMapper,
     ServicoService,

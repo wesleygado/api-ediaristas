@@ -25,10 +25,4 @@ export class MeController {
   me(@GetUser() usuario: UsuarioApi): Promise<UsuarioResponseDto> {
     return this.meService.obterUsuarioLogado(usuario);
   }
-
-  @Get('teste')
-  async teste() {
-    const diaria = await this.diaria.getAptasParaSelecaoDiarista();
-    return diaria;
-  }
 }

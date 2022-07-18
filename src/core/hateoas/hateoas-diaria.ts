@@ -10,6 +10,7 @@ import { ConfirmacaoPresencaController } from '../services/confirmacao-presenca/
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import { AvaliacaoController } from 'src/api/avaliacao/avaliacao.controller';
 import { Avaliacao } from 'src/api/avaliacao/entities/avaliacao.entity';
+import { UsuarioController } from 'src/api/usuarios/usuario.controller';
 
 @Injectable()
 export class HateoasDiaria extends HateoasBase implements HateoasInterface {

@@ -56,7 +56,10 @@ export class UsuarioApi {
   @Column({ name: 'chave_pix', nullable: true, unique: true })
   chavePix: string;
 
-  @OneToOne((type) => Foto, { nullable: true, eager: true })
+  @OneToOne((type) => Foto, {
+    nullable: true,
+    eager: true,
+  })
   @JoinColumn({ name: 'foto_usuario' })
   fotoUsuario: Foto;
 
