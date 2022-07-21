@@ -24,6 +24,7 @@ import { AvaliacaoModule } from './api/avaliacao/avaliacao.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AvaliacaoRepository } from './api/avaliacao/avaliacao.repository';
+import { PasswordResetModule } from './api/password-reset/password-reset.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { AvaliacaoRepository } from './api/avaliacao/avaliacao.repository';
     CoreModule,
     AvaliacaoModule,
     TypeOrmModule.forFeature([AvaliacaoRepository]),
+    PasswordResetModule,
   ],
   controllers: [AppController],
   providers: [HateoasIndex],

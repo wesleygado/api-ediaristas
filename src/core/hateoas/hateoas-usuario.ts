@@ -7,7 +7,6 @@ import { EnderecoDiaristaController } from 'src/api/endereco-diarista/endereco-d
 import { CidadesAtendidasController } from 'src/api/cidades-atendidas/cidades-atendidas.controller';
 import { OportunidadeController } from 'src/api/oportunidade/oportunidade.controller';
 import { PagamentosController } from 'src/api/pagamentos/pagamentos.controller';
-import { UsuarioController } from 'src/api/usuarios/usuario.controller';
 
 @Injectable()
 export class HateoasUsuario extends HateoasBase implements HateoasInterface {

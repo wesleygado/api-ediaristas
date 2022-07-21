@@ -1,5 +1,6 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import { PasswordReset } from 'src/api/password-reset/entities/password-reset.entity';
 import { UsuarioApi } from '../../../api/usuarios/entities/usuario.entity';
 
 @Injectable()
@@ -25,6 +26,18 @@ export class MailService {
       context: {
         nome: usuario.nomeCompleto,
         tipoUsuario: tipoUsuario,
+      },
+    });
+  }
+
+  async enviarEmailDeResetDeSenha(passwordReset: PasswordReset) {
+    await this.mailerService.sendMail({
+      to: 'wesley.gado@treinaweb.com.br',
+      from: 'E-Diaristas <ediaristas@suporte.com>',
+      subject: 'Solicitação de Reset de Senha - Ediaristas',
+      template: 'resetar-senha',
+      context: {
+        link: `${process.env.FRONTEND_HOST}/admin/resetar-senha/confirmacao?token=${passwordReset.token}`,
       },
     });
   }
