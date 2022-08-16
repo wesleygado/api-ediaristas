@@ -17,6 +17,9 @@ export class PasswordReset {
   @Column({ nullable: false, unique: true })
   token: string;
 
+  @Column()
+  teste: string;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

@@ -11,7 +11,7 @@ export class ChavePixJaExiste implements ValidatorConstraintInterface {
   constructor(private readonly usuarioRepository: UsuarioRepository) {}
 
   async validate(chavePix: string) {
-    const existeUsuario = await this.usuarioRepository.findOne({
+    const existeUsuario = await this.usuarioRepository.repository.findOneBy({
       chavePix: chavePix,
     });
     return !existeUsuario ? true : false;

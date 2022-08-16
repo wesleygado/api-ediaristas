@@ -15,21 +15,19 @@ import { PasswordResetConfirmacaoRequestDto } from './dto/password-reset-confirm
 @Injectable()
 export class PasswordResetService {
   constructor(
-    @InjectRepository(PasswordResetRepository)
     private passwordRepository: PasswordResetRepository,
-    @InjectRepository(UsuarioRepository)
     private usuarioRepository: UsuarioRepository,
     private mailService: MailService,
   ) {}
   async criarPasswordReset(email: string): Promise<PasswordReset> {
     if (
-      (await this.usuarioRepository.findAndCount({ email: email })).length > 0
+      (await this.usuarioRepository.repository.findBy({ email: email }))
+        .length > 0
     ) {
-      console.log('teste');
       const passwordReset = new PasswordReset();
       passwordReset.email = email;
       passwordReset.token = randomUUID();
-      return await this.passwordRepository.save(passwordReset);
+      return await this.passwordRepository.repository.save(passwordReset);
     }
     return null;
   }
@@ -38,15 +36,15 @@ export class PasswordResetService {
     const passwordReset = await this.buscarPasswordResetPorToken(
       passwordResetToken,
     );
-    const usuario = await this.usuarioRepository.findOne({
+    const usuario = await this.usuarioRepository.repository.findOneBy({
       email: passwordReset.email,
     });
     await usuario.setPassword(novaSenha);
-    await this.usuarioRepository.save(usuario);
-    await this.passwordRepository.delete(passwordReset.id);
+    await this.usuarioRepository.repository.save(usuario);
+    await this.passwordRepository.repository.delete(passwordReset.id);
   }
   private async buscarPasswordResetPorToken(passwordResetToken: string) {
-    const passwordReset = await this.passwordRepository.findOne({
+    const passwordReset = await this.passwordRepository.repository.findOneBy({
       token: passwordResetToken,
     });
     if (!passwordReset) {

@@ -38,7 +38,7 @@ export class JwtTokens {
     const accessToken = req.body.refresh;
 
     const email = this.jwtService.decode(accessToken)['email'];
-    const usuario = await this.usuarioRepository.findOne({
+    const usuario = await this.usuarioRepository.repository.findOneBy({
       email: email,
     });
 

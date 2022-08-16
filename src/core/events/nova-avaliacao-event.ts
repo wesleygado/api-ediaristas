@@ -1,6 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { InjectRepository } from '@nestjs/typeorm';
 import { AvaliacaoRepository } from 'src/api/avaliacao/avaliacao.repository';
 import { Avaliacao } from 'src/api/avaliacao/entities/avaliacao.entity';
 import { DiariaRepository } from 'src/api/diarias/diaria.repository';
@@ -11,11 +10,8 @@ import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 export class NovaAvaliacaoEvent {
   constructor(
     private readonly eventEmitter: EventEmitter2,
-    @InjectRepository(AvaliacaoRepository)
     private readonly avaliacaoRepository: AvaliacaoRepository,
-    @InjectRepository(UsuarioRepository)
     private readonly usuarioRepository: UsuarioRepository,
-    @InjectRepository(DiariaRepository)
     private readonly diariaRepository: DiariaRepository,
   ) {}
 
@@ -33,20 +29,21 @@ export class NovaAvaliacaoEvent {
 
   private async atualizarReputacaoAvaliado(avaliacao: Avaliacao) {
     const avaliado = avaliacao.avaliado;
-    const notaMedia = await this.avaliacaoRepository.getAvaliacaoMedia(
-      avaliado,
-    );
+    const notaMedia =
+      await this.avaliacaoRepository.repository.getAvaliacaoMedia(avaliado);
     avaliado.reputacao = notaMedia;
-    this.usuarioRepository.save(avaliado);
+    this.usuarioRepository.repository.save(avaliado);
   }
 
   private async atualizarStatusDaDiariaAvaliada(avaliacao: Avaliacao) {
     const diaria = avaliacao.diaria;
     if (
-      await this.avaliacaoRepository.isClienteAndDiaristaAvaliaramDiaria(diaria)
+      await this.avaliacaoRepository.repository.isClienteAndDiaristaAvaliaramDiaria(
+        diaria,
+      )
     ) {
       diaria.status = DiariaStatus.AVALIADO;
-      await this.diariaRepository.save(diaria);
+      await this.diariaRepository.repository.save(diaria);
     }
   }
 }

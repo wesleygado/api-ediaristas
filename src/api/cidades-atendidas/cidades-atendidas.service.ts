@@ -11,10 +11,8 @@ import { CidadesAtendidas } from './entities/cidades-atendidas.entity';
 @Injectable()
 export class CidadesAtendidasService {
   constructor(
-    @InjectRepository(CidadesAtendidasRepository)
     private readonly cidadeAtendidaRepository: CidadesAtendidasRepository,
     private readonly consultaCidade: IbgeService,
-    @InjectRepository(UsuarioRepository)
     private readonly usuarioRepository: UsuarioRepository,
   ) {}
   listarCidadesAtendidas(
@@ -33,9 +31,10 @@ export class CidadesAtendidasService {
 
       let cidadeAtendida = new CidadesAtendidas();
       try {
-        cidadeAtendida = await this.cidadeAtendidaRepository.findByCodigoIbge(
-          codigoIbge,
-        );
+        cidadeAtendida =
+          await this.cidadeAtendidaRepository.repository.findByCodigoIbge(
+            codigoIbge,
+          );
       } catch (error) {
         cidadeAtendida = await this.cadastrarCidadeAtendida(codigoIbge);
       }
@@ -43,7 +42,7 @@ export class CidadesAtendidasService {
     });
 
     usuarioLogado.cidadesAtendidas = cidadesAtendidas;
-    await this.usuarioRepository.save(usuarioLogado);
+    await this.usuarioRepository.repository.save(usuarioLogado);
 
     return { message: 'Cidades Atendidas atualizadas com Sucesso' };
   }
@@ -57,6 +56,6 @@ export class CidadesAtendidasService {
     cidadeAtendida.cidade = cidade.cidade;
     cidadeAtendida.estado = cidade.estado;
 
-    return await this.cidadeAtendidaRepository.save(cidadeAtendida);
+    return await this.cidadeAtendidaRepository.repository.save(cidadeAtendida);
   }
 }

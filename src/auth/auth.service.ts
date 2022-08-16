@@ -17,7 +17,9 @@ export class AuthService {
 
   async signIn(usuarioAuthDto: UsuarioAuthDto): Promise<ITokens> {
     const { email, password } = usuarioAuthDto;
-    const usuario = await this.usuarioRepository.findOne({ email: email });
+    const usuario = await this.usuarioRepository.repository.findOneBy({
+      email: email,
+    });
 
     if (usuario && (await bcrypt.compare(password, usuario.senha))) {
       const payload: JwtPayload = { email };

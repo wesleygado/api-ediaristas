@@ -5,12 +5,11 @@ import { Diaria } from 'src/api/diarias/entities/diaria.entity';
 import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import { DiaristaRepository } from 'src/api/diaristas/diarista.repository';
 import { ServicoService } from 'src/api/servicos/servico.service';
-import { ViaCepService } from 'src/core/providers/via-cep.service';
+import { ViaCepService } from 'src/core/services/via-cep.service';
 
 @Injectable()
 export class ValidatorDiaria {
   constructor(
-    @InjectRepository(DiaristaRepository)
     private readonly diaristaRepository: DiaristaRepository,
     private readonly servicoService: ServicoService,
     private readonly validatorCep: ViaCepService,
@@ -42,7 +41,7 @@ export class ValidatorDiaria {
   async validarDisponibilidade(diariaDTO: DiariaRequestDto) {
     const codigoIbge = diariaDTO.codigoIbge;
     const disponibilidade =
-      await this.diaristaRepository.existsByCidadesAtendidasCodigoIbge(
+      await this.diaristaRepository.repository.existsByCidadesAtendidasCodigoIbge(
         codigoIbge,
       );
     if (disponibilidade === false) {
@@ -120,7 +119,7 @@ export class ValidatorDiaria {
 
   private validarDataAtendimento(diaria: Diaria) {
     const hoje = new Date(Date.now());
-    const isDataAtendimentoNoPassado = diaria.localDateTime;
+    const isDataAtendimentoNoPassado = diaria.dataAtendimento;
 
     if (hoje > isDataAtendimentoNoPassado) {
       throw new BadRequestException({

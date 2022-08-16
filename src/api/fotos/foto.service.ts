@@ -12,12 +12,12 @@ export class FotoService {
     foto.fileName = file.filename;
     foto.contentLength = file.size;
     foto.contentType = file.mimetype;
-    foto.url = `${req.protocol}://${req.get('host')}/images/${file.filename}`;
+    foto.url = `http://${req.get('host')}/images/${file.filename}`;
 
-    return await this.fotoRepository.createFoto(foto);
+    return await this.fotoRepository.repository.createFoto(foto);
   }
 
   async deletar(fotoId: number) {
-    return await this.fotoRepository.delete({ id: fotoId });
+    return await this.fotoRepository.repository.delete({ id: fotoId });
   }
 }

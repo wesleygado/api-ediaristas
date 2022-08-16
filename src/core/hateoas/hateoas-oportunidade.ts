@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { HateoasInterface, HateoasLinks } from './hateoas.interface';
+import { HateoasLinks } from './hateoas.interface';
 import { HateoasBase } from './hateoas-base';
 import { Diaria } from 'src/api/diarias/entities/diaria.entity';
 import { CandidaturaController } from 'src/api/candidaturas/candidatura.controller';
-import { UsuarioController } from 'src/api/usuarios/usuario.controller';
 
 @Injectable()
-export class HateoasOportunidade
-  extends HateoasBase
-  implements HateoasInterface
-{
+export class HateoasOportunidade extends HateoasBase {
   gerarLinksHateoas(diaria?: Diaria): HateoasLinks[] {
     this.LINKS = [];
 
@@ -17,7 +13,7 @@ export class HateoasOportunidade
       id: diaria.id,
     };
 
-    this.adicionaLink(
+    this.adicionarLink(
       'POST',
       'candidatar_diaria',
       CandidaturaController,

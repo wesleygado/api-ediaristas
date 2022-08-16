@@ -9,7 +9,7 @@ import { ClienteMapper } from 'src/api/clientes/clienteMapper';
 import { ServicoMapper } from 'src/api/servicos/servico.mapper';
 import { ServicoExiste } from 'src/core/validators/diaria/validator-servico';
 import { DataAtendimento } from 'src/core/validators/diaria/validator-data-atendimento';
-import { ViaCepService } from 'src/core/providers/via-cep.service';
+import { ViaCepService } from 'src/core/services/via-cep.service';
 import { DiaristaRepository } from 'src/api/diaristas/diarista.repository';
 import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 import { DiaristaMapper } from 'src/api/diaristas/diarista.mapper';
@@ -22,18 +22,25 @@ import { GatewayPagamentoService } from 'src/core/services/getaway-pagamento/ada
 import { PagarMeService } from 'src/core/services/getaway-pagamento/providers/pagarme.service';
 import { PagamentoRepository } from '../pagamentos/pagamento.repository';
 import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
+import { Avaliacao } from '../avaliacao/entities/avaliacao.entity';
+import { Diaria } from './entities/diaria.entity';
+import { Servico } from '../servicos/entities/services.entity';
+import { Pagamento } from '../pagamentos/entities/pagamento.entity';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([DiariaRepository]),
-    TypeOrmModule.forFeature([DiaristaRepository]),
-    TypeOrmModule.forFeature([UsuarioRepository]),
-    TypeOrmModule.forFeature([ServicoRepository]),
-    TypeOrmModule.forFeature([AvaliacaoRepository]),
-    TypeOrmModule.forFeature([PagamentoRepository]),
+    TypeOrmModule.forFeature([Diaria]),
+    TypeOrmModule.forFeature([UsuarioApi]),
+    TypeOrmModule.forFeature([Servico]),
+    TypeOrmModule.forFeature([Avaliacao]),
+    TypeOrmModule.forFeature([Pagamento]),
   ],
   controllers: [DiariasController],
   providers: [
+    DiaristaRepository,
+    PagamentoRepository,
+    ServicoRepository,
     HateoasUsuario,
     DiariasService,
     DiariaMapper,
@@ -47,10 +54,13 @@ import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
     DiaristaMapper,
     ValidatorDiariaUsuario,
     ValidatorDiaria,
+    AvaliacaoRepository,
+    DiariaRepository,
     {
       provide: GatewayPagamentoService,
       useClass: PagarMeService,
     },
   ],
+  exports: [DiariaRepository],
 })
 export class DiariasModule {}

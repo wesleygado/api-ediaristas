@@ -17,15 +17,23 @@ export class EnderecoDiaristaService {
     usuario: UsuarioApi,
   ) {
     if (!usuario.endereco) {
-      usuario.endereco = await this.enderecoRepository.save(enderecoDiarista);
-      const usuarioAtualizado = await this.usuarioRepository.save(usuario);
+      usuario.endereco = await this.enderecoRepository.repository.save(
+        enderecoDiarista,
+      );
+      const usuarioAtualizado = await this.usuarioRepository.repository.save(
+        usuario,
+      );
       return this.enderecoDiaristaMapper.toEnderecoDiaristaResponse(
         usuarioAtualizado.endereco,
       );
     }
     enderecoDiarista.id = usuario.endereco.id;
-    usuario.endereco = await this.enderecoRepository.save(enderecoDiarista);
-    const usuarioAtualizado = await this.usuarioRepository.save(usuario);
+    usuario.endereco = await this.enderecoRepository.repository.save(
+      enderecoDiarista,
+    );
+    const usuarioAtualizado = await this.usuarioRepository.repository.save(
+      usuario,
+    );
     return this.enderecoDiaristaMapper.toEnderecoDiaristaResponse(
       usuarioAtualizado.endereco,
     );

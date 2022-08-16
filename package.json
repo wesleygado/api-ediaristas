@@ -19,10 +19,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/ormconfig.ts",
-    "typeorm:migrate": "npm run typeorm migration:generate -- -n",
-    "typeorm:run": "npm run typeorm migration:run",
-    "typeorm:revert": "npm run typeorm migration:revert"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm:migrate": "cross-var npm run typeorm -- -d ./src/migrations-config.ts migration:generate ./src/migrations/$npm_config_name",
+    "typeorm:run": "npm run typeorm -- -d ./src/migrations-config.ts migration:run",
+    "typeorm:revert": "npm run typeorm -- -d ./src/migrations-config.ts migration:revert"
   },
   "dependencies": {
     "@automapper/classes": "^7.3.14",
@@ -39,7 +39,7 @@
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^2.0.1",
-    "@nestjs/typeorm": "^8.0.3",
+    "@nestjs/typeorm": "^9.0.0",
     "@types/passport-jwt": "^3.0.6",
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
@@ -52,8 +52,8 @@
     "nodemailer": "^6.7.3",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
-    "typeorm": "^0.2.45",
-    "typeorm-naming-strategies": "^4.0.0",
+    "typeorm": "^0.3.7",
+    "typeorm-naming-strategies": "^4.1.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -71,6 +71,8 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "cross-env": "^7.0.3",
+    "cross-var": "^1.1.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",

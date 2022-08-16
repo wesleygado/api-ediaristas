@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ViaCepService } from 'src/core/providers/via-cep.service';
+import { ViaCepService } from 'src/core/services/via-cep.service';
 import { DiaristaMapper } from './diarista.mapper';
 import { DiaristaRepository } from './diarista.repository';
 import { DiaristaLocalidadesPagedResponse } from './dtos/diarista-localidades-paged-response.dto';
@@ -9,7 +8,6 @@ import { DisponibilidadeResponse } from './dtos/disponibilidade-response.dto';
 @Injectable()
 export class DiaristaService {
   constructor(
-    @InjectRepository(DiaristaRepository)
     private diaristaRepository: DiaristaRepository,
     private viaCepService: ViaCepService,
     private diaristaMapper: DiaristaMapper,
@@ -20,7 +18,7 @@ export class DiaristaService {
 
     const pageSize = 6;
     const usuarios =
-      await this.diaristaRepository.findByCidadesAtendidasCodigoIbge(
+      await this.diaristaRepository.repository.findByCidadesAtendidasCodigoIbge(
         codigoIbge,
         pageSize,
       );
@@ -39,7 +37,7 @@ export class DiaristaService {
   async verificarDisponibilidadePorCep(cep: string) {
     const codigoIbge = await this.buscarCodigoIbgePorCep(cep);
     const disponibilidade =
-      await this.diaristaRepository.existsByCidadesAtendidasCodigoIbge(
+      await this.diaristaRepository.repository.existsByCidadesAtendidasCodigoIbge(
         codigoIbge,
       );
     return new DisponibilidadeResponse(disponibilidade);

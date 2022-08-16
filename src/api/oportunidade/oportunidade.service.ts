@@ -12,21 +12,20 @@ import { CandidaturaController } from '../candidaturas/candidatura.controller';
 @Injectable()
 export class OportunidadeService {
   constructor(
-    @InjectRepository(DiariaRepository)
     private diariaRepository: DiariaRepository,
     private hateoas: HateoasOportunidade,
     private diariaMapper: DiariaMapper,
     private avaliacaoMapper: AvaliacaoMapper,
-    @InjectRepository(AvaliacaoRepository)
-    private readonly avaliacaoRepository: AvaliacaoRepository,
+    private readonly avalicaoRepository: AvaliacaoRepository,
   ) {}
   async buscarOportunidades(usuarioLogado: UsuarioApi) {
     const cidades = usuarioLogado.cidadesAtendidas.map(
       (cidade) => cidade.codigoIbge,
     );
-    const diaria = await this.diariaRepository.findOportunidades(
+
+    const diaria = await this.diariaRepository.repository.findOportunidades(
       cidades,
-      usuarioLogado.id,
+      usuarioLogado,
     );
 
     const diariaResponseDto = [];
@@ -34,9 +33,10 @@ export class OportunidadeService {
       diariaResponseDto[i] = await this.diariaMapper.toDiariaResponseDto(
         diaria[i],
       );
-      const avaliacoes = await this.avaliacaoRepository.findByAvaliado(
-        diaria[i].cliente,
-      );
+      const avaliacoes =
+        await this.avalicaoRepository.repository.findByAvaliado(
+          diaria[i].cliente,
+        );
       diariaResponseDto[i].avaliacao = avaliacoes.map((avaliacao) =>
         this.avaliacaoMapper.toResponse(avaliacao),
       );

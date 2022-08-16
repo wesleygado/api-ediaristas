@@ -3,7 +3,6 @@ import { UsuarioModule } from './api/usuarios/usuario.module';
 import { FotoModule } from './api/fotos/foto.module';
 import { CidadesAtendidasModule } from './api/cidades-atendidas/cidades-atendidas.module';
 import { DiaristaModule } from './api/diaristas/diarista.module';
-import { EnderecoModule } from './core/services/consulta-endereco/endereco.module';
 import { ServicoModule } from './api/servicos/servico.module';
 import { MailModule } from './core/services/mail/mail.module';
 import { AuthModule } from './auth/auth.module';
@@ -13,7 +12,6 @@ import { AppController } from './app.controller';
 import { HateoasIndex } from './core/hateoas/hateoas-index';
 import { UrlGeneratorModule } from 'nestjs-url-generator';
 import { ConfigModule } from '@nestjs/config';
-import { TypeormConfigModule } from 'src/database.module';
 import { DiariasModule } from './api/diarias/diarias.module';
 import { PagamentosModule } from './api/pagamentos/pagamentos.module';
 import { EnderecoDiaristaModule } from './api/endereco-diarista/endereco-diarista.module';
@@ -25,6 +23,10 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AvaliacaoRepository } from './api/avaliacao/avaliacao.repository';
 import { PasswordResetModule } from './api/password-reset/password-reset.module';
+import { TypeOrmConfigService } from './typeorm-config';
+import { HateoasUsuario } from './core/hateoas/hateoas-usuario';
+import { EnderecoModule } from './api/consulta-endereco/endereco.module';
+import { ApiController } from './api/api.controller';
 
 @Module({
   imports: [
@@ -32,8 +34,10 @@ import { PasswordResetModule } from './api/password-reset/password-reset.module'
       isGlobal: true,
     }),
     EventEmitterModule.forRoot(),
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService,
+    }),
     UsuarioModule,
-    TypeormConfigModule,
     FotoModule,
     CidadesAtendidasModule,
     DiaristaModule,
@@ -57,7 +61,7 @@ import { PasswordResetModule } from './api/password-reset/password-reset.module'
     TypeOrmModule.forFeature([AvaliacaoRepository]),
     PasswordResetModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, ApiController],
   providers: [HateoasIndex],
 })
 export class AppModule {}

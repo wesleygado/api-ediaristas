@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { NovaAvaliacaoEvent } from 'src/core/events/nova-avaliacao-event';
 import { AvalicaoValidator } from 'src/core/validators/avaliacao/validator-avaliacao';
 import { DiariaRepository } from '../diarias/diaria.repository';
@@ -13,9 +12,7 @@ import { Avaliacao } from './entities/avaliacao.entity';
 @Injectable()
 export class AvaliacaoService {
   constructor(
-    @InjectRepository(AvaliacaoRepository)
     private readonly avaliacaoRepository: AvaliacaoRepository,
-    @InjectRepository(DiariaRepository)
     private readonly diariaRepository: DiariaRepository,
     private readonly avaliacaoMappar: AvaliacaoMapper,
     private readonly avaliacaoValidator: AvalicaoValidator,
@@ -38,16 +35,19 @@ export class AvaliacaoService {
     avaliacao.avaliado = this.getAvaliado(avaliacao);
     await this.avaliacaoValidator.validar(avaliacao, usuarioLogado, diaria);
 
-    const atualizacaoCadastrada = await this.avaliacaoRepository.save(
-      avaliacao,
-    );
+    const atualizacaoCadastrada =
+      await this.avaliacaoRepository.repository.save(avaliacao);
     this.avaliacaoEvent.NovaAvaliacaoEvent(atualizacaoCadastrada);
 
     return { message: 'Avaliação realizada com sucesso' };
   }
 
-  private buscarDiariaPorId(id: number) {
-    return this.diariaRepository.findOne(id);
+  private async buscarDiariaPorId(id: number) {
+    const diaria = await this.diariaRepository.repository.findOneBy({ id: id });
+    if (!diaria) {
+      throw new NotFoundException('Diaria não encontrada');
+    }
+    return diaria;
   }
 
   private getAvaliado(model: Avaliacao) {

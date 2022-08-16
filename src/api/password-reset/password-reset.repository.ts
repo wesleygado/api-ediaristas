@@ -1,5 +1,11 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { PasswordReset } from './entities/password-reset.entity';
 
-@EntityRepository(PasswordReset)
-export class PasswordResetRepository extends Repository<PasswordReset> {}
+export class PasswordResetRepository {
+  constructor(
+    @InjectRepository(PasswordReset)
+    private passwordResetRepository: Repository<PasswordReset>,
+  ) {}
+  repository = this.passwordResetRepository.extend({});
+}

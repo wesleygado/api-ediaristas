@@ -5,13 +5,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioRepository } from '../usuarios/usuario.repository';
 import { PasswordResetRepository } from './password-reset.repository';
 import { MailService } from 'src/core/services/mail/mail.service';
+import { PasswordReset } from './entities/password-reset.entity';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UsuarioRepository]),
-    TypeOrmModule.forFeature([PasswordResetRepository]),
+    TypeOrmModule.forFeature([UsuarioApi]),
+    TypeOrmModule.forFeature([PasswordReset]),
   ],
   controllers: [PasswordResetController],
-  providers: [PasswordResetService, MailService],
+  providers: [
+    UsuarioRepository,
+    PasswordResetService,
+    MailService,
+    PasswordResetRepository,
+  ],
 })
 export class PasswordResetModule {}

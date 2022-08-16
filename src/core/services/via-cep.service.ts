@@ -3,8 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { EnderecoResponse } from 'src/core/services/consulta-endereco/dtos/endereco-response.dto';
 import axios from 'axios';
+import { EnderecoResponse } from 'src/api/consulta-endereco/dtos/endereco-response.dto';
 
 @Injectable()
 export class ViaCepService {

@@ -15,7 +15,7 @@ export class CandidaturaController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(TipoUsuario.DIARISTA)
   candidatar(
-    @Param() id: number,
+    @Param('id') id: number,
     @GetUser() usuarioLogado: UsuarioApi,
   ): Promise<{ mensagem: string }> {
     return this.candidaturaService.candidatar(id, usuarioLogado);

@@ -14,18 +14,27 @@ import { GoogleMatrixService } from 'src/core/services/consulta-distancia/provid
 import { DiaristaIndiceService } from 'src/core/services/diarista-indice/diarista-indice.service';
 import { DiariaRepository } from '../diarias/diaria.repository';
 import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
+import { Token } from 'src/auth/tokens/entities/token.entity';
+import { Diaria } from '../diarias/entities/diaria.entity';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
+import { Avaliacao } from '../avaliacao/entities/avaliacao.entity';
+import { UsuarioController } from '../usuarios/usuario.controller';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TokenRepository]),
-    TypeOrmModule.forFeature([DiariaRepository]),
-    TypeOrmModule.forFeature([UsuarioRepository]),
-    TypeOrmModule.forFeature([AvaliacaoRepository]),
+    TypeOrmModule.forFeature([Token]),
+    TypeOrmModule.forFeature([Diaria]),
+    TypeOrmModule.forFeature([UsuarioApi]),
+    TypeOrmModule.forFeature([Avaliacao]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({}),
   ],
   controllers: [MeController],
   providers: [
+    AvaliacaoRepository,
+    UsuarioRepository,
+    DiariaRepository,
+    TokenRepository,
     MeService,
     UsuarioMapper,
     JwtTokens,

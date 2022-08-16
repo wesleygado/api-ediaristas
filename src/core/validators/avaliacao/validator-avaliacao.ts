@@ -7,10 +7,7 @@ import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 
 export class AvalicaoValidator {
-  constructor(
-    @InjectRepository(AvaliacaoRepository)
-    private readonly avaliacaoRepository: AvaliacaoRepository,
-  ) {}
+  constructor(private readonly avaliacaoRepository: AvaliacaoRepository) {}
   async validar(
     avaliacao: Avaliacao,
     usuarioLogado: UsuarioApi,
@@ -31,7 +28,7 @@ export class AvalicaoValidator {
 
   private validarDiariaDataAtendimento(avaliacao: Avaliacao) {
     const dataHoje = new Date(Date.now());
-    const dataAtendimento = avaliacao.diaria.localDateTime;
+    const dataAtendimento = avaliacao.diaria.dataAtendimento;
 
     if (dataHoje < dataAtendimento) {
       const mensagem = 'Diária com data de atendimento no futuro!';
@@ -42,9 +39,15 @@ export class AvalicaoValidator {
   private async validarAvaliador(avaliacao: Avaliacao) {
     if (
       (
-        await this.avaliacaoRepository.find({
-          diaria: avaliacao.diaria,
-          avaliador: avaliacao.avaliador,
+        await this.avaliacaoRepository.repository.find({
+          where: {
+            diaria: {
+              id: avaliacao.diaria.id,
+            },
+            avaliador: {
+              id: avaliacao.avaliador.id,
+            },
+          },
         })
       ).length > 0
     ) {

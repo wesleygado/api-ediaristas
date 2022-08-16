@@ -8,19 +8,25 @@ import { AvaliacaoMapper } from './avaliacao.mapper';
 import { AvalicaoValidator } from 'src/core/validators/avaliacao/validator-avaliacao';
 import { NovaAvaliacaoEvent } from 'src/core/events/nova-avaliacao-event';
 import { UsuarioRepository } from '../usuarios/usuario.repository';
+import { Avaliacao } from './entities/avaliacao.entity';
+import { Diaria } from '../diarias/entities/diaria.entity';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([DiariaRepository]),
-    TypeOrmModule.forFeature([AvaliacaoRepository]),
-    TypeOrmModule.forFeature([UsuarioRepository]),
+    TypeOrmModule.forFeature([Diaria]),
+    TypeOrmModule.forFeature([Avaliacao]),
+    TypeOrmModule.forFeature([UsuarioApi]),
   ],
   controllers: [AvaliacaoController],
   providers: [
+    UsuarioRepository,
+    DiariaRepository,
     AvaliacaoService,
     AvaliacaoMapper,
     AvalicaoValidator,
     NovaAvaliacaoEvent,
+    AvaliacaoRepository,
   ],
 })
 export class AvaliacaoModule {}

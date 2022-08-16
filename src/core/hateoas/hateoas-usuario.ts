@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HateoasInterface, HateoasLinks } from './hateoas.interface';
+import { HateoasLinks } from './hateoas.interface';
 import { HateoasBase } from './hateoas-base';
 import { DiariasController } from 'src/api/diarias/diarias.controller';
 import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
@@ -7,14 +7,15 @@ import { EnderecoDiaristaController } from 'src/api/endereco-diarista/endereco-d
 import { CidadesAtendidasController } from 'src/api/cidades-atendidas/cidades-atendidas.controller';
 import { OportunidadeController } from 'src/api/oportunidade/oportunidade.controller';
 import { PagamentosController } from 'src/api/pagamentos/pagamentos.controller';
+import { UsuarioController } from 'src/api/usuarios/usuario.controller';
 
 @Injectable()
-export class HateoasUsuario extends HateoasBase implements HateoasInterface {
+export class HateoasUsuario extends HateoasBase {
   gerarLinksHateoas(tipoUsuario?: number): HateoasLinks[] {
     this.LINKS = [];
 
     if (tipoUsuario === TipoUsuario.CLIENTE) {
-      this.adicionaLink(
+      this.adicionarLink(
         'POST',
         'cadastrar_diaria',
         DiariasController,
@@ -23,42 +24,42 @@ export class HateoasUsuario extends HateoasBase implements HateoasInterface {
     }
 
     if (tipoUsuario === TipoUsuario.DIARISTA) {
-      this.adicionaLink(
+      this.adicionarLink(
         'PUT',
         'cadastrar_endereco',
         EnderecoDiaristaController,
         EnderecoDiaristaController.prototype.atualizarEndereco,
       );
 
-      this.adicionaLink(
+      this.adicionarLink(
         'GET',
         'listar_endereco',
         EnderecoDiaristaController,
         EnderecoDiaristaController.prototype.exibirEndereco,
       );
 
-      this.adicionaLink(
+      this.adicionarLink(
         'PUT',
         'relacionar_cidades',
         CidadesAtendidasController,
         CidadesAtendidasController.prototype.atualizarCidadesAtendidas,
       );
 
-      this.adicionaLink(
+      this.adicionarLink(
         'GET',
         'listar_cidades',
         CidadesAtendidasController,
         CidadesAtendidasController.prototype.listarCidadesAtendidas,
       );
 
-      this.adicionaLink(
+      this.adicionarLink(
         'GET',
         'lista_oportunidades',
         OportunidadeController,
         OportunidadeController.prototype.buscarOportunidades,
       );
 
-      this.adicionaLink(
+      this.adicionarLink(
         'GET',
         'lista_pagamentos',
         PagamentosController,
@@ -66,26 +67,26 @@ export class HateoasUsuario extends HateoasBase implements HateoasInterface {
       );
     }
 
-    this.adicionaLink(
+    this.adicionarLink(
       'GET',
       'lista_diarias',
       DiariasController,
       DiariasController.prototype.listarDiarias,
     );
 
-    /*     this.adicionaLink(
+    this.adicionarLink(
       'POST',
       'alterar_foto_usuario',
       UsuarioController,
       UsuarioController.prototype.atualizarFotoUsuario,
     );
 
-    this.adicionaLink(
+    this.adicionarLink(
       'PUT',
       'editar_usuario',
       UsuarioController,
       UsuarioController.prototype.atualizar,
-    ); */
+    );
 
     return this.LINKS;
   }

@@ -5,6 +5,8 @@ import { UsuarioApi } from './entities/usuario.entity';
 import { UsuarioResponseDto } from './dtos/usuario-response.dto';
 import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
 import { Injectable } from '@nestjs/common';
+import { UrlGeneratorService } from 'nestjs-url-generator';
+import { UsuarioController } from './usuario.controller';
 
 @Injectable()
 export class UsuarioMapper {

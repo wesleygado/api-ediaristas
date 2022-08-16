@@ -7,14 +7,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class MeService {
   constructor(
-    @InjectRepository(UsuarioRepository)
     private usuarioRepository: UsuarioRepository,
-    private mapper: UsuarioMapper,
     private hateOas: HateoasUsuario,
+    private mapper: UsuarioMapper,
   ) {}
 
   async obterUsuarioLogado(usuario) {
-    const usuarioLogado = await this.usuarioRepository.findOne({
+    const usuarioLogado = await this.usuarioRepository.repository.findOneBy({
       email: usuario.email,
     });
 

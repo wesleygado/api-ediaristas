@@ -8,14 +8,18 @@ import { PagarMeService } from 'src/core/services/getaway-pagamento/providers/pa
 import { PagamentoRepository } from './pagamento.repository';
 import { GatewayPagamentoService } from 'src/core/services/getaway-pagamento/adapters/gateway-pagamento.service';
 import { PagamentoMapper } from './pagamento.mapper';
+import { Diaria } from '../diarias/entities/diaria.entity';
+import { Pagamento } from './entities/pagamento.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([DiariaRepository]),
-    TypeOrmModule.forFeature([PagamentoRepository]),
+    TypeOrmModule.forFeature([Diaria]),
+    TypeOrmModule.forFeature([Pagamento]),
   ],
   controllers: [PagamentosController],
   providers: [
+    PagamentoRepository,
+    DiariaRepository,
     PagamentosService,
     ValidatorPagamentoStatus,
     PagamentoMapper,

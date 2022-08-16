@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Request } from 'express';
 import { UsuarioRequestDto } from './dtos/usuario-request.dto';
 import { UsuarioCadastroResponseDto } from './dtos/usuario-cadastro-response.dto';
 import { UsuarioMapper } from './usuario.mapper';
@@ -7,7 +8,6 @@ import { UsuarioRepository } from './usuario.repository';
 import 'reflect-metadata';
 import { FotoService } from 'src/api/fotos/foto.service';
 import { ValidatorPasswordConfirmation } from 'src/core/validators/usuario/validator-password-confirmation';
-import { Request } from 'express';
 import { MailService } from 'src/core/services/mail/mail.service';
 import { JwtTokens } from 'src/auth/strategies/jwt-tokens';
 import { JwtPayload } from 'src/auth/strategies/jwt-payload.interface';
@@ -16,26 +16,26 @@ import { UsuarioApi } from './entities/usuario.entity';
 import * as fs from 'fs/promises';
 import { UsuarioAtualizarRequest } from './dtos/usuario-atualizar-request.dto';
 import * as bcrypt from 'bcrypt';
+import { link } from 'fs';
+import { HateoasLinks } from 'src/core/hateoas/hateoas.interface';
 
 @Injectable()
 export class UsuarioService {
   constructor(
-    @InjectRepository(UsuarioRepository)
     private usuarioRepository: UsuarioRepository,
     private mapper: UsuarioMapper,
     private foto: FotoService,
     private validator: ValidatorPasswordConfirmation,
     private mailService: MailService,
     private jwtTokens: JwtTokens,
-    private hateOas: HateoasUsuario,
   ) {}
 
   buscarDiaristasPorCep() {
-    return this.usuarioRepository.getUsers();
+    return this.usuarioRepository.repository.getUsers();
   }
 
   async buscarPorEmail(email: string) {
-    const existeUsuario = await this.usuarioRepository.findOne({
+    const existeUsuario = await this.usuarioRepository.repository.findOneBy({
       email: email,
     });
 
@@ -61,17 +61,13 @@ export class UsuarioService {
       usuarioRequestDto.tipoUsuario,
     );
 
-    const usuarioCadastrado = await this.usuarioRepository.createUser(
-      usuarioParaCadastrar,
-    );
+    const usuarioCadastrado =
+      await this.usuarioRepository.repository.createUser(usuarioParaCadastrar);
 
     const usuarioCadastroDTO = await this.mapper.toUsuarioCadastroResponseDto(
       usuarioCadastrado,
     );
 
-    usuarioCadastroDTO.links = await this.hateOas.gerarLinksHateoas(
-      usuarioCadastroDTO.tipoUsuario,
-    );
     const { email } = usuarioCadastrado;
     const payload: JwtPayload = { email };
     usuarioCadastroDTO.token = await this.jwtTokens.gerarTokens(payload);
@@ -80,9 +76,10 @@ export class UsuarioService {
   }
 
   async calcularReputacaoMedia(tipoUsuario): Promise<number> {
-    let reputacaoMedia = await this.usuarioRepository.getMediaReputacaoDiarista(
-      tipoUsuario,
-    );
+    let reputacaoMedia =
+      await this.usuarioRepository.repository.getMediaReputacaoDiarista(
+        tipoUsuario,
+      );
 
     if (reputacaoMedia === null || reputacaoMedia === 0.0) {
       reputacaoMedia = 5;
@@ -98,14 +95,14 @@ export class UsuarioService {
     if (!usuarioLogado.fotoUsuario) {
       const foto = await this.foto.salvar(file, req);
       usuarioLogado.fotoUsuario = foto;
-      await this.usuarioRepository.save(usuarioLogado);
+      await this.usuarioRepository.repository.save(usuarioLogado);
       return { mensagem: 'Foto Salva com Sucesso' };
     } else {
       const fotoId = usuarioLogado.fotoUsuario.id;
       const fotoName = usuarioLogado.fotoUsuario.fileName;
       const foto = await this.foto.salvar(file, req);
       usuarioLogado.fotoUsuario = foto;
-      await this.usuarioRepository.save(usuarioLogado);
+      await this.usuarioRepository.repository.save(usuarioLogado);
       await this.apagarFotoDesatualizada(fotoName, fotoId);
       return { mensagem: 'Foto Atualizada com Sucesso' };
     }
@@ -123,7 +120,7 @@ export class UsuarioService {
     await this.atualizarSenha(atualizarUsuarioRequest, usuarioLogado);
     console.log(usuarioLogado.senha);
 
-    await this.usuarioRepository.save(usuarioLogado);
+    await this.usuarioRepository.repository.save(usuarioLogado);
 
     return { message: 'Usuário Atualizado com Sucesso' };
   }

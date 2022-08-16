@@ -56,7 +56,7 @@ export class ValidatorCandidatura {
 
   private validarDataAtendimento(diaria: Diaria) {
     const dataAtual = new Date(Date.now());
-    if (diaria.localDateTime < dataAtual) {
+    if (diaria.dataAtendimento < dataAtual) {
       const message = {
         data_atendimento: 'Data de atendimento expirada',
       };

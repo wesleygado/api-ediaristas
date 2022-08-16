@@ -19,10 +19,7 @@ import { PagarMeTransacaoResponse } from './dtos/pagar-me-transacao-response.dto
 
 @Injectable()
 export class PagarMeService implements GatewayPagamentoService {
-  constructor(
-    @InjectRepository(PagamentoRepository)
-    private readonly pagamento: PagamentoRepository,
-  ) {}
+  constructor(private readonly pagamentoRepository: PagamentoRepository) {}
 
   BASE_URL = 'https://api.pagar.me/1';
   API_KEY = process.env.API_KEY_PAGARME;
@@ -89,7 +86,7 @@ export class PagarMeService implements GatewayPagamentoService {
     pagamento.transacaoId = body.id;
     pagamento.status = this.criarPagamentoStatus(body.status);
     pagamento.diaria = diaria;
-    return await this.pagamento.save(pagamento);
+    return await this.pagamentoRepository.repository.save(pagamento);
   }
 
   private async criarPagamentoReembolso(
@@ -102,7 +99,7 @@ export class PagarMeService implements GatewayPagamentoService {
     pagamento.transacaoId = response.id;
     pagamento.status = PagamentoStatus.REEMBOLSADO;
     pagamento.diaria = diaria;
-    return await this.pagamento.save(pagamento);
+    return await this.pagamentoRepository.repository.save(pagamento);
   }
 
   private criarPagamentoStatus(transacaoStatus: string) {
@@ -132,7 +129,10 @@ export class PagarMeService implements GatewayPagamentoService {
   }
 
   private async getPagamentoDaDiaria(diaria: Diaria): Promise<Pagamento> {
-    const pagamento = await this.pagamento.findPagamentosParaReembolso(diaria);
+    const pagamento =
+      await this.pagamentoRepository.repository.findPagamentosParaReembolso(
+        diaria,
+      );
 
     if (!pagamento) {
       throw new NotFoundException('Pagamento não encontrado');

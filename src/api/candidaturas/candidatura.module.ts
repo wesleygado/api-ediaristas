@@ -4,10 +4,11 @@ import { CandidaturaController } from './candidatura.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DiariaRepository } from 'src/api/diarias/diaria.repository';
 import { ValidatorCandidatura } from 'src/core/validators/candidatura/validator-candidatura';
+import { Diaria } from '../diarias/entities/diaria.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([DiariaRepository])],
+  imports: [TypeOrmModule.forFeature([Diaria])],
   controllers: [CandidaturaController],
-  providers: [CandidaturaService, ValidatorCandidatura],
+  providers: [DiariaRepository, CandidaturaService, ValidatorCandidatura],
 })
 export class CandidaturaModule {}

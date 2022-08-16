@@ -25,6 +25,8 @@ export class GoogleMatrixService implements ConsultaDistanciaInterface {
     dadosDistancia.distanciaEmKm =
       matrixApiData.data.rows[0].elements[0].distance.value / 1000.0;
 
+      //not found exception - distancia
+
     return dadosDistancia;
   }
 

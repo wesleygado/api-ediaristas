@@ -19,19 +19,34 @@ import { TokensService } from 'src/auth/tokens/tokens.service';
 import { TokenRepository } from 'src/auth/tokens/tokens.repository';
 import { HateoasUsuario } from 'src/core/hateoas/hateoas-usuario';
 import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
+import { UsuarioApi } from './entities/usuario.entity';
+import { Foto } from '../fotos/entities/foto.entity';
+import { Avaliacao } from '../avaliacao/entities/avaliacao.entity';
+import { Token } from 'src/auth/tokens/entities/token.entity';
+import { UrlGeneratorModule, UrlGeneratorService } from 'nestjs-url-generator';
+import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
+import { HateoasBase } from 'src/core/hateoas/hateoas-base';
+import { MeService } from '../me/me.service';
+import { MeModule } from '../me/me.module';
+import { MeController } from '../me/me.controller';
+import { HateoasIndex } from 'src/core/hateoas/hateoas-index';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UsuarioRepository]),
-    TypeOrmModule.forFeature([FotoRepository]),
-    TypeOrmModule.forFeature([TokenRepository]),
-    TypeOrmModule.forFeature([AvaliacaoRepository]),
+    TypeOrmModule.forFeature([UsuarioApi]),
+    TypeOrmModule.forFeature([Foto]),
+    TypeOrmModule.forFeature([Token]),
+    TypeOrmModule.forFeature([Avaliacao]),
     JwtModule.register({}),
     MailModule,
   ],
   controllers: [UsuarioController],
   providers: [
     HateoasUsuario,
+    TokenRepository,
+    AvaliacaoRepository,
+    FotoRepository,
+    UsuarioRepository,
     ChavePixJaExiste,
     CpfJaExiste,
     EmailJaExiste,

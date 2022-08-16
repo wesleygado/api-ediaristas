@@ -11,7 +11,7 @@ export class CpfJaExiste implements ValidatorConstraintInterface {
   constructor(private readonly usuarioRepository: UsuarioRepository) {}
 
   async validate(cpf: string) {
-    const existeUsuario = await this.usuarioRepository.findOne({
+    const existeUsuario = await this.usuarioRepository.repository.findOneBy({
       cpf: cpf,
     });
     return !existeUsuario ? true : false;

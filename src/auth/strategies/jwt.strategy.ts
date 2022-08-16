@@ -10,7 +10,6 @@ import { JwtPayload } from './jwt-payload.interface';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
-    @InjectRepository(UsuarioRepository)
     private usuarioRepository: UsuarioRepository,
     private mapper: UsuarioMapper,
   ) {
@@ -22,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
   async validate(payload: JwtPayload): Promise<UsuarioApi> {
     const { email } = payload;
-    const usuario = await this.usuarioRepository.findOne({
+    const usuario = await this.usuarioRepository.repository.findOneBy({
       email: email,
     });
 

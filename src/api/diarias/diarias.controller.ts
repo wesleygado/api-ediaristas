@@ -38,15 +38,13 @@ export class DiariasController {
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(TipoUsuario.CLIENTE, TipoUsuario.DIARISTA)
+  @UseGuards(AuthGuard('jwt'))
   async buscarPorId(@GetUser() usuario: UsuarioApi, @Param('id') id: number) {
     return await this.diariasService.buscarPorId(id, usuario);
   }
 
   @Patch(':id/cancelar')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(TipoUsuario.CLIENTE, TipoUsuario.DIARISTA)
   cancelar(
     @Body() diariaCancelamentoRequestDto: DiariaCancelamentoRequestDto,
     @GetUser() usuario: UsuarioApi,

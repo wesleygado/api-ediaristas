@@ -5,13 +5,20 @@ import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 import { CidadesAtendidasRepository } from './cidade-atendida.repository';
 import { CidadesAtendidasController } from './cidades-atendidas.controller';
 import { CidadesAtendidasService } from './cidades-atendidas.service';
+import { CidadesAtendidas } from './entities/cidades-atendidas.entity';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([CidadesAtendidasRepository]),
-    TypeOrmModule.forFeature([UsuarioRepository]),
+    TypeOrmModule.forFeature([CidadesAtendidas]),
+    TypeOrmModule.forFeature([UsuarioApi]),
   ],
   controllers: [CidadesAtendidasController],
-  providers: [CidadesAtendidasService, IbgeService],
+  providers: [
+    UsuarioRepository,
+    CidadesAtendidasService,
+    IbgeService,
+    CidadesAtendidasRepository,
+  ],
 })
 export class CidadesAtendidasModule {}

@@ -28,7 +28,7 @@ export class DiariaMapper {
     diariaReponseDto.motivoCancelamento = diaria.movitoCancelamento;
     diariaReponseDto.nomeServico = diaria.servico.name;
     diariaReponseDto.complemento = diaria.complemento;
-    diariaReponseDto.dataAtendimento = diaria.localDateTime;
+    diariaReponseDto.dataAtendimento = diaria.dataAtendimento;
     diariaReponseDto.tempoAtendimento = diaria.tempoAtendimento;
     diariaReponseDto.preco = diaria.preco;
     diariaReponseDto.logradouro = diaria.logradouro;

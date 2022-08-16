@@ -17,7 +17,6 @@ import { ServicoRepository } from '../servicos/servico.repository';
 import { ValidatorDiaria } from 'src/core/validators/diaria/validator-diaria';
 import { ValidatorDiariaUsuario } from 'src/core/validators/diaria/validator-diaria-usuario';
 import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
-import { request } from 'http';
 import { DiariaCancelamentoRequestDto } from './dto/diaria-cancelamento-request.dto';
 import { Diaria } from './entities/diaria.entity';
 import { GatewayPagamentoService } from 'src/core/services/getaway-pagamento/adapters/gateway-pagamento.service';
@@ -26,16 +25,13 @@ import { Avaliacao } from '../avaliacao/entities/avaliacao.entity';
 @Injectable()
 export class DiariasService {
   constructor(
-    @InjectRepository(DiariaRepository)
     private diariaRepository: DiariaRepository,
-    @InjectRepository(ServicoRepository)
     private servicoRepository: ServicoRepository,
     private diariaMapper: DiariaMapper,
     private servico: ServicoService,
     private hateOas: HateoasDiaria,
     private validatorDiaria: ValidatorDiaria,
     private validarUsuario: ValidatorDiariaUsuario,
-    @InjectRepository(AvaliacaoRepository)
     private avalicaoRepository: AvaliacaoRepository,
     private gatewayPagamento: GatewayPagamentoService,
   ) {}
@@ -44,17 +40,17 @@ export class DiariasService {
     diariaDTO: DiariaRequestDto,
     userRequest: UsuarioApi,
   ): Promise<DiariaResponseDto> {
-    const servico = await this.servicoRepository.findOne(diariaDTO.servico);
+    const servico = await this.servicoRepository.repository.findOneBy({
+      id: diariaDTO.servico,
+    });
     await this.validatorDiaria.validarDiaria(diariaDTO, 22);
 
     diariaDTO.valorComissao = await this.calcularComissao(diariaDTO);
     diariaDTO.cliente = userRequest;
     diariaDTO.status = DiariaStatus.SEM_PAGAMENTO;
 
-    const diariaCadastrada = await this.diariaRepository.createDiaria(
-      diariaDTO,
-      servico,
-    );
+    const diariaCadastrada =
+      await this.diariaRepository.repository.createDiaria(diariaDTO, servico);
 
     const diariaDtoResponse = await this.diariaMapper.toDiariaResponseDto(
       diariaCadastrada,
@@ -68,14 +64,16 @@ export class DiariasService {
   }
   async listarPorUsuarioLogado(usuarioLogado: UsuarioApi) {
     if (usuarioLogado.tipoUsuario === TipoUsuario.CLIENTE) {
-      const diarias = await this.diariaRepository.findByCliente(usuarioLogado);
+      const diarias = await this.diariaRepository.repository.findByCliente(
+        usuarioLogado,
+      );
       return Promise.all(
         diarias.map(async (diaria) => {
           if (!diaria.servico) {
             return null;
           }
           const avaliacao =
-            await this.avalicaoRepository.findByAvaliadorAndDiaria(
+            await this.avalicaoRepository.repository.findByAvaliadorAndDiaria(
               usuarioLogado,
               diaria,
             );
@@ -91,14 +89,16 @@ export class DiariasService {
       );
     }
     if (usuarioLogado.tipoUsuario === TipoUsuario.DIARISTA) {
-      const diarias = await this.diariaRepository.findByDiarista(usuarioLogado);
+      const diarias = await this.diariaRepository.repository.findByDiarista(
+        usuarioLogado,
+      );
       return Promise.all(
         diarias.map(async (diaria) => {
           if (!diaria.servico) {
             return null;
           }
           const avaliacao =
-            await this.avalicaoRepository.findByAvaliadorAndDiaria(
+            await this.avalicaoRepository.repository.findByAvaliadorAndDiaria(
               usuarioLogado,
               diaria,
             );
@@ -119,7 +119,7 @@ export class DiariasService {
     id: number,
     usuario: UsuarioApi,
   ): Promise<DiariaResponseDto> {
-    const diaria = await this.diariaRepository.findOne({ id: id });
+    const diaria = await this.diariaRepository.repository.findOneBy({ id: id });
     if (!diaria) {
       throw new BadRequestException(`Diária com Id:${id} não encontrada`);
     }
@@ -134,7 +134,7 @@ export class DiariasService {
   }
 
   async listaDiarias() {
-    return await this.diariaRepository.getAptasParaCancelamento();
+    return await this.diariaRepository.repository.getAptasParaCancelamento();
   }
 
   async cancelar(
@@ -154,7 +154,7 @@ export class DiariasService {
 
     diaria.status = DiariaStatus.CANCELADO;
     diaria.movitoCancelamento = diariaCancelamentoRequestDto.motivoCancelamento;
-    this.diariaRepository.save(diaria);
+    this.diariaRepository.repository.save(diaria);
 
     return { mensagem: 'A diária foi cancelada com sucesso' };
   }
@@ -175,11 +175,13 @@ export class DiariasService {
     avaliacao.visibilidade = false;
     avaliacao.diaria = diaria;
 
-    await this.avalicaoRepository.save(avaliacao);
+    await this.avalicaoRepository.repository.save(avaliacao);
   }
 
   private async buscarDiariaPorId(diariaId: number): Promise<Diaria> {
-    const diaria = await this.diariaRepository.findOne(diariaId);
+    const diaria = await this.diariaRepository.repository.findOneBy({
+      id: diariaId,
+    });
 
     if (!diaria) {
       throw new NotFoundException('Diária não encontrada');
@@ -199,7 +201,7 @@ export class DiariasService {
   private hasPenalizacao(diaria: Diaria): boolean {
     const hoje = new Date(Date.now());
     const diferencaDatas = new Date(
-      diaria.localDateTime.getTime() - hoje.getTime(),
+      diaria.dataAtendimento.getTime() - hoje.getTime(),
     );
     const converterParaHoras = 3600000;
     const diferencaHoras = diferencaDatas.getTime() / converterParaHoras;

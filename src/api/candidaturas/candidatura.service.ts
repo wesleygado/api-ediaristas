@@ -8,13 +8,11 @@ import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 @Injectable()
 export class CandidaturaService {
   constructor(
-    @InjectRepository(DiariaRepository)
     private readonly diariaRepository: DiariaRepository,
     private readonly validatorCandidatura: ValidatorCandidatura,
   ) {}
   async candidatar(id: number, usuarioLogado: UsuarioApi) {
     const diaria = await this.buscarDiariaPorId(id);
-
     await this.validatorCandidatura.validar(usuarioLogado, diaria);
 
     if (!diaria.candidatos) {
@@ -22,12 +20,14 @@ export class CandidaturaService {
     }
 
     diaria.candidatos.push(usuarioLogado);
-    this.diariaRepository.save(diaria);
+    this.diariaRepository.repository.save(diaria);
     return { mensagem: 'Candidatura realizada com sucesso' };
   }
 
   async buscarDiariaPorId(id: number): Promise<Diaria> {
-    const diaria = await this.diariaRepository.findOne(id);
+    const diaria = await this.diariaRepository.repository.findOneBy({
+      id: id,
+    });
     if (!diaria) {
       throw new NotFoundException(`Diária de id:${id} não encontrada`);
     }

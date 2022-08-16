@@ -8,18 +8,14 @@ import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 import { GatewayPagamentoService } from 'src/core/services/getaway-pagamento/adapters/gateway-pagamento.service';
 import { PagamentoResponseDto } from './dto/pagamento-response.dto';
 import { PagamentoRepository } from './pagamento.repository';
-import { InjectRepository } from '@nestjs/typeorm';
 import { PagamentoMapper } from './pagamento.mapper';
-import { Pagamento } from './entities/pagamento.entity';
 
 @Injectable()
 export class PagamentosService {
   constructor(
-    @InjectRepository(DiariaRepository)
     private diariaRepository: DiariaRepository,
     private pagamentoValidator: ValidatorPagamentoStatus,
     private gateway: GatewayPagamentoService,
-    @InjectRepository(PagamentoRepository)
     private pagamentoRepository: PagamentoRepository,
     private pagamentoMapper: PagamentoMapper,
   ) {}
@@ -37,7 +33,7 @@ export class PagamentosService {
 
     if (pagamento.status === PagamentoStatus.ACEITO) {
       diaria.status = DiariaStatus.PAGO;
-      this.diariaRepository.save(diaria);
+      this.diariaRepository.repository.save(diaria);
       return 'Diária paga com sucesso';
     }
 
@@ -45,7 +41,7 @@ export class PagamentosService {
   }
 
   private async buscarDiariaPorId(id: number) {
-    const diaria = await this.diariaRepository.findOne({ id: id });
+    const diaria = await this.diariaRepository.repository.findOneBy({ id: id });
 
     if (!diaria) {
       throw new NotFoundException('Diária não encontrada');
@@ -58,7 +54,7 @@ export class PagamentosService {
     usuarioLogado: UsuarioApi,
   ): Promise<PagamentoResponseDto[]> {
     const pagamentos =
-      await this.pagamentoRepository.findPagamentosPorUsuarioLogado(
+      await this.pagamentoRepository.repository.findPagamentosPorUsuarioLogado(
         usuarioLogado,
       );
     return pagamentos.map((pagamento) =>

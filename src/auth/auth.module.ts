@@ -13,16 +13,20 @@ import { RolesGuard } from './guards/roles.guard';
 import { JwtTokens } from './strategies/jwt-tokens';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsuarioModule } from 'src/api/usuarios/usuario.module';
+import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
+import { Token } from './tokens/entities/token.entity';
 
 @Module({
   imports: [
     JwtModule.register({}),
-    TypeOrmModule.forFeature([UsuarioRepository]),
-    TypeOrmModule.forFeature([TokenRepository]),
+    TypeOrmModule.forFeature([UsuarioApi]),
+    TypeOrmModule.forFeature([Token]),
     TokensModule,
   ],
   controllers: [AuthController],
   providers: [
+    TokenRepository,
+    UsuarioRepository,
     AuthService,
     JwtStrategy,
     JwtTokens,

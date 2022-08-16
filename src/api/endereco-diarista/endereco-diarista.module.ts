@@ -6,13 +6,21 @@ import { UsuarioRepository } from 'src/api/usuarios/usuario.repository';
 import { EnderecoDiaristaMapper } from './endereco-diarista.mapper';
 import { EnderecoDiaristaRepository } from './endereco-diarista.repository';
 import { IbgeService } from 'src/core/services/consulta-cidade/consulta-cidade.service';
+import { EnderecoDiarista } from './entities/endereco-diarista.entity';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UsuarioRepository]),
-    TypeOrmModule.forFeature([EnderecoDiaristaRepository]),
+    TypeOrmModule.forFeature([UsuarioApi]),
+    TypeOrmModule.forFeature([EnderecoDiarista]),
   ],
   controllers: [EnderecoDiaristaController],
-  providers: [EnderecoDiaristaService, EnderecoDiaristaMapper, IbgeService],
+  providers: [
+    UsuarioRepository,
+    EnderecoDiaristaService,
+    EnderecoDiaristaMapper,
+    IbgeService,
+    EnderecoDiaristaRepository,
+  ],
 })
 export class EnderecoDiaristaModule {}

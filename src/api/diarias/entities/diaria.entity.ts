@@ -23,7 +23,7 @@ export class Diaria {
   id: number;
 
   @Column({ name: 'data_atendimento', nullable: false })
-  localDateTime: Date;
+  dataAtendimento: Date;
 
   @Column({ name: 'tempo_atendimento', nullable: false })
   tempoAtendimento: number;

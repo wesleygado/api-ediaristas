@@ -17,7 +17,7 @@ export class ValidatorConfirmacaoDiaria {
 
   async validarDataPassadoDiaria(diaria: Diaria) {
     const hoje = new Date(Date.now());
-    const dataAtendimentoDiaria = diaria.localDateTime;
+    const dataAtendimentoDiaria = diaria.dataAtendimento;
 
     if (hoje < dataAtendimentoDiaria) {
       throw new BadRequestException({

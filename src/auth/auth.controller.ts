@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { UsuarioAuthDto } from './dtos/usuario-auth.dto';
 import { ITokens } from './strategies/jwt-tokens.interface';
 
-@Controller('/auth')
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 

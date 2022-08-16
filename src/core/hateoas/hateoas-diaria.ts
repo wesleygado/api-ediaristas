@@ -1,19 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { HateoasInterface, HateoasLinks } from './hateoas.interface';
+import { HateoasLinks } from './hateoas.interface';
 import { HateoasBase } from './hateoas-base';
 import { PagamentosController } from 'src/api/pagamentos/pagamentos.controller';
 import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import TipoUsuario from 'src/api/usuarios/enum/tipoUsuario-enum';
 import { Diaria } from 'src/api/diarias/entities/diaria.entity';
 import { DiariasController } from 'src/api/diarias/diarias.controller';
-import { ConfirmacaoPresencaController } from '../services/confirmacao-presenca/confirmacao-presenca.controller';
+import { ConfirmacaoPresencaController } from '../../api/confirmacao-presenca/confirmacao-presenca.controller';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import { AvaliacaoController } from 'src/api/avaliacao/avaliacao.controller';
-import { Avaliacao } from 'src/api/avaliacao/entities/avaliacao.entity';
-import { UsuarioController } from 'src/api/usuarios/usuario.controller';
 
 @Injectable()
-export class HateoasDiaria extends HateoasBase implements HateoasInterface {
+export class HateoasDiaria extends HateoasBase {
   gerarLinksHateoas(
     tipoUsuario?: number,
     diaria?: Diaria,
@@ -30,7 +28,7 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
       tipoUsuario === TipoUsuario.CLIENTE &&
       diaria.status === DiariaStatus.SEM_PAGAMENTO
     ) {
-      this.adicionaLink(
+      this.adicionarLink(
         'POST',
         'pagar_diaria',
         PagamentosController,
@@ -40,7 +38,7 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
     }
 
     if (this.aptaParaConfirmacaoPresenca(diaria)) {
-      this.adicionaLink(
+      this.adicionarLink(
         'PATCH',
         'confirmar_diarista',
         ConfirmacaoPresencaController,
@@ -49,7 +47,7 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
       );
     }
 
-    this.adicionaLink(
+    this.adicionarLink(
       'GET',
       'self',
       DiariasController,
@@ -58,7 +56,7 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
     );
 
     if (this.isAptaParaAvaliacao(diaria, avaliacaoApta)) {
-      this.adicionaLink(
+      this.adicionarLink(
         'PATCH',
         'avaliar_diaria',
         AvaliacaoController,
@@ -68,7 +66,7 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
     }
 
     if (this.isAptaParaCancelamento(diaria)) {
-      this.adicionaLink(
+      this.adicionarLink(
         'PATCH',
         'cancelar_diaria',
         DiariasController,
@@ -84,7 +82,7 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
     const hoje = new Date(Date.now());
     if (
       diaria.status === DiariaStatus.CONFIRMADO &&
-      diaria.localDateTime < hoje
+      diaria.dataAtendimento < hoje
     ) {
       return true;
     }
@@ -100,7 +98,7 @@ export class HateoasDiaria extends HateoasBase implements HateoasInterface {
     if (
       (diaria.status === DiariaStatus.PAGO ||
         diaria.status === DiariaStatus.CONFIRMADO) &&
-      diaria.localDateTime > dataHoje
+      diaria.dataAtendimento > dataHoje
     ) {
       return true;
     }

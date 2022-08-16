@@ -17,6 +17,7 @@ import { EmailJaExiste } from 'src/core/validators/usuario/validator-email';
 import { IdadeValida } from 'src/core/validators/usuario/validator-idade';
 import { EnderecoDiarista } from 'src/api/endereco-diarista/entities/endereco-diarista.entity';
 import { Foto } from 'src/api/fotos/entities/foto.entity';
+import { CpfValido } from 'src/core/validators/diaria/validar-cpf-valido';
 
 export class UsuarioRequestDto {
   id: number;
@@ -47,6 +48,7 @@ export class UsuarioRequestDto {
 
   @Length(11, 11, { message: 'CPF deve possuir 11 caracteres' })
   @Validate(CpfJaExiste)
+  @Validate(CpfValido)
   cpf: string;
 
   @IsNumber()

@@ -11,7 +11,7 @@ export class EmailJaExiste implements ValidatorConstraintInterface {
   constructor(private readonly usuarioRepository: UsuarioRepository) {}
 
   async validate(email: string) {
-    const existeUsuario = await this.usuarioRepository.findOne({
+    const existeUsuario = await this.usuarioRepository.repository.findOneBy({
       email: email,
     });
     return !existeUsuario ? true : false;

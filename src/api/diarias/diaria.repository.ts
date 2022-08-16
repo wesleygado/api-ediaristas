@@ -1,153 +1,171 @@
+import { NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { plainToInstance } from 'class-transformer';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
-import { EntityRepository, LessThan, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Servico } from '../servicos/entities/services.entity';
-import { DiariasController } from './diarias.controller';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { Diaria } from './entities/diaria.entity';
 import DiariaStatus from './enum/diaria-status';
 
-@EntityRepository(Diaria)
-export class DiariaRepository extends Repository<Diaria> {
-  async getDiaria(): Promise<Diaria[]> {
-    const query = this.createQueryBuilder('Diaria');
-    const diarias = await query.getMany();
-    return diarias;
-  }
+export class DiariaRepository {
+  constructor(
+    @InjectRepository(Diaria)
+    private diariaRepository: Repository<Diaria>,
+  ) {}
+  repository = this.diariaRepository.extend({
+    async getDiaria(): Promise<Diaria[]> {
+      const query = this.createQueryBuilder('Diaria');
+      const diarias = await query.getMany();
+      return diarias;
+    },
 
-  async createDiaria(
-    diariaDto: DiariaRequestDto,
-    servico: Servico,
-  ): Promise<Diaria> {
-    const {
-      dataAtendimento,
-      tempoAtendimento,
-      preco,
-      logradouro,
-      numero,
-      bairro,
-      complemento,
-      cidade,
-      estado,
-      cep,
-      quantidadeBanheiros,
-      quantidadeCozinhas,
-      quantidadeOutros,
-      quantidadeQuartos,
-      quantidadeQuintais,
-      quantidadeSalas,
-      observacoes,
-      valorComissao,
-      cliente,
-      status,
-      codigoIbge,
-    } = diariaDto;
-    const diaria = this.create({
-      localDateTime: dataAtendimento,
-      tempoAtendimento,
-      preco,
-      logradouro,
-      numero,
-      bairro,
-      complemento,
-      cidade,
-      estado,
-      cep,
-      quantidadeBanheiros,
-      quantidadeCozinhas,
-      quantidadeOutros,
-      quantidadeQuartos,
-      quantidadeQuintais,
-      quantidadeSalas,
-      observacoes,
-      servico,
-      valorComissao: valorComissao,
-      cliente,
-      status,
-      codigoIbge,
-    });
-    await this.save(diaria);
-    return diaria;
-  }
+    async createDiaria(
+      diariaDto: DiariaRequestDto,
+      servico: Servico,
+    ): Promise<Diaria> {
+      const {
+        dataAtendimento,
+        tempoAtendimento,
+        preco,
+        logradouro,
+        numero,
+        bairro,
+        complemento,
+        cidade,
+        estado,
+        cep,
+        quantidadeBanheiros,
+        quantidadeCozinhas,
+        quantidadeOutros,
+        quantidadeQuartos,
+        quantidadeQuintais,
+        quantidadeSalas,
+        observacoes,
+        valorComissao,
+        cliente,
+        status,
+        codigoIbge,
+      } = diariaDto;
+      const diaria = this.create({
+        dataAtendimento,
+        tempoAtendimento,
+        preco,
+        logradouro,
+        numero,
+        bairro,
+        complemento,
+        cidade,
+        estado,
+        cep,
+        quantidadeBanheiros,
+        quantidadeCozinhas,
+        quantidadeOutros,
+        quantidadeQuartos,
+        quantidadeQuintais,
+        quantidadeSalas,
+        observacoes,
+        servico,
+        valorComissao: valorComissao,
+        cliente,
+        status,
+        codigoIbge,
+      });
+      await this.save(diaria);
+      return diaria;
+    },
 
-  async findByCliente(cliente: UsuarioApi): Promise<Diaria[]> {
-    return await this.find({ cliente: cliente });
-  }
+    async findByCliente(cliente: UsuarioApi): Promise<Diaria[]> {
+      return await this.find({
+        where: {
+          cliente: {
+            id: cliente.id,
+          },
+        },
+      });
+    },
 
-  async findByDiarista(diarista: UsuarioApi): Promise<Diaria[]> {
-    return await this.find({ diarista: diarista });
-  }
+    async findByDiarista(diarista: UsuarioApi): Promise<Diaria[]> {
+      return await this.find({
+        where: {
+          diarista: {
+            id: diarista.id,
+          },
+        },
+      });
+    },
 
-  async findOportunidades(
-    cidades: string[],
-    usuarioLogadoId: number,
-  ): Promise<Diaria[]> {
-    let diaria = await this.createQueryBuilder('diaria')
-      .select('diaria')
-      .leftJoinAndSelect('diaria.cliente', 'cliente')
-      .leftJoinAndSelect('diaria.candidatos', 'candidatos')
-      .leftJoinAndSelect('diaria.servico', 'servico')
-      .where('diaria.diarista IS NULL')
-      .andWhere('diaria.codigoIbge IN(:cidades)', { cidades: cidades })
-      .andWhere('diaria.status = :status', { status: 2 })
-      .getMany();
-
-    diaria = diaria.filter((diaria) => diaria.candidatos.length <= 3);
-
-    return diaria;
-  }
-
-  async getAptasParaSelecaoDiarista(): Promise<Diaria[]> {
-    let diaria = await this.createQueryBuilder('diaria')
-      .select('diaria')
-      .where('diaria.status = :status', { status: DiariaStatus.PAGO })
-      .andWhere('diaria.diarista IS NULL')
-      .innerJoinAndSelect('diaria.candidatos', 'candidatos')
-      .leftJoinAndSelect('candidatos.endereco', 'endereco')
-      .getMany();
-
-    diaria = diaria.filter((diaria) => {
-      const dataAgora = new Date(Date.now());
-      const diferencaDatas = new Date(
-        dataAgora.getTime() - diaria.created_at.getTime(),
+    async findOportunidades(
+      cidades: string[],
+      usuarioLogado: UsuarioApi,
+    ): Promise<Diaria[]> {
+      const diaria = await this.manager.query(
+        `select * from diaria where status = ${DiariaStatus.PAGO} 
+        and codigo_ibge in (${cidades}) 
+        and (select count(*) 
+        from diaria_candidato 
+        where diaria.id = diaria_candidato.diaria_id) < 3 
+        and not exists (select * from diaria_candidato where diaria.id = diaria_candidato.diaria_id 
+        and usuario_api_id = ${usuarioLogado.id})`,
       );
-      const diferencaHoras = diferencaDatas.getTime() / 3600000;
-      if (diferencaHoras > 24) {
-        return diaria;
+
+      console.log(diaria);
+
+      const ids = diaria.map((diaria) => diaria.id);
+
+      if (ids.length === 0) {
+        throw new NotFoundException('Não há diarias dispóniveis');
       }
-    });
 
-    diaria = diaria.filter(
-      (diaria) =>
-        diaria.candidatos.length <= 3 || diaria.candidatos.length >= 0,
-    );
-    return diaria;
-  }
+      const diarias = await this.createQueryBuilder('diaria')
+        .select('diaria')
+        .leftJoinAndSelect('diaria.cliente', 'cliente')
+        .leftJoinAndSelect('diaria.candidatos', 'candidatos')
+        .leftJoinAndSelect('diaria.servico', 'servico')
+        .where('diaria.id IN(:id)', { id: ids })
+        .getMany();
 
-  async getAptasParaCancelamento(): Promise<Diaria[]> {
-    const diariaSemCandidatoPaga = await this.createQueryBuilder('diaria')
-      .select('diaria')
-      .leftJoinAndSelect('diaria.candidatos', 'candidatos')
-      .where('usuario_api_id IS NULL')
-      .andWhere('diaria.status = :status', { status: DiariaStatus.PAGO })
-      .andWhere('diaria.data_atendimento - interval 1 day < now()')
-      .getMany();
+      return diarias;
+    },
 
-    const diariaSemCandidatoSemPagamento = await this.createQueryBuilder(
-      'diaria',
-    )
-      .select('diaria')
-      .leftJoinAndSelect('diaria.candidatos', 'candidatos')
-      .where('usuario_api_id IS NULL')
-      .andWhere('diaria.status = :status', {
-        status: DiariaStatus.SEM_PAGAMENTO,
-      })
-      .andWhere('diaria.created_at + interval 1 day < now()')
-      .getMany();
+    async getAptasParaSelecaoDiarista(): Promise<Diaria[]> {
+      const diaria = await this.createQueryBuilder('diaria')
+        .select('diaria')
+        .where('diaria.status = :status', { status: DiariaStatus.PAGO })
+        .andWhere('diaria.diarista IS NULL')
+        .leftJoinAndSelect('diaria.candidatos', 'candidatos')
+        .andWhere('diaria.created_at + interval 1 day > now()')
+        .getMany();
 
-    const diarias = diariaSemCandidatoPaga.concat(
-      diariaSemCandidatoSemPagamento,
-    );
+      return diaria;
+    },
 
-    return diarias;
-  }
+    async getAptasParaCancelamento(): Promise<Diaria[]> {
+      const diariaSemCandidatoPaga = await this.createQueryBuilder('diaria')
+        .select('diaria')
+        .leftJoinAndSelect('diaria.candidatos', 'candidatos')
+        .where('usuario_api_id IS NULL')
+        .andWhere('diaria.status = :status', { status: DiariaStatus.PAGO })
+        .andWhere('diaria.data_atendimento - interval 1 day < now()')
+        .getMany();
+
+      const diariaSemCandidatoSemPagamento = await this.createQueryBuilder(
+        'diaria',
+      )
+        .select('diaria')
+        .leftJoinAndSelect('diaria.candidatos', 'candidatos')
+        .where('usuario_api_id IS NULL')
+        .andWhere('diaria.status = :status', {
+          status: DiariaStatus.SEM_PAGAMENTO,
+        })
+        .andWhere('diaria.created_at + interval 1 day < now()')
+        .getMany();
+
+      const diarias = diariaSemCandidatoPaga.concat(
+        diariaSemCandidatoSemPagamento,
+      );
+
+      return diarias;
+    },
+  });
 }

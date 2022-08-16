@@ -14,16 +14,23 @@ import { ServicoMapper } from 'src/api/servicos/servico.mapper';
 import { ServicoRepository } from '../servicos/servico.repository';
 import { AvaliacaoRepository } from '../avaliacao/avaliacao.repository';
 import { AvaliacaoMapper } from '../avaliacao/avaliacao.mapper';
+import { Avaliacao } from '../avaliacao/entities/avaliacao.entity';
+import { Diaria } from '../diarias/entities/diaria.entity';
+import { UsuarioApi } from '../usuarios/entities/usuario.entity';
+import { Servico } from '../servicos/entities/services.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([DiariaRepository]),
-    TypeOrmModule.forFeature([UsuarioRepository]),
-    TypeOrmModule.forFeature([ServicoRepository]),
-    TypeOrmModule.forFeature([AvaliacaoRepository]),
+    TypeOrmModule.forFeature([Diaria]),
+    TypeOrmModule.forFeature([UsuarioApi]),
+    TypeOrmModule.forFeature([Servico]),
+    TypeOrmModule.forFeature([Avaliacao]),
   ],
   controllers: [OportunidadeController],
   providers: [
+    ServicoRepository,
+    UsuarioRepository,
+    DiariaRepository,
     OportunidadeService,
     HateoasOportunidade,
     DiariaMapper,
@@ -33,6 +40,7 @@ import { AvaliacaoMapper } from '../avaliacao/avaliacao.mapper';
     HateoasDiaria,
     ServicoMapper,
     AvaliacaoMapper,
+    AvaliacaoRepository,
   ],
 })
 export class OportunidadeModule {}

@@ -7,11 +7,12 @@ import {
 import { HateoasLinks } from './hateoas.interface';
 
 @Injectable()
-export class HateoasBase {
-  constructor(private readonly urlGeneratorService: UrlGeneratorService) {}
+export abstract class HateoasBase {
+  constructor(public urlGeneratorService: UrlGeneratorService) {}
   LINKS: HateoasLinks[] = [];
+  abstract gerarLinksHateoas(): HateoasLinks[];
 
-  protected adicionaLink(
+  protected adicionarLink(
     metodo: string,
     descricao: string,
     controller: ControllerClass,

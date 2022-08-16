@@ -16,8 +16,7 @@ export class MeController {
     private readonly meService: MeService,
     private hateOas: HateoasUsuario,
     private googleMatrix: DiaristaIndiceService,
-    @InjectRepository(DiariaRepository)
-    private diaria: DiariaRepository,
+    private diariaRepository: DiariaRepository,
   ) {}
 
   @Get()
