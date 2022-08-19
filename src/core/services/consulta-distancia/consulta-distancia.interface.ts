@@ -1,7 +1,7 @@
 import { DistanciaResponseDto } from './distancia-response.dto';
 
-export interface ConsultaDistanciaInterface {
-  calcularDistanciaEntreDoisCeps(
+export abstract class ConsultaDistanciaCep {
+  abstract calcularDistanciaEntreDoisCeps(
     origem: string,
     destino: string,
   ): Promise<DistanciaResponseDto>;

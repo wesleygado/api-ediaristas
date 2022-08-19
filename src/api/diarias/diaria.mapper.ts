@@ -28,7 +28,7 @@ export class DiariaMapper {
     diariaReponseDto.motivoCancelamento = diaria.movitoCancelamento;
     diariaReponseDto.nomeServico = diaria.servico.name;
     diariaReponseDto.complemento = diaria.complemento;
-    diariaReponseDto.dataAtendimento = diaria.dataAtendimento;
+    diariaReponseDto.dataAtendimento = this.toGtm(diaria.dataAtendimento);
     diariaReponseDto.tempoAtendimento = diaria.tempoAtendimento;
     diariaReponseDto.preco = diaria.preco;
     diariaReponseDto.logradouro = diaria.logradouro;
@@ -50,5 +50,9 @@ export class DiariaMapper {
     diariaReponseDto.cliente = cliente;
     diariaReponseDto.diarista = diariaDTO;
     return diariaReponseDto;
+  }
+
+  private toGtm(data: Date): Date {
+    return new Date(data.valueOf() - data.getTimezoneOffset() * 60000);
   }
 }

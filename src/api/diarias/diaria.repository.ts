@@ -1,6 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { plainToInstance } from 'class-transformer';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import { Repository } from 'typeorm';
 import { Servico } from '../servicos/entities/services.entity';
@@ -109,8 +108,6 @@ export class DiariaRepository {
         and usuario_api_id = ${usuarioLogado.id})`,
       );
 
-      console.log(diaria);
-
       const ids = diaria.map((diaria) => diaria.id);
 
       if (ids.length === 0) {
@@ -131,10 +128,12 @@ export class DiariaRepository {
     async getAptasParaSelecaoDiarista(): Promise<Diaria[]> {
       const diaria = await this.createQueryBuilder('diaria')
         .select('diaria')
+        .leftJoinAndSelect('diaria.candidatos', 'candidatos')
+        .leftJoinAndSelect('candidatos.endereco', 'endereco')
         .where('diaria.status = :status', { status: DiariaStatus.PAGO })
         .andWhere('diaria.diarista IS NULL')
-        .leftJoinAndSelect('diaria.candidatos', 'candidatos')
-        .andWhere('diaria.created_at + interval 1 day > now()')
+        .andWhere('usuario_api_id IS NOT NULL')
+        .andWhere('diaria.created_at + interval 1 day < now()')
         .getMany();
 
       return diaria;

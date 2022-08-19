@@ -1,4 +1,8 @@
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AvaliacaoRepository } from 'src/api/avaliacao/avaliacao.repository';
 import { Avaliacao } from 'src/api/avaliacao/entities/avaliacao.entity';
@@ -6,6 +10,7 @@ import { Diaria } from 'src/api/diarias/entities/diaria.entity';
 import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 
+@Injectable()
 export class AvalicaoValidator {
   constructor(private readonly avaliacaoRepository: AvaliacaoRepository) {}
   async validar(

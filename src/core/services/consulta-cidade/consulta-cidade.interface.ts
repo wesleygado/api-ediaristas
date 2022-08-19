@@ -1,5 +1,7 @@
 import { CidadeResponseDto } from './dto/cidade-response.dto';
 
-export interface ConsultaCidade {
-  buscarCidadePorCodigoIbge(codigoIbge: string): Promise<CidadeResponseDto>;
+export abstract class ConsultaCidade {
+  abstract buscarCidadePorCodigoIbge(
+    codigoIbge: string,
+  ): Promise<CidadeResponseDto>;
 }

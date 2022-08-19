@@ -1,14 +1,12 @@
 /* eslint-disable no-var */
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CidadeAtendidaRequestDto } from 'src/api/cidades-atendidas/dto/cidade-atendida-request.dto';
 import { Diaria } from 'src/api/diarias/entities/diaria.entity';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
-import { ConsultaDistanciaInterface } from '../consulta-distancia/consulta-distancia.interface';
 import { GoogleMatrixService } from '../consulta-distancia/providers/google-matrix.service';
-import { DiaristaServiceInterface } from './providers/diarista-service.interface';
+import { DiaristaServiceSelecao } from './providers/diarista-service.interface';
 
 @Injectable()
-export class DiaristaIndiceService implements DiaristaServiceInterface {
+export class DiaristaIndiceService implements DiaristaServiceSelecao {
   constructor(private readonly consultaDistanciaService: GoogleMatrixService) {}
   async selecionarMelhorDiarista(diaria: Diaria): Promise<UsuarioApi> {
     this.validatorDiaria(diaria);
@@ -49,7 +47,7 @@ export class DiaristaIndiceService implements DiaristaServiceInterface {
     return candidato.endereco.cep;
   }
 
-  private async getDistancia(destino: string, origem: string) {
+  async getDistancia(destino: string, origem: string) {
     try {
       const googleMatrix =
         await this.consultaDistanciaService.calcularDistanciaEntreDoisCeps(
@@ -58,7 +56,7 @@ export class DiaristaIndiceService implements DiaristaServiceInterface {
         );
       return googleMatrix.distanciaEmKm;
     } catch (error) {
-      console.log(error + ` origem: ${origem} destino: ${destino}`);
+      return Number.MAX_VALUE;
     }
   }
 

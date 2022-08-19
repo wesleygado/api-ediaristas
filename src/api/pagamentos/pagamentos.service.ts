@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { DiariaRepository } from 'src/api/diarias/diaria.repository';
 import DiariaStatus from 'src/api/diarias/enum/diaria-status';
 import { PagamentoRequestDto } from './dto/paramento-request.dto';
@@ -24,7 +28,7 @@ export class PagamentosService {
     pagamentoDto: PagamentoRequestDto,
     id: number,
     usuarioLogado: UsuarioApi,
-  ): Promise<string> {
+  ): Promise<{ message: string }> {
     const diaria = await this.buscarDiariaPorId(id);
     await this.pagamentoValidator.validarClienteDiaria(usuarioLogado, diaria);
     await this.pagamentoValidator.validarStatus(diaria);
@@ -34,10 +38,10 @@ export class PagamentosService {
     if (pagamento.status === PagamentoStatus.ACEITO) {
       diaria.status = DiariaStatus.PAGO;
       this.diariaRepository.repository.save(diaria);
-      return 'Diária paga com sucesso';
+      return { message: 'Diária paga com sucesso' };
     }
 
-    return 'Pagamento Recusado';
+    throw new BadRequestException('Pagamento Recusado');
   }
 
   private async buscarDiariaPorId(id: number) {

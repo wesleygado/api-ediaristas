@@ -3,7 +3,6 @@ import { ClienteResponseDto } from './dto/cliente-response.dto';
 
 export class ClienteMapper {
   toResponse(usuario: UsuarioApi): ClienteResponseDto {
-    console.log(usuario);
     const clienteDTO = new ClienteResponseDto();
     clienteDTO.id = usuario.id;
     clienteDTO.nascimento = usuario.nascimento;

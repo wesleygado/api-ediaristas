@@ -4,8 +4,8 @@ import { Avaliacao } from 'src/api/avaliacao/entities/avaliacao.entity';
 import { Expose } from 'class-transformer';
 
 export class OportunidadeDiariaDtoResponse extends DiariaResponseDto {
-  links?: HateoasLinks[];
-
+  /*   links?: HateoasLinks[];
+   */
   @Expose({ name: 'avaliacoes_cliente' })
   avalicoes: Avaliacao[];
 }

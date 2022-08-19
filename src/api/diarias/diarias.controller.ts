@@ -16,19 +16,33 @@ import { TipoUsuario } from 'src/api/usuarios/enum/tipoUsuario-enum';
 import { DiariasService } from './diarias.service';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { DiariaCancelamentoRequestDto } from './dto/diaria-cancelamento-request.dto';
+import { HateoasDiaria } from 'src/core/hateoas/hateoas-diaria';
 
 @Controller('api/diarias')
 export class DiariasController {
-  constructor(private readonly diariasService: DiariasService) {}
+  constructor(
+    private readonly diariasService: DiariasService,
+    private hateOas: HateoasDiaria,
+  ) {}
 
   @Post()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(TipoUsuario.CLIENTE)
-  cadastrar(
+  async cadastrar(
     @Body() diariaRequestDto: DiariaRequestDto,
     @GetUser() usuario: UsuarioApi,
   ) {
-    return this.diariasService.cadastrar(diariaRequestDto, usuario);
+    const { diariaDto, diaria } = await this.diariasService.cadastrar(
+      diariaRequestDto,
+      usuario,
+    );
+
+    diariaDto.links = this.hateOas.gerarLinksHateoas(
+      usuario.tipoUsuario,
+      diaria,
+    );
+
+    return diariaDto;
   }
 
   @Get()
@@ -40,7 +54,15 @@ export class DiariasController {
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
   async buscarPorId(@GetUser() usuario: UsuarioApi, @Param('id') id: number) {
-    return await this.diariasService.buscarPorId(id, usuario);
+    const { diariaDto, diaria } = await this.diariasService.buscarPorId(
+      id,
+      usuario,
+    );
+    diariaDto.links = await this.hateOas.gerarLinksHateoas(
+      usuario.tipoUsuario,
+      diaria,
+    );
+    return diariaDto;
   }
 
   @Patch(':id/cancelar')

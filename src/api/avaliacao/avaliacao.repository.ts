@@ -1,5 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { DiariaResponseDto } from '../diarias/dto/diaria-response.dto';
 import { Diaria } from '../diarias/entities/diaria.entity';
 import { UsuarioApi } from '../usuarios/entities/usuario.entity';
 import { Avaliacao } from './entities/avaliacao.entity';

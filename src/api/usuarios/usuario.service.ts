@@ -116,9 +116,7 @@ export class UsuarioService {
       atualizarUsuarioRequest,
       usuarioLogado,
     );
-    console.log(usuarioLogado.senha);
     await this.atualizarSenha(atualizarUsuarioRequest, usuarioLogado);
-    console.log(usuarioLogado.senha);
 
     await this.usuarioRepository.repository.save(usuarioLogado);
 
@@ -196,7 +194,6 @@ export class UsuarioService {
       );
       await this.foto.deletar(fotoId);
     } catch (error) {
-      console.log(error);
       throw new BadRequestException(
         'Problemas ao excluir foto desatualizada do usuário',
       );

@@ -58,7 +58,6 @@ export class PasswordResetService {
   ): Promise<{ mensagem: string }> {
     const passwordReset = await this.criarPasswordReset(request.email);
     if (passwordReset != null) {
-      console.log('sim');
       await this.mailService.enviarEmailDeResetDeSenha(passwordReset);
     }
     return {

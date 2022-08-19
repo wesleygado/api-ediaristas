@@ -4,6 +4,7 @@ import { EnderecoMapper } from './endereco.mapper';
 import { EnderecoService } from './adapters/endereco.service.interface';
 import { IbgeService } from 'src/core/services/consulta-cidade/consulta-cidade.service';
 import { ViaCepService } from 'src/core/services/via-cep.service';
+import { ConsultaCidade } from 'src/core/services/consulta-cidade/consulta-cidade.interface';
 
 @Module({
   controllers: [EnderecoController],

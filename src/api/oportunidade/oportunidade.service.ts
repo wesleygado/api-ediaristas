@@ -40,9 +40,8 @@ export class OportunidadeService {
       diariaResponseDto[i].avaliacao = avaliacoes.map((avaliacao) =>
         this.avaliacaoMapper.toResponse(avaliacao),
       );
-      diariaResponseDto[i].links = this.hateoas.gerarLinksHateoas(diaria[i]);
     }
     /**/
-    return diariaResponseDto;
+    return { diariaResponseDto: diariaResponseDto, diaria: diaria };
   }
 }

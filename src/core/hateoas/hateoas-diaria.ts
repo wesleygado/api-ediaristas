@@ -9,14 +9,23 @@ import { DiariasController } from 'src/api/diarias/diarias.controller';
 import { ConfirmacaoPresencaController } from '../../api/confirmacao-presenca/confirmacao-presenca.controller';
 import { UsuarioApi } from 'src/api/usuarios/entities/usuario.entity';
 import { AvaliacaoController } from 'src/api/avaliacao/avaliacao.controller';
+import { AvaliacaoRepository } from 'src/api/avaliacao/avaliacao.repository';
+import { UrlGeneratorService } from 'nestjs-url-generator';
+import { DiariaResponseDto } from 'src/api/diarias/dto/diaria-response.dto';
 
 @Injectable()
 export class HateoasDiaria extends HateoasBase {
+  constructor(
+    private avalicaoRepository: AvaliacaoRepository,
+    url: UrlGeneratorService,
+  ) {
+    super(url);
+  }
   gerarLinksHateoas(
     tipoUsuario?: number,
     diaria?: Diaria,
     usuarioLogado?: UsuarioApi,
-    avaliacaoApta?: boolean,
+    avaliacao?: boolean,
   ): HateoasLinks[] {
     this.LINKS = [];
 
@@ -55,7 +64,7 @@ export class HateoasDiaria extends HateoasBase {
       params,
     );
 
-    if (this.isAptaParaAvaliacao(diaria, avaliacaoApta)) {
+    if (this.isAptaParaAvaliacao(diaria, avaliacao)) {
       this.adicionarLink(
         'PATCH',
         'avaliar_diaria',

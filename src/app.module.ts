@@ -27,6 +27,8 @@ import { TypeOrmConfigService } from './typeorm-config';
 import { HateoasUsuario } from './core/hateoas/hateoas-usuario';
 import { EnderecoModule } from './api/consulta-endereco/endereco.module';
 import { ApiController } from './api/api.controller';
+import { DiaristaIndiceService } from './core/services/diarista-indice/diarista-indice.service';
+import { GoogleMatrixService } from './core/services/consulta-distancia/providers/google-matrix.service';
 
 @Module({
   imports: [

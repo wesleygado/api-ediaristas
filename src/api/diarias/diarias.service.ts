@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { DiariaRepository } from './diaria.repository';
-import { InjectRepository } from '@nestjs/typeorm';
 import { DiariaMapper } from './diaria.mapper';
 import { DiariaRequestDto } from './dto/diaria-request.dto';
 import { ServicoService } from 'src/api/servicos/servico.service';
@@ -39,7 +38,7 @@ export class DiariasService {
   async cadastrar(
     diariaDTO: DiariaRequestDto,
     userRequest: UsuarioApi,
-  ): Promise<DiariaResponseDto> {
+  ): Promise<{ diariaDto: DiariaResponseDto; diaria: Diaria }> {
     const servico = await this.servicoRepository.repository.findOneBy({
       id: diariaDTO.servico,
     });
@@ -56,11 +55,7 @@ export class DiariasService {
       diariaCadastrada,
     );
 
-    diariaDtoResponse.links = await this.hateOas.gerarLinksHateoas(
-      userRequest.tipoUsuario,
-      diariaCadastrada,
-    );
-    return diariaDtoResponse;
+    return { diariaDto: diariaDtoResponse, diaria: diariaCadastrada };
   }
   async listarPorUsuarioLogado(usuarioLogado: UsuarioApi) {
     if (usuarioLogado.tipoUsuario === TipoUsuario.CLIENTE) {
@@ -78,7 +73,7 @@ export class DiariasService {
               diaria,
             );
           const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
-          diariaDTO.links = await this.hateOas.gerarLinksHateoas(
+          diariaDTO.links = this.hateOas.gerarLinksHateoas(
             usuarioLogado.tipoUsuario,
             diaria,
             usuarioLogado,
@@ -114,27 +109,18 @@ export class DiariasService {
       );
     }
   }
-
   async buscarPorId(
     id: number,
     usuario: UsuarioApi,
-  ): Promise<DiariaResponseDto> {
+  ): Promise<{ diariaDto: DiariaResponseDto; diaria: Diaria }> {
     const diaria = await this.diariaRepository.repository.findOneBy({ id: id });
     if (!diaria) {
       throw new BadRequestException(`Diária com Id:${id} não encontrada`);
     }
-    const diariaDTO = await this.diariaMapper.toDiariaResponseDto(diaria);
-    diariaDTO.links = await this.hateOas.gerarLinksHateoas(
-      usuario.tipoUsuario,
-      diaria,
-    );
+    const diariaDto = await this.diariaMapper.toDiariaResponseDto(diaria);
 
     this.validarUsuario.validarDiariaUsuario(usuario, diaria);
-    return diariaDTO;
-  }
-
-  async listaDiarias() {
-    return await this.diariaRepository.repository.getAptasParaCancelamento();
+    return { diariaDto: diariaDto, diaria: diaria };
   }
 
   async cancelar(
